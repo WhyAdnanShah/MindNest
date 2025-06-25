@@ -6,8 +6,8 @@ MindNest is a mental wellness companion app built for Android.
 
 - 🟢 **Mood Tracker** — Log and track your emotional states daily
 - 📓 **Journal** — Reflect with private, secure journaling
-- 🌬️ **Breathing Exercises** — Simple breathing tools to help you relax
-- 🤖 **AI Chat** — Talk to an AI when you need to vent, reflect, or feel heard
+- 🌬️ **Zen Mode** — Simple breathing tools to help you relax
+- 🤖 **Vent** — Talk to an AI when you need to vent, reflect, or feel heard
 
 ### 📱 Built With
 
