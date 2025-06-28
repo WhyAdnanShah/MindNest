@@ -179,8 +179,8 @@ fun ImageRadioGroup(imageResIds: List<Int>, selectedIndex: Int, onSelected: (Int
                     .size(40.dp)
                     .clip(RoundedCornerShape(12.dp))
                     .border(
-                        width = if (isSelected) 2.dp else 1.dp,
-                        color = if (isSelected) colorResource(R.color.cornflower_blue) else Color.Gray,
+                        width = if (isSelected) 1.dp else 1.dp,
+                        color = if (isSelected) colorResource(R.color.cornflower_blue) else Color.LightGray,
                         shape = RoundedCornerShape(12.dp)
                     )
                     .clickable { onSelected(index) }
