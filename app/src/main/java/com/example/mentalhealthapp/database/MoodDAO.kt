@@ -9,10 +9,10 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface MoodDAO {
     @Insert
-    suspend fun insertMood(mood: MoodEntity)
+    suspend fun insertMood(moodEntity: MoodEntity)
 
     @Delete
-    suspend fun deleteMood(mood: MoodEntity)
+    suspend fun deleteMood(moodEntity: MoodEntity)
 
     @Query("SELECT * FROM mood_table ORDER BY date DESC")
     fun getAllMoods(): Flow<List<MoodEntity>>

@@ -9,7 +9,7 @@ import com.example.mentalhealthapp.database.MoodEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-class moodViewModel(application: Application) : AndroidViewModel(application) {
+class MoodViewModel(application: Application) : AndroidViewModel(application) {
 
     private val db = Room.databaseBuilder(
         application.applicationContext,
@@ -19,9 +19,8 @@ class moodViewModel(application: Application) : AndroidViewModel(application) {
 
     var allMoods: Flow<List<MoodEntity>> = db.moodDao().getAllMoods()
 
-    fun addMood(id: MoodEntity) {
+    fun addMood(moodEntity: MoodEntity) {
         viewModelScope.launch {
-            val moodEntity = MoodEntity(mood = id.mood, note = id.note, date = id.date)
             db.moodDao().insertMood(moodEntity)
         }
     }

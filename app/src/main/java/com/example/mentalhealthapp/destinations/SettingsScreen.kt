@@ -35,7 +35,7 @@ fun SettingsScreen(){
 
     Column (modifier = Modifier
         .fillMaxSize()
-        .padding(16.dp, 60.dp, 16.dp, 0.dp)
+        .padding(16.dp, 0.dp, 16.dp, 0.dp)
     ){
         Text(text = "Settings",
             fontSize = 20.sp,
@@ -58,7 +58,7 @@ fun SettingsScreen(){
                 color = colorResource(R.color.google_grey),
                 ColorText = colorResource(R.color.floral_white),
                 borderColor = colorResource(R.color.floral_white),
-                onClick = Toast.makeText(context, "Dark Mode", Toast.LENGTH_SHORT).show()
+                onClick = { Toast.makeText(context, "Dark Mode", Toast.LENGTH_SHORT).show() }
 
             )
             ThemeCard(
@@ -66,7 +66,7 @@ fun SettingsScreen(){
                 color = colorResource(R.color.floral_white),
                 ColorText = colorResource(R.color.black),
                 borderColor = colorResource(R.color.wheat),
-                onClick = Toast.makeText(context, "Light Mode", Toast.LENGTH_SHORT).show()
+                onClick = { Toast.makeText(context, "Light Mode", Toast.LENGTH_SHORT).show() }
             )
         }
     }
@@ -79,9 +79,8 @@ fun ThemeCard(text: String, color: Color, ColorText: Color, borderColor: Color, 
             .fillMaxHeight()
             .width(150.dp)
             .clickable(
-                onClick = {
-                    onClick
-                }
+                onClick = onClick as () -> Unit
+
             ),
         colors = CardDefaults.cardColors(color),
         border = (
