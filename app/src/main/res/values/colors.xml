@@ -270,4 +270,8 @@
     <color name="davys_gray">#555555</color>
     <color name="gunmetal">#2A3439</color>
 
+    //Transparent
+    <color name="transparent">#00000000</color>
+
+
 </resources>

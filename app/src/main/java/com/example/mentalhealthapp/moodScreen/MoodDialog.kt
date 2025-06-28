@@ -1,8 +1,6 @@
 package com.example.mentalhealthapp.moodScreen
 
 import android.app.Application
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -136,8 +134,9 @@ fun MoodDialog(onDismiss: () -> Unit, moodViewModel : MoodViewModel = viewModel(
                 ) {
                     dialogButtons(
                         text = "Cancel",
-                        onClick = onDismiss ,
-                        color = colorResource(R.color.indian_red)
+                        onClick = onDismiss,
+                        color = Color.Transparent,
+                        textColors = colorResource(R.color.light_red),
                     )
                     dialogButtons(
                         text = "Save",
@@ -151,7 +150,8 @@ fun MoodDialog(onDismiss: () -> Unit, moodViewModel : MoodViewModel = viewModel(
                             )
                             onDismiss()
                         },
-                        color = colorResource(R.color.blue_sky)
+                        color = colorResource(R.color.blue_sky),
+                        textColors = Color.Black
                     )
                 }
 //                Log.d("Mood Save or Not?", "images[selected].toString() : " + images[selected].toString() +
@@ -246,13 +246,16 @@ fun DatePickerDialogModal(
 }
 
 @Composable
-fun dialogButtons(text: String, onClick: () -> Unit, color: Color) {
+fun dialogButtons(text: String, onClick: () -> Unit, color: Color, textColors: Color) {
     Button(
         onClick = onClick,
         modifier = Modifier.size(120.dp, 45.dp),
         colors = ButtonDefaults.buttonColors(color),
-        shape = RoundedCornerShape(20.dp)
+        shape = RoundedCornerShape(20.dp),
     ) {
-        Text(text)
+        Text(
+            text,
+            color = textColors,
+        )
     }
 }
