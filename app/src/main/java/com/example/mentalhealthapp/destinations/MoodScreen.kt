@@ -35,11 +35,7 @@ import com.example.mentalhealthapp.viewModel.MoodViewModelFactory
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MoodScreen(moodViewModel: MoodViewModel = viewModel(
-    factory = MoodViewModelFactory(
-        LocalContext.current.applicationContext as Application
-    ))
-)
+fun MoodScreen(moodViewModel: MoodViewModel)
 {
     Log.d("MoodScreen", "Recomposing MoodScreen")
 

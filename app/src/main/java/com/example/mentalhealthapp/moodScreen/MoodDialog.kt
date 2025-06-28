@@ -1,6 +1,6 @@
 package com.example.mentalhealthapp.moodScreen
 
-import android.app.Application
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -45,21 +45,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.database.MoodEntity
 import com.example.mentalhealthapp.navigation.CenteredText
 import com.example.mentalhealthapp.viewModel.MoodViewModel
-import com.example.mentalhealthapp.viewModel.MoodViewModelFactory
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 @Composable
-fun MoodDialog(onDismiss: () -> Unit, moodViewModel : MoodViewModel = viewModel(
-    factory = MoodViewModelFactory(
-        LocalContext.current.applicationContext as Application
-    )
-)) {
+fun MoodDialog(onDismiss: () -> Unit, moodViewModel: MoodViewModel) {
 
 //    //Collecting all remembered moods
 //    val allMoods = moodViewModel.allMoods.collectAsState(initial = emptyList())
@@ -154,11 +148,11 @@ fun MoodDialog(onDismiss: () -> Unit, moodViewModel : MoodViewModel = viewModel(
                         textColors = Color.Black
                     )
                 }
-//                Log.d("Mood Save or Not?", "images[selected].toString() : " + images[selected].toString() +
-//                        " moodNote: " + moodNote + " Date : " + selectedDateMillis?.let { dateFormat.format(it) })
 //                Toast.makeText(LocalContext.current, "image : " + images[selected].toString() +
 //                        " moodNote: " + moodNote + " Date : " + selectedDateMillis?.let { dateFormat.format(it) }
 //                    , Toast.LENGTH_SHORT).show()
+//                Log.d("Mood Save or Not?", "images[selected].toString() : " + images[selected].toString() +
+//                        " moodNote: " + moodNote + " Date : " + selectedDateMillis?.let { dateFormat.format(it) })
             }
         }
     }

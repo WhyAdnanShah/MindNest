@@ -77,19 +77,16 @@ fun ThemeCard(text: String, color: Color, ColorText: Color, borderColor: Color, 
     Card(
         modifier = Modifier
             .fillMaxHeight()
-            .width(150.dp)
-            .clickable(
-                onClick = onClick as () -> Unit
-
-            ),
+            .width(150.dp),
         colors = CardDefaults.cardColors(color),
+        shape = RoundedCornerShape(20.dp),
         border = (
                 androidx.compose.foundation.BorderStroke(
                     width = 1.dp,
                     color = borderColor,
                 )
                 ),
-        shape = RoundedCornerShape(20.dp)
+        onClick = onClick as () -> Unit,
     ){
         Column (
             modifier = Modifier

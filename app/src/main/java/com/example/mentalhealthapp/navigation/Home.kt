@@ -1,6 +1,7 @@
 package com.example.mentalhealthapp.navigation
 
 import android.annotation.SuppressLint
+import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -27,12 +28,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -41,6 +44,8 @@ import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.destinations.MoodScreen
 import com.example.mentalhealthapp.destinations.SettingsScreen
 import com.example.mentalhealthapp.ui.theme.MentalHealthAppTheme
+import com.example.mentalhealthapp.viewModel.MoodViewModel
+import com.example.mentalhealthapp.viewModel.MoodViewModelFactory
 
 class Home : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,6 +69,17 @@ class Home : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
+    //MoodScreen View Model
+    /* This is being done because there was a problem regarding the Instance of the View Model.
+       The MoodViewModel was being initiated in two different places in the MoodScreen which created issues.
+       The best way is to pass ONE instance of the MoodViewModel to the MoodScreen.
+    */
+    val context = LocalContext.current.applicationContext as Application
+    val moodViewModel : MoodViewModel = viewModel(factory = MoodViewModelFactory(context))
+
+
+
+    //For Navigation Controller
     val navController = rememberNavController()
     val items = listOf(
         BottomNavItem.Home,
@@ -100,7 +116,9 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            composable(BottomNavItem.Home.route) { MoodScreen() }
+            composable(BottomNavItem.Home.route) { MoodScreen(
+                moodViewModel = moodViewModel
+            ) }
             composable(BottomNavItem.Journal.route) { JournalScreen() }
             composable(BottomNavItem.Zen.route) { ZenModeScreen() }
             composable(BottomNavItem.Vent.route) { VentScreen() }
