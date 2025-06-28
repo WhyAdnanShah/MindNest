@@ -52,23 +52,25 @@ fun MoodItemCard(moods: MoodEntity){
         ){
             Image(modifier = Modifier.size(35.dp),
                 painter = painterResource(
-                    if (moods.mood == "2130968593") {
-                        R.drawable.laughing
-                    }
-                    else if (moods.mood == "2130968611") {
-                        R.drawable.smiling
-                    }
-                    else if (moods.mood == "2130968595") {
-                        R.drawable.neutral
-                    }
-                    else if (moods.mood == "2130968609") {
-                        R.drawable.sad
-                    }
-                    else if (moods.mood == "2130968581") {
-                        R.drawable.dead
-                    }
-                    else{
-                        R.drawable.dead
+                    when (moods.mood) {
+                        "2130968593" -> {
+                            R.drawable.laughing
+                        }
+                        "2130968611" -> {
+                            R.drawable.smiling
+                        }
+                        "2130968595" -> {
+                            R.drawable.neutral
+                        }
+                        "2130968609" -> {
+                            R.drawable.sad
+                        }
+                        "2130968581" -> {
+                            R.drawable.dead
+                        }
+                        else -> {
+                            R.drawable.dead
+                        }
                     }
                 ) ,
                 contentDescription = null
