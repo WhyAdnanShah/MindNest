@@ -1,7 +1,85 @@
 package com.example.mentalhealthapp.moodScreen
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CardElevation
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.database.MoodEntity
+import java.nio.file.WatchEvent
 
-fun MoodItemCard(moodEntity: MoodEntity){
+@Composable
+fun MoodItemCard(moods: MoodEntity){
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp, 10.dp, 16.dp, 5.dp),
+        colors = CardDefaults.cardColors(Color.Transparent),
+        shape = RoundedCornerShape(20.dp),
+        border = (
+                BorderStroke(
+                    width = 0.dp,
+                    color = colorResource(R.color.wheat)
+                )
+                ),
 
+        ){
+        Column (
+            modifier = Modifier
+                .padding(16.dp, 10.dp, 16.dp, 10.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.Start
+
+        ){
+            Image(modifier = Modifier.size(35.dp),
+                painter = painterResource(
+                    if (moods.mood == "2130968593") {
+                        R.drawable.laughing
+                    }
+                    else if (moods.mood == "2130968611") {
+                        R.drawable.smiling
+                    }
+                    else if (moods.mood == "2130968595") {
+                        R.drawable.neutral
+                    }
+                    else if (moods.mood == "2130968609") {
+                        R.drawable.sad
+                    }
+                    else if (moods.mood == "2130968581") {
+                        R.drawable.dead
+                    }
+                    else{
+                        R.drawable.dead
+                    }
+                ) ,
+                contentDescription = null
+            )
+            Text(
+                text = moods.note,
+            )
+            Text(
+                text = moods.date,
+            )
+        }
+
+    }
 }

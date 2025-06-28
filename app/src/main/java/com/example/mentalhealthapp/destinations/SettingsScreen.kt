@@ -1,6 +1,7 @@
 package com.example.mentalhealthapp.destinations
 
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -81,7 +82,7 @@ fun ThemeCard(text: String, color: Color, ColorText: Color, borderColor: Color, 
         colors = CardDefaults.cardColors(color),
         shape = RoundedCornerShape(20.dp),
         border = (
-                androidx.compose.foundation.BorderStroke(
+                BorderStroke(
                     width = 1.dp,
                     color = borderColor,
                 )
