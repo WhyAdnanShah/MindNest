@@ -31,7 +31,7 @@ fun MoodItemCard(moods: MoodEntity){
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp, 10.dp, 16.dp, 5.dp),
+            .padding(16.dp, 10.dp, 16.dp, 10.dp),
         colors = CardDefaults.cardColors(Color.Transparent),
         shape = RoundedCornerShape(20.dp),
         border = (
