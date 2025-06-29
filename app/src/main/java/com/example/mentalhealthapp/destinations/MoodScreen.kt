@@ -9,7 +9,9 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -54,58 +56,71 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
 
     val moods by moodViewModel.allMoods.collectAsState(initial = emptyList())
 
-    TitleText(
-        text = ""
-    )
 
-    Scaffold(
+    Column (
         modifier = Modifier
-            .fillMaxSize(),
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { isMoodCardVisible = true },
-                shape = RoundedCornerShape(20.dp),
-                elevation = FloatingActionButtonDefaults.elevation(10.dp),
-                containerColor = colorResource(R.color.blue_sky)
-            ) {
-                Text(
-                    modifier = Modifier.padding(5.dp),
-                    text = "+",
-                    fontSize = 25.sp,
-                    color = colorResource(R.color.rich_black)
-                )
-            }
-        }
-    ) {
-            paddingValues ->
+            .fillMaxSize()
+    ){
         Column (
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp, 10.dp, 16.dp, 10.dp)
-                .border(
-                    shape = RoundedCornerShape(20.dp),
-                    width = 0.dp,
-                    color = colorResource(R.color.wheat),
-                )
+                .padding(10.dp)
         ){
-            LazyColumn(
+            Text(
+                text = "Your Emotional Timeline",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Medium,
+            )
+        }
+        Scaffold(
+            modifier = Modifier
+                .fillMaxSize(),
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = { isMoodCardVisible = true },
+                    shape = RoundedCornerShape(20.dp),
+                    elevation = FloatingActionButtonDefaults.elevation(10.dp),
+                    containerColor = colorResource(R.color.blue_sky)
+                ) {
+                    Text(
+                        modifier = Modifier.padding(5.dp),
+                        text = "+",
+                        fontSize = 25.sp,
+                        color = colorResource(R.color.rich_black)
+                    )
+                }
+            }
+        ) {
+                paddingValues ->
+            Column (
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(500.dp)
+                    .padding(16.dp, 10.dp, 16.dp, 10.dp)
+                    .border(
+                        shape = RoundedCornerShape(20.dp),
+                        width = 0.dp,
+                        color = colorResource(R.color.wheat),
+                    )
             ){
-                items(moods) { moodItem ->
-                    MoodItemCard(moods = moodItem)
+                LazyColumn(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(500.dp)
+                ){
+                    items(moods) { moodItem ->
+                        MoodItemCard(moods = moodItem)
+                    }
                 }
             }
+            if (isMoodCardVisible) {
+                MoodDialog(
+                    onDismiss = { isMoodCardVisible = false },
+                    moodViewModel = moodViewModel
+                )
+                Log.d("Mood Dialog", "Mood Dialog Opened?")
+            }
         }
-        if (isMoodCardVisible) {
-            MoodDialog(
-                onDismiss = { isMoodCardVisible = false },
-                moodViewModel = moodViewModel
-            )
-            Log.d("Mood Dialog", "Mood Dialog Opened?")
-        }
-
     }
+
 }
 
