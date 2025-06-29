@@ -14,12 +14,18 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,6 +40,7 @@ import com.example.mentalhealthapp.database.MoodEntity
 @Composable
 fun MoodItemCard(moods: MoodEntity){
     val context = LocalContext.current
+    var showDeleteDialog by remember { mutableStateOf(false) }
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -108,16 +115,59 @@ fun MoodItemCard(moods: MoodEntity){
                 Button (modifier = Modifier
                     .width(100.dp)
                     .height(35.dp),
-                    onClick = { Toast.makeText(context, "Delete id: " + moods.id, Toast.LENGTH_SHORT).show()},
-                    colors = ButtonDefaults.buttonColors(colorResource(R.color.light_red))
+                    onClick = {
+                        showDeleteDialog = true
+                        Toast.makeText(context, "Delete id: " + moods.id, Toast.LENGTH_SHORT).show()
+                    },
+                    border = (
+                            BorderStroke(
+                                width = 0.dp,
+                                color = colorResource(R.color.light_red)
+                            )
+                            ),
+                    colors = ButtonDefaults.buttonColors(Color.Transparent)
                 ){
                     Text(text = "Delete",
-                        fontSize = 13.sp
+                        fontSize = 13.sp,
+                        color = colorResource(R.color.light_red)
+
                     )
                 }
             }
 
+            if (showDeleteDialog) DeleteMoodDialog(
+                onDismiss = { showDeleteDialog = false },
+            )
+
         }
 
     }
+}
+
+@Composable
+fun DeleteMoodDialog(onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Delete Mood Entry") },
+        text = { Text("Are you sure you want to delete this mood entry?") },
+        confirmButton = {
+            Button(
+                onClick = {
+                    onDismiss()
+                }
+            ) {
+                Text("Confirm")
+            }
+        },
+        dismissButton = {
+            Button(
+                onClick = onDismiss,
+                colors = ButtonDefaults.buttonColors(Color.Transparent)
+            ) {
+                Text("Cancel",
+                color = colorResource(R.color.light_red)
+                )
+            }
+        }
+    )
 }
