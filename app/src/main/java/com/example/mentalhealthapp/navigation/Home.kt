@@ -1,6 +1,5 @@
 package com.example.mentalhealthapp.navigation
 
-import android.annotation.SuppressLint
 import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,13 +8,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -25,6 +22,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,6 +38,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.destinations.MoodScreen
@@ -53,20 +52,15 @@ class Home : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MentalHealthAppTheme {
-                Scaffold(modifier = Modifier
-                    .fillMaxSize()
-                    .padding(WindowInsets.safeDrawing.asPaddingValues())
+                HomeScreen(
+                    modifier = Modifier
                 )
-                { innerPadding ->
-                    HomeScreen(
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
             }
         }
     }
 }
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
@@ -95,7 +89,10 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         topBar = {
             TopAppBar(
                 title = {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
+                    Row(modifier = Modifier
+                        .fillMaxWidth()
+                        .height(30.dp),
+                        verticalAlignment = Alignment.CenterVertically) {
                         Image(
                             painter = painterResource(id = R.drawable.cropped_icon_image),
                             contentDescription = null,
@@ -134,10 +131,11 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun BottomNavigationBar(navController: NavHostController, items: List<BottomNavItem>) {
-    val currentRoute = navController.currentBackStackEntry?.destination?.route
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
     NavigationBar (
-        containerColor = colorResource(R.color.slate_gray)
+        containerColor = Color.Transparent,
     ){
         items.forEach {
                 item ->
