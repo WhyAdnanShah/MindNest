@@ -120,6 +120,14 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
                 Log.d("Mood Dialog", "Mood Dialog Opened?")
             }
         }
+
+        Text(modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp),
+            text = "Trend Analysis",
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Medium,
+        )
     }
 
 }
