@@ -1,5 +1,6 @@
 package com.example.mentalhealthapp.destinations
 
+import android.R.attr.shape
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.border
@@ -44,6 +45,8 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
 
     val moods by moodViewModel.allMoods.collectAsState(initial = emptyList())
 
+
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         floatingActionButton = {
@@ -86,9 +89,9 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
                     .fillMaxWidth()
                     .height(450.dp)
                     .border(
-                        shape = RoundedCornerShape(20.dp),
-                        width = 0.dp,
-                        color = colorResource(R.color.wheat)
+                        shape = RoundedCornerShape(5.dp, 5.dp, 20.dp, 20.dp),
+                        width = 1.dp,
+                        color = colorResource(R.color.slate_gray)
                     )
 
             ) {
@@ -124,3 +127,4 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
         }
     }
 }
+

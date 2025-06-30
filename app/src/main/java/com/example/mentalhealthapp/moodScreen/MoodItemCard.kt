@@ -38,10 +38,9 @@ fun MoodItemCard(moods: MoodEntity, moodViewModel: MoodViewModel){
         border = (
                 BorderStroke(
                     width = 0.dp,
-                    color = colorResource(R.color.wheat)
+                    color = colorResource(R.color.slate_gray)
                 )
                 ),
-
         ){
         Column (
             modifier = Modifier

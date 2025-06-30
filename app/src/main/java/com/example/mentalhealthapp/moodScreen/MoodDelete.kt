@@ -2,11 +2,16 @@ package com.example.mentalhealthapp.moodScreen
 
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mentalhealthapp.R
@@ -29,8 +35,7 @@ fun MoodDelete(moodViewModel: MoodViewModel, moods: MoodEntity){
     var showDeleteDialog by remember { mutableStateOf(false) }
 
     Button (modifier = Modifier
-        .width(100.dp)
-        .height(35.dp),
+        .wrapContentSize(),
         onClick = {
             showDeleteDialog = true
             moodViewModel
@@ -44,6 +49,11 @@ fun MoodDelete(moodViewModel: MoodViewModel, moods: MoodEntity){
                 ),
         colors = ButtonDefaults.buttonColors(Color.Transparent)
     ){
+        Image(modifier = Modifier
+            .size(13.dp),
+            painter = painterResource(R.drawable.delete), contentDescription = null
+        )
+        Spacer(Modifier.width(5.dp))
         Text(text = "Delete",
             fontSize = 13.sp,
             color = colorResource(R.color.light_red)

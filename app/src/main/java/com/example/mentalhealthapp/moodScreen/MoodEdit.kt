@@ -1,6 +1,5 @@
 package com.example.mentalhealthapp.moodScreen
 
-import android.R.attr.title
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -18,10 +17,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -38,30 +35,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.database.MoodEntity
 import com.example.mentalhealthapp.viewModel.MoodViewModel
-import java.text.SimpleDateFormat
-import java.util.Locale
 import kotlin.collections.listOf
 
 @Composable
 fun MoodEdit(moodViewModel: MoodViewModel, moods: MoodEntity) {
-    var context = LocalContext.current
+    val context = LocalContext.current
     var showEditDialog by remember { mutableStateOf(false) }
 
 
     Button(
         modifier = Modifier
-            .width(100.dp)
-            .height(35.dp),
+            .wrapContentSize(),
         onClick = {
             showEditDialog = true
             moodViewModel
@@ -75,6 +69,8 @@ fun MoodEdit(moodViewModel: MoodViewModel, moods: MoodEntity) {
                 ),
         colors = ButtonDefaults.buttonColors(Color.Transparent)
     ) {
+        Image(painter = painterResource(R.drawable.edit), contentDescription = null, modifier = Modifier.size(13.dp))
+        Spacer(Modifier.width(5.dp))
         Text(
             text = "Edit",
             fontSize = 13.sp,
@@ -160,16 +156,18 @@ fun EditMoodDialog(
                                 MoodEntity(
                                     mood = images[selected].toString(),
                                     note = moodNoteEdit,
-                                ))
+                                )
+                            )
                             onDismiss()
                         }
                     ) {
                         Text("Confirm")
                     }
+                    Toast.makeText(LocalContext.current, "image : " + images[selected].toString() +
+                            " moodNote: " + moodNoteEdit
+                        , Toast.LENGTH_SHORT).show()
                 }
-
             }
-
         }
     }
 }

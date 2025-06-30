@@ -16,7 +16,8 @@
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.MentalHealthApp">
+            android:theme="@style/Theme.MentalHealthApp"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -26,7 +27,8 @@
         <activity
             android:name=".navigation.Home"
             android:exported="true"
-            android:theme="@style/Theme.MentalHealthApp"/>
+            android:theme="@style/Theme.MentalHealthApp"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
