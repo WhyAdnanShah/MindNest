@@ -39,10 +39,6 @@ import com.example.mentalhealthapp.viewModel.MoodViewModel
 
 @Composable
 fun MoodItemCard(moods: MoodEntity, moodViewModel: MoodViewModel){
-    val context = LocalContext.current
-    var showDeleteDialog by remember { mutableStateOf(false) }
-    var showEditDialog by remember { mutableStateOf(false) }
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -106,6 +102,7 @@ fun MoodItemCard(moods: MoodEntity, moodViewModel: MoodViewModel){
             Text(
                 text = moods.note,
             )
+
             Spacer(Modifier.height(10.dp))
 
             Row(
@@ -114,129 +111,23 @@ fun MoodItemCard(moods: MoodEntity, moodViewModel: MoodViewModel){
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End
             ){
-                Button (modifier = Modifier
-                    .width(100.dp)
-                    .height(35.dp),
-                    onClick = {
-                        showEditDialog = true
-                        moodViewModel
-                        Toast.makeText(context, "Edit id: " + moods.id, Toast.LENGTH_SHORT).show()
-                    },
-                    border = (
-                            BorderStroke(
-                                width = 0.dp,
-                                color = colorResource(R.color.earth_yellow)
-                            )
-                            ),
-                    colors = ButtonDefaults.buttonColors(Color.Transparent)
-                ){
-                    Text(text = "Edit",
-                        fontSize = 13.sp,
-                        color = colorResource(R.color.earth_yellow)
-
-                    )
-                }
+                MoodEdit(
+                    moodViewModel = moodViewModel,
+                    moods = moods
+                )
 
                 Spacer(Modifier.width(10.dp))
 
-                Button (modifier = Modifier
-                    .width(100.dp)
-                    .height(35.dp),
-                    onClick = {
-                        showDeleteDialog = true
-                        moodViewModel
-                        Toast.makeText(context, "Delete id: " + moods.id, Toast.LENGTH_SHORT).show()
-                    },
-                    border = (
-                            BorderStroke(
-                                width = 0.dp,
-                                color = colorResource(R.color.light_red)
-                            )
-                            ),
-                    colors = ButtonDefaults.buttonColors(Color.Transparent)
-                ){
-                    Text(text = "Delete",
-                        fontSize = 13.sp,
-                        color = colorResource(R.color.light_red)
-
-                    )
-                }
-
+                MoodDelete(
+                    moodViewModel = moodViewModel,
+                    moods = moods
+                )
             }
-
-            if (showDeleteDialog) DeleteMoodDialog(
-                onDismiss = { showDeleteDialog = false },
-                moodViewModel = moodViewModel,
-                moods = moods
-            )
-
-            if (showEditDialog) EditMoodDialog(
-                onDismiss = { showEditDialog = false },
-                moodViewModel = moodViewModel,
-                moods = moods
-            )
-
         }
-
     }
 }
 
-@Composable
-fun DeleteMoodDialog(onDismiss: () -> Unit, moodViewModel: MoodViewModel, moods: MoodEntity) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text("Delete Mood Entry") },
-        text = { Text("Are you sure you want to delete this mood entry?") },
-        confirmButton = {
-            Button(
-                onClick = {
-                    moodViewModel.removeMood(moods)
-                    onDismiss()
-                }
-            ) {
-                Text("Confirm")
-            }
-        },
-        dismissButton = {
-            Button(
-                onClick = onDismiss,
-                colors = ButtonDefaults.buttonColors(Color.Transparent)
-            ) {
-                Text("Cancel",
-                    color = colorResource(R.color.light_red)
-                )
-            }
-        }
-    )
-}
 
 
-@Composable
-fun EditMoodDialog(onDismiss: () -> Unit, moodViewModel: MoodViewModel, moods: MoodEntity) {
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text("Edit Mood Entry") },
-        text = { Text("Are you sure you want to edit this mood entry?") },
-        confirmButton = {
-            Button(
-                onClick = {
-                    moodViewModel.editMood(moods)
-                    onDismiss()
-                }
-            ) {
-                Text("Confirm")
-            }
-        },
-        dismissButton = {
-            Button(
-                onClick = onDismiss,
-                colors = ButtonDefaults.buttonColors(Color.Transparent)
-            ) {
-                Text("Cancel",
-                    color = colorResource(R.color.light_red)
-                )
-            }
 
-        }
-    )
-}
+
