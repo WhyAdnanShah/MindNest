@@ -24,4 +24,16 @@ class MoodViewModel(application: Application) : AndroidViewModel(application) {
             db.moodDao().insertMood(moodEntity)
         }
     }
+
+    fun removeMood(moodEntity: MoodEntity){
+        viewModelScope.launch {
+            db.moodDao().deleteMood(moodEntity)
+        }
+    }
+
+    fun editMood(moodEntity: MoodEntity){
+        viewModelScope.launch {
+            db.moodDao().updateMood(moodEntity)
+        }
+    }
 }

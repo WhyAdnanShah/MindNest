@@ -35,11 +35,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.database.MoodEntity
+import com.example.mentalhealthapp.viewModel.MoodViewModel
 
 @Composable
-fun MoodItemCard(moods: MoodEntity){
+fun MoodItemCard(moods: MoodEntity, moodViewModel: MoodViewModel){
     val context = LocalContext.current
     var showDeleteDialog by remember { mutableStateOf(false) }
+    var showEditDialog by remember { mutableStateOf(false) }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -115,7 +118,33 @@ fun MoodItemCard(moods: MoodEntity){
                     .width(100.dp)
                     .height(35.dp),
                     onClick = {
+                        showEditDialog = true
+                        moodViewModel
+                        Toast.makeText(context, "Edit id: " + moods.id, Toast.LENGTH_SHORT).show()
+                    },
+                    border = (
+                            BorderStroke(
+                                width = 0.dp,
+                                color = colorResource(R.color.earth_yellow)
+                            )
+                            ),
+                    colors = ButtonDefaults.buttonColors(Color.Transparent)
+                ){
+                    Text(text = "Edit",
+                        fontSize = 13.sp,
+                        color = colorResource(R.color.earth_yellow)
+
+                    )
+                }
+
+                Spacer(Modifier.width(10.dp))
+
+                Button (modifier = Modifier
+                    .width(100.dp)
+                    .height(35.dp),
+                    onClick = {
                         showDeleteDialog = true
+                        moodViewModel
                         Toast.makeText(context, "Delete id: " + moods.id, Toast.LENGTH_SHORT).show()
                     },
                     border = (
@@ -132,10 +161,19 @@ fun MoodItemCard(moods: MoodEntity){
 
                     )
                 }
+
             }
 
             if (showDeleteDialog) DeleteMoodDialog(
                 onDismiss = { showDeleteDialog = false },
+                moodViewModel = moodViewModel,
+                moods = moods
+            )
+
+            if (showEditDialog) EditMoodDialog(
+                onDismiss = { showEditDialog = false },
+                moodViewModel = moodViewModel,
+                moods = moods
             )
 
         }
@@ -144,7 +182,7 @@ fun MoodItemCard(moods: MoodEntity){
 }
 
 @Composable
-fun DeleteMoodDialog(onDismiss: () -> Unit) {
+fun DeleteMoodDialog(onDismiss: () -> Unit, moodViewModel: MoodViewModel, moods: MoodEntity) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("Delete Mood Entry") },
@@ -152,6 +190,7 @@ fun DeleteMoodDialog(onDismiss: () -> Unit) {
         confirmButton = {
             Button(
                 onClick = {
+                    moodViewModel.removeMood(moods)
                     onDismiss()
                 }
             ) {
@@ -164,9 +203,40 @@ fun DeleteMoodDialog(onDismiss: () -> Unit) {
                 colors = ButtonDefaults.buttonColors(Color.Transparent)
             ) {
                 Text("Cancel",
-                color = colorResource(R.color.light_red)
+                    color = colorResource(R.color.light_red)
                 )
             }
+        }
+    )
+}
+
+
+@Composable
+fun EditMoodDialog(onDismiss: () -> Unit, moodViewModel: MoodViewModel, moods: MoodEntity) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Edit Mood Entry") },
+        text = { Text("Are you sure you want to edit this mood entry?") },
+        confirmButton = {
+            Button(
+                onClick = {
+                    moodViewModel.editMood(moods)
+                    onDismiss()
+                }
+            ) {
+                Text("Confirm")
+            }
+        },
+        dismissButton = {
+            Button(
+                onClick = onDismiss,
+                colors = ButtonDefaults.buttonColors(Color.Transparent)
+            ) {
+                Text("Cancel",
+                    color = colorResource(R.color.light_red)
+                )
+            }
+
         }
     )
 }
