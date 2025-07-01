@@ -47,7 +47,10 @@ import com.example.mentalhealthapp.viewModel.MoodViewModel
 import kotlin.collections.listOf
 
 @Composable
-fun MoodEdit(moodViewModel: MoodViewModel, moods: MoodEntity) {
+fun MoodEdit(
+    moodViewModel: MoodViewModel,
+    moods: MoodEntity
+) {
     val context = LocalContext.current
     var showEditDialog by remember { mutableStateOf(false) }
 
@@ -81,7 +84,7 @@ fun MoodEdit(moodViewModel: MoodViewModel, moods: MoodEntity) {
     if (showEditDialog) EditMoodDialog(
         onDismiss = { showEditDialog = false },
         moodViewModel = moodViewModel,
-        moods = moods
+        moods = moods,
     )
 }
 
@@ -100,6 +103,7 @@ fun EditMoodDialog(
     )
     var selected by remember { mutableIntStateOf(images.indexOf(moods.mood.toInt())) }
     var moodNoteEdit by remember { mutableStateOf(moods.note) }
+
 
 
     Dialog(onDismissRequest = onDismiss)
@@ -158,6 +162,8 @@ fun EditMoodDialog(
                             )
                             moodViewModel.editMood(updatedMood)
                             onDismiss()
+
+
                         }
                     ) {
                         Text("Confirm")
