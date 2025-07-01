@@ -29,14 +29,21 @@ import androidx.compose.ui.unit.sp
 import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.viewModel.MoodViewModel
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import com.example.mentalhealthapp.moodScreen.MoodDialog
 import com.example.mentalhealthapp.moodScreen.MoodItemCard
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
+@Stable
 fun MoodScreen(moodViewModel: MoodViewModel) {
     Log.d("MoodScreen", "Recomposing MoodScreen")
 
@@ -69,7 +76,8 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .padding(horizontal = 16.dp),
+                .padding(horizontal = 16.dp)
+                .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start
         ) {
@@ -96,7 +104,7 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
             ) {
                 LazyColumn{
 
-                    items(moods) { moodItem ->
+                    items(moods, key= {it.id}) { moodItem ->
                         MoodItemCard(
                             moods = moodItem,
                             moodViewModel = moodViewModel
@@ -115,6 +123,19 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Medium
             )
+            Card (
+                modifier = Modifier
+                    .fillMaxWidth().height(500.dp)
+                    .border(
+                    shape = RoundedCornerShape(5.dp, 5.dp, 20.dp, 20.dp),
+                    width = 1.dp,
+                    color = colorResource(R.color.slate_gray)
+                ),
+                colors = CardDefaults.cardColors(Color.Transparent)
+
+            )
+
+            {  }
 
         }
 

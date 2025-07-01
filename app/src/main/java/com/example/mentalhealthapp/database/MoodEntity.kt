@@ -1,8 +1,10 @@
 package com.example.mentalhealthapp.database
 
+import androidx.compose.runtime.Immutable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+@Immutable
 @Entity(tableName = "mood_table")
 data class MoodEntity(
     @PrimaryKey(autoGenerate = true) var id: Int = 0,
