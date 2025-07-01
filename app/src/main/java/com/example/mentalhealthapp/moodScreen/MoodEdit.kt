@@ -41,7 +41,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.database.MoodEntity
 import com.example.mentalhealthapp.viewModel.MoodViewModel
@@ -92,9 +91,6 @@ fun EditMoodDialog(
     moodViewModel: MoodViewModel,
     moods: MoodEntity
 ) {
-    var selected by remember { mutableIntStateOf(0) }
-    var moodNoteEdit by remember { mutableStateOf("") }
-
     val images = listOf(
         R.drawable.laughing,
         R.drawable.smiling,
@@ -102,6 +98,10 @@ fun EditMoodDialog(
         R.drawable.sad,
         R.drawable.dead
     )
+    var selected by remember { mutableIntStateOf(images.indexOf(moods.mood.toInt())) }
+    var moodNoteEdit by remember { mutableStateOf(moods.note) }
+
+
     Dialog(onDismissRequest = onDismiss)
     {
         Card(modifier = Modifier
@@ -152,20 +152,19 @@ fun EditMoodDialog(
 
                     Button(
                         onClick = {
-                            moodViewModel.editMood(
-                                MoodEntity(
-                                    mood = images[selected].toString(),
-                                    note = moodNoteEdit,
-                                )
+                            val updatedMood = moods.copy(
+                                mood = images[selected].toString(),
+                                note = moodNoteEdit
                             )
+                            moodViewModel.editMood(updatedMood)
                             onDismiss()
                         }
                     ) {
                         Text("Confirm")
                     }
-                    Toast.makeText(LocalContext.current, "image : " + images[selected].toString() +
-                            " moodNote: " + moodNoteEdit
-                        , Toast.LENGTH_SHORT).show()
+//                    Toast.makeText(LocalContext.current, "image : " + images[selected].toString() +
+//                            " moodNote: " + moodNoteEdit
+//                        , Toast.LENGTH_SHORT).show()
                 }
             }
         }
