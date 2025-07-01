@@ -1,5 +1,6 @@
 package com.example.mentalhealthapp.moodScreen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -38,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
@@ -54,20 +56,26 @@ import java.util.Locale
 
 @Composable
 fun MoodDialog(onDismiss: () -> Unit, moodViewModel: MoodViewModel) {
-
-//    //Collecting all remembered moods
-//    val allMoods = moodViewModel.allMoods.collectAsState(initial = emptyList())
-
     var selected by remember { mutableIntStateOf(0) }
     var datePickerCard by remember { mutableStateOf(false) }
     var selectedDateMillis by remember { mutableStateOf<Long?>(null) }
-    val dateFormat = remember { SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()) }
     var moodNote by remember { mutableStateOf("") }
+    val context = LocalContext.current
+    val dateFormat = remember { SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()) }
+
+
+    val moodNames = listOf("laughing", "smiling", "neutral", "sad", "dead")
+    val moodImages = listOf(
+        R.drawable.laughing,
+        R.drawable.smiling,
+        R.drawable.neutral,
+        R.drawable.sad,
+        R.drawable.dead
+    )
 
     Dialog(onDismissRequest = onDismiss) {
         Card(
-            modifier = Modifier
-                .wrapContentSize()
+            modifier = Modifier.wrapContentSize()
         ) {
             Column(
                 modifier = Modifier
@@ -79,16 +87,9 @@ fun MoodDialog(onDismiss: () -> Unit, moodViewModel: MoodViewModel) {
                 TitleText(text = "How are you feeling right now?")
 
                 Spacer(modifier = Modifier.height(25.dp))
-                
-                val images = listOf(
-                    R.drawable.laughing,
-                    R.drawable.smiling,
-                    R.drawable.neutral,
-                    R.drawable.sad,
-                    R.drawable.dead
-                )
+
                 ImageRadioGroup(
-                    imageResIds = images,
+                    imageResIds = moodImages,
                     selectedIndex = selected,
                     onSelected = { selected = it }
                 )
@@ -103,7 +104,7 @@ fun MoodDialog(onDismiss: () -> Unit, moodViewModel: MoodViewModel) {
                 )
 
                 Spacer(modifier = Modifier.height(25.dp))
-                
+
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -139,27 +140,36 @@ fun MoodDialog(onDismiss: () -> Unit, moodViewModel: MoodViewModel) {
                         color = Color.Transparent,
                         textColors = colorResource(R.color.light_red),
                     )
+
                     dialogButtons(
                         text = "Save",
                         onClick = {
+                            val mood = moodNames[selected]
+                            val note = moodNote
+                            val date = selectedDateMillis?.let { dateFormat.format(it) }.toString()
+
                             moodViewModel.addMood(
                                 MoodEntity(
-                                    mood = images[selected].toString(),
-                                    note = moodNote,
-                                    date = selectedDateMillis?.let { dateFormat.format(it) }.toString()
+                                    mood = mood,
+                                    note = note,
+                                    date = date
                                 )
                             )
+
+//                            Toast.makeText(
+//                                context,
+//                                "Saved mood: $mood\nNote: $note\nDate: $date",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+
+                            Log.d("Mood Save", "Mood: $mood, Note: $note, Date: $date")
+
                             onDismiss()
                         },
                         color = colorResource(R.color.blue_sky),
                         textColors = Color.Black
                     )
                 }
-//                Toast.makeText(LocalContext.current, "image : " + images[selected].toString() +
-//                        " moodNote: " + moodNote + " Date : " + selectedDateMillis?.let { dateFormat.format(it) }
-//                    , Toast.LENGTH_SHORT).show()
-//                Log.d("Mood Save or Not?", "images[selected].toString() : " + images[selected].toString() +
-//                        " moodNote: " + moodNote + " Date : " + selectedDateMillis?.let { dateFormat.format(it) })
             }
         }
     }

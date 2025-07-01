@@ -1,6 +1,5 @@
 package com.example.mentalhealthapp.moodScreen
 
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -61,7 +60,6 @@ fun MoodEdit(
         onClick = {
             showEditDialog = true
             moodViewModel
-            Toast.makeText(context, "Edit id: " + moods.id, Toast.LENGTH_SHORT).show()
         },
         border = (
                 BorderStroke(
@@ -94,6 +92,7 @@ fun EditMoodDialog(
     moodViewModel: MoodViewModel,
     moods: MoodEntity
 ) {
+    val moodNames = listOf("laughing", "smiling", "neutral", "sad", "dead")
     val images = listOf(
         R.drawable.laughing,
         R.drawable.smiling,
@@ -101,7 +100,7 @@ fun EditMoodDialog(
         R.drawable.sad,
         R.drawable.dead
     )
-    var selected by remember { mutableIntStateOf(images.indexOf(moods.mood.toInt())) }
+    var selected by remember { mutableIntStateOf(0) }
     var moodNoteEdit by remember { mutableStateOf(moods.note) }
 
 
@@ -157,7 +156,7 @@ fun EditMoodDialog(
                     Button(
                         onClick = {
                             val updatedMood = moods.copy(
-                                mood = images[selected].toString(),
+                                mood = moodNames[selected],
                                 note = moodNoteEdit
                             )
                             moodViewModel.editMood(updatedMood)

@@ -58,19 +58,19 @@ fun MoodItemCard(moods: MoodEntity, moodViewModel: MoodViewModel){
             ){ Image(modifier = Modifier.size(40.dp),
                 painter = painterResource(
                     when (moods.mood) {
-                        "2130968593" -> {
+                        "laughing" -> {
                             R.drawable.laughing
                         }
-                        "2130968611" -> {
+                        "smiling" -> {
                             R.drawable.smiling
                         }
-                        "2130968595" -> {
+                        "neutral" -> {
                             R.drawable.neutral
                         }
-                        "2130968609" -> {
+                        "sad" -> {
                             R.drawable.sad
                         }
-                        "2130968581" -> {
+                        "dead" -> {
                             R.drawable.dead
                         }
                         else -> {

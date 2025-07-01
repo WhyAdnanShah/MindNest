@@ -8,5 +8,5 @@ data class MoodEntity(
     @PrimaryKey(autoGenerate = true) var id: Int = 0,
     val mood: String,
     val note: String = "",
-    val date: String = ""
+    val date: String
 )
