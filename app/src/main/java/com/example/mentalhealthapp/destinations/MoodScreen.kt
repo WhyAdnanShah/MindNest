@@ -2,6 +2,8 @@ package com.example.mentalhealthapp.destinations
 
 import android.annotation.SuppressLint
 import android.util.Log
+import android.widget.Button
+import android.widget.Toast
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -31,12 +33,17 @@ import com.example.mentalhealthapp.viewModel.MoodViewModel
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ButtonDefaults.buttonColors
+import androidx.compose.material3.ButtonDefaults.shape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import com.example.mentalhealthapp.moodScreen.MoodDialog
 import com.example.mentalhealthapp.moodScreen.MoodItemCard
@@ -45,6 +52,7 @@ import com.example.mentalhealthapp.moodScreen.MoodItemCard
 @Composable
 @Stable
 fun MoodScreen(moodViewModel: MoodViewModel) {
+    val context = LocalContext.current
     Log.d("MoodScreen", "Recomposing MoodScreen")
 
     var isMoodCardVisible by remember { mutableStateOf(false) }
@@ -104,14 +112,35 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
             ) {
                 LazyColumn{
 
+                    item {
+                        Button(
+                            modifier = Modifier
+                                .border(
+                                    shape = RoundedCornerShape(20.dp),
+                                    color = colorResource(R.color.slate_gray),
+                                    width = 1.dp
+                                ),
+                            onClick = {
+                                Toast.makeText(context, "Hellooooo", Toast.LENGTH_SHORT).show()
+                            },
+                            shape = RoundedCornerShape(20.dp),
+                            colors = ButtonDefaults.buttonColors(colorResource(R.color.transparent)),
+                            elevation = ButtonDefaults.buttonElevation(10.dp),
+                        ){
+
+                        }
+                    }
+
                     items(moods, key= {it.id}) { moodItem ->
                         MoodItemCard(
                             moods = moodItem,
                             moodViewModel = moodViewModel
                         )
                     }
+
                 }
             }
+
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -125,12 +154,13 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
             )
             Card (
                 modifier = Modifier
-                    .fillMaxWidth().height(500.dp)
+                    .fillMaxWidth()
+                    .height(500.dp)
                     .border(
-                    shape = RoundedCornerShape(5.dp, 5.dp, 20.dp, 20.dp),
-                    width = 1.dp,
-                    color = colorResource(R.color.slate_gray)
-                ),
+                        shape = RoundedCornerShape(5.dp, 5.dp, 20.dp, 20.dp),
+                        width = 1.dp,
+                        color = colorResource(R.color.slate_gray)
+                    ),
                 colors = CardDefaults.cardColors(Color.Transparent)
 
             )
