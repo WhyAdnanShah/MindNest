@@ -1,20 +1,15 @@
 package com.example.mentalhealthapp.destinations
 
 import android.annotation.SuppressLint
+import android.graphics.MeshSpecification
 import android.util.Log
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,8 +18,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -47,22 +40,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ButtonDefaults.buttonColors
-import androidx.compose.material3.ButtonDefaults.shape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.room.util.TableInfo
-import com.example.mentalhealthapp.database.MoodDatabase
 import com.example.mentalhealthapp.database.MoodEntity
 import com.example.mentalhealthapp.moodScreen.MoodDialog
 import com.example.mentalhealthapp.moodScreen.MoodItemCard
@@ -72,22 +56,19 @@ import kotlinx.coroutines.flow.Flow
 @Composable
 @Stable
 fun MoodScreen(moodViewModel: MoodViewModel) {
-    val context = LocalContext.current
     Log.d("MoodScreen", "Recomposing MoodScreen")
 
     var isMoodCardVisible by remember { mutableStateOf(false) }
 
     val moods by moodViewModel.allMoods.collectAsState(initial = emptyList())
 
-    //Animations that I like
-    var expandedMoodDetailsButton by remember { mutableStateOf(false) }
-    val moodDetailHeight = if (expandedMoodDetailsButton) 1000.dp else 450.dp
-    val rotation by animateFloatAsState(targetValue = if (expandedMoodDetailsButton) 270f else 0f)
-
     //These are all the moods that are in the DataBase in a ListView... This is to check if there is any item in the DataBase or not.
     val allMoods: Flow<List<MoodEntity>> = moodViewModel.db.moodDao().getAllMoods()
 
-
+    //Animations that I like
+    var expandedMoodDetailsButton by remember { mutableStateOf(false) }
+    val rotation by animateFloatAsState(targetValue = if (expandedMoodDetailsButton) 270f else 0f)
+    val moodDetailHeight = if (expandedMoodDetailsButton) 1000.dp else 450.dp
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -130,9 +111,11 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .animateContentSize(animationSpec = tween (
-                        700, easing = FastOutSlowInEasing
-                    ))
+                    .animateContentSize(
+                        animationSpec = tween(
+                            700, easing = FastOutSlowInEasing
+                        )
+                    )
                     .height(moodDetailHeight)
                     .border(
                         shape = RoundedCornerShape(5.dp, 5.dp, 20.dp, 20.dp),
@@ -159,7 +142,9 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
                     LazyColumn{
 
                         item {
-                            Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 5.dp),
+                            Row(modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 5.dp),
                                 horizontalArrangement = Arrangement.End)
                             {
                                 Button(
@@ -175,7 +160,8 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
                                     },
                                     colors = buttonColors(colorResource(R.color.transparent))
                                 ) {
-                                    Image(modifier = Modifier.size(17.dp)
+                                    Image(modifier = Modifier
+                                        .size(17.dp)
                                         .rotate(rotation),
                                         painter = if (expandedMoodDetailsButton) painterResource(R.drawable.collapse)
                                         else painterResource(R.drawable.expand),

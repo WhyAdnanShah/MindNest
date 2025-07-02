@@ -1,6 +1,5 @@
 package com.example.mentalhealthapp.moodScreen
 
-import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Spacer
@@ -18,7 +17,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -29,7 +27,6 @@ import com.example.mentalhealthapp.viewModel.MoodViewModel
 
 @Composable
 fun MoodDelete(moodViewModel: MoodViewModel, moods: MoodEntity){
-    var context = LocalContext.current
     var showDeleteDialog by remember { mutableStateOf(false) }
 
     Button (modifier = Modifier
@@ -37,7 +34,6 @@ fun MoodDelete(moodViewModel: MoodViewModel, moods: MoodEntity){
         onClick = {
             showDeleteDialog = true
             moodViewModel
-            Toast.makeText(context, "Delete id: " + moods.id, Toast.LENGTH_SHORT).show()
         },
         border = (
                 BorderStroke(

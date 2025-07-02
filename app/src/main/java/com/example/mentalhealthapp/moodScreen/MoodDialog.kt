@@ -260,7 +260,7 @@ fun DatePickerDialogModal(
 fun dialogButtons(text: String, onClick: () -> Unit, color: Color, textColors: Color) {
     Button(
         onClick = onClick,
-        modifier = Modifier.size(120.dp, 45.dp),
+        modifier = Modifier.wrapContentSize(),
         colors = ButtonDefaults.buttonColors(color),
         shape = RoundedCornerShape(20.dp),
     ) {
