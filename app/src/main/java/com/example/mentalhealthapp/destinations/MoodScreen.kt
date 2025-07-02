@@ -5,6 +5,11 @@ import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -47,6 +52,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -65,8 +71,11 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
 
     val moods by moodViewModel.allMoods.collectAsState(initial = emptyList())
 
-    var expandedMoodDetails by remember { mutableStateOf(false) }
-    val moodDetailHeight = if (expandedMoodDetails) 700.dp else 450.dp
+    //Animations that I like
+    var expandedMoodDetailsButton by remember { mutableStateOf(false) }
+    val moodDetailHeight = if (expandedMoodDetailsButton) 1000.dp else 450.dp
+    val rotation by animateFloatAsState(targetValue = if (expandedMoodDetailsButton) 180f else 0f)
+
 
 
     Scaffold(
@@ -110,12 +119,16 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
+                    .animateContentSize(animationSpec = tween (
+                        500, easing = FastOutSlowInEasing
+                    ))
                     .height(moodDetailHeight)
                     .border(
                         shape = RoundedCornerShape(5.dp, 5.dp, 20.dp, 20.dp),
                         width = 1.dp,
                         color = colorResource(R.color.slate_gray)
                     )
+
 
             ) {
                 LazyColumn{
@@ -132,22 +145,18 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
                                         width = 1.dp
                                     ),
                                 onClick = {
-                                    expandedMoodDetails = !expandedMoodDetails
+                                    expandedMoodDetailsButton = !expandedMoodDetailsButton
                                 },
                                 shape = RoundedCornerShape(20.dp),
                                 colors = buttonColors(colorResource(R.color.transparent)),
                                 elevation = ButtonDefaults.buttonElevation(10.dp),
                             ) {
-                                Image(
-                                    painter = if (expandedMoodDetails) painterResource(R.drawable.collapse)
+                                Image(modifier = Modifier.size(20.dp)
+                                    .rotate(rotation),
+                                    painter = if (expandedMoodDetailsButton) painterResource(R.drawable.collapse)
                                     else painterResource(R.drawable.expand),
                                     contentDescription = null,
-                                    modifier = Modifier.size(20.dp)
                                 )
-//                                Text(
-//                                    text = if (expandedMoodDetails) "Collapse" else "Expand",
-//                                    fontSize = 13.sp
-//                                )
                             }
                         }
 
