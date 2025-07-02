@@ -84,11 +84,8 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
     val moodDetailHeight = if (expandedMoodDetailsButton) 1000.dp else 450.dp
     val rotation by animateFloatAsState(targetValue = if (expandedMoodDetailsButton) 270f else 0f)
 
-
-//    var allMoods by remember { mutableStateOf(moodViewModel.allMoods) }
+    //These are all the moods that are in the DataBase in a ListView... This is to check if there is any item in the DataBase or not.
     val allMoods: Flow<List<MoodEntity>> = moodViewModel.db.moodDao().getAllMoods()
-
-
 
 
 
