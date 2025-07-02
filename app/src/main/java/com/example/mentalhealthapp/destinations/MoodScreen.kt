@@ -3,16 +3,21 @@ package com.example.mentalhealthapp.destinations
 import android.annotation.SuppressLint
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.FloatingActionButton
@@ -44,6 +49,7 @@ import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import com.example.mentalhealthapp.moodScreen.MoodDialog
 import com.example.mentalhealthapp.moodScreen.MoodItemCard
@@ -59,6 +65,8 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
 
     val moods by moodViewModel.allMoods.collectAsState(initial = emptyList())
 
+    var expandedMoodDetails by remember { mutableStateOf(false) }
+    val moodDetailHeight = if (expandedMoodDetails) 700.dp else 450.dp
 
 
     Scaffold(
@@ -99,10 +107,10 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
                 fontWeight = FontWeight.Medium
             )
 
-            Box(
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(450.dp)
+                    .height(moodDetailHeight)
                     .border(
                         shape = RoundedCornerShape(5.dp, 5.dp, 20.dp, 20.dp),
                         width = 1.dp,
@@ -113,22 +121,36 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
                 LazyColumn{
 
                     item {
-                        Button(
-                            modifier = Modifier
-                                .border(
-                                    shape = RoundedCornerShape(20.dp),
-                                    color = colorResource(R.color.slate_gray),
-                                    width = 1.dp
-                                ),
-                            onClick = {
-                                Toast.makeText(context, "Hellooooo", Toast.LENGTH_SHORT).show()
-                            },
-                            shape = RoundedCornerShape(20.dp),
-                            colors = ButtonDefaults.buttonColors(colorResource(R.color.transparent)),
-                            elevation = ButtonDefaults.buttonElevation(10.dp),
-                        ){
-
+                        Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 5.dp),
+                            horizontalArrangement = Arrangement.End)
+                        {
+                            Button(
+                                modifier = Modifier
+                                    .border(
+                                        shape = RoundedCornerShape(20.dp),
+                                        color = colorResource(R.color.slate_gray),
+                                        width = 1.dp
+                                    ),
+                                onClick = {
+                                    expandedMoodDetails = !expandedMoodDetails
+                                },
+                                shape = RoundedCornerShape(20.dp),
+                                colors = buttonColors(colorResource(R.color.transparent)),
+                                elevation = ButtonDefaults.buttonElevation(10.dp),
+                            ) {
+                                Image(
+                                    painter = if (expandedMoodDetails) painterResource(R.drawable.collapse)
+                                    else painterResource(R.drawable.expand),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(20.dp)
+                                )
+//                                Text(
+//                                    text = if (expandedMoodDetails) "Collapse" else "Expand",
+//                                    fontSize = 13.sp
+//                                )
+                            }
                         }
+
                     }
 
                     items(moods, key= {it.id}) { moodItem ->
