@@ -38,7 +38,7 @@ fun MoodItemCard(moods: MoodEntity, moodViewModel: MoodViewModel){
         shape = RoundedCornerShape(20.dp),
         border = (
                 BorderStroke(
-                    width = 0.dp,
+                    width = 1.dp,
                     color = colorResource(R.color.slate_gray)
                 )
                 ),

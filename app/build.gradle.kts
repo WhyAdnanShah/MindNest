@@ -28,6 +28,7 @@ android {
                 "proguard-rules.pro"
             )
         }
+
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -39,7 +40,10 @@ android {
     buildFeatures {
         compose = true
     }
+
+
 }
+
 
 dependencies {
 
@@ -62,10 +66,9 @@ dependencies {
     implementation("androidx.compose.material:material-ripple:1.7.0+")
     implementation ("androidx.navigation:navigation-compose:2.7.5")
 
-    val room_version = "2.6.1"
-    implementation("androidx.room:room-runtime:2.6.1")
-    kapt("androidx.room:room-compiler:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
-
+    implementation("androidx.room:room-runtime:2.7.2")
+    kapt("androidx.room:room-compiler:2.7.2")
+    implementation("androidx.room:room-ktx:2.7.2")
+    
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }
-

@@ -7,6 +7,7 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -22,6 +23,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -54,11 +57,16 @@ import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.room.util.TableInfo
+import com.example.mentalhealthapp.database.MoodDatabase
+import com.example.mentalhealthapp.database.MoodEntity
 import com.example.mentalhealthapp.moodScreen.MoodDialog
 import com.example.mentalhealthapp.moodScreen.MoodItemCard
+import kotlinx.coroutines.flow.Flow
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -74,7 +82,13 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
     //Animations that I like
     var expandedMoodDetailsButton by remember { mutableStateOf(false) }
     val moodDetailHeight = if (expandedMoodDetailsButton) 1000.dp else 450.dp
-    val rotation by animateFloatAsState(targetValue = if (expandedMoodDetailsButton) 180f else 0f)
+    val rotation by animateFloatAsState(targetValue = if (expandedMoodDetailsButton) 270f else 0f)
+
+
+//    var allMoods by remember { mutableStateOf(moodViewModel.allMoods) }
+    val allMoods: Flow<List<MoodEntity>> = moodViewModel.db.moodDao().getAllMoods()
+
+
 
 
 
@@ -120,58 +134,71 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .animateContentSize(animationSpec = tween (
-                        500, easing = FastOutSlowInEasing
+                        700, easing = FastOutSlowInEasing
                     ))
                     .height(moodDetailHeight)
                     .border(
                         shape = RoundedCornerShape(5.dp, 5.dp, 20.dp, 20.dp),
-                        width = 1.dp,
+                        width = 0.dp,
                         color = colorResource(R.color.slate_gray)
                     )
 
 
             ) {
-                LazyColumn{
+                if (allMoods.collectAsState(initial = emptyList()).value.isEmpty()){
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center
+                    ){
+                        Image(modifier = Modifier.size(150.dp), painter = painterResource(R.drawable.empty_list), contentDescription = "Empty List")
+                        Spacer(Modifier.height(20.dp))
+                        Text(modifier = Modifier,
+                            text = "Tap the '+' icon to add a new snapshot"
+                        )
+                    }
+                }
+                else{
+                    LazyColumn{
 
-                    item {
-                        Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 5.dp),
-                            horizontalArrangement = Arrangement.End)
-                        {
-                            Button(
-                                modifier = Modifier
-                                    .border(
-                                        shape = RoundedCornerShape(20.dp),
-                                        color = colorResource(R.color.slate_gray),
-                                        width = 1.dp
-                                    ),
-                                onClick = {
-                                    expandedMoodDetailsButton = !expandedMoodDetailsButton
-                                },
-                                shape = RoundedCornerShape(20.dp),
-                                colors = buttonColors(colorResource(R.color.transparent)),
-                                elevation = ButtonDefaults.buttonElevation(10.dp),
-                            ) {
-                                Image(modifier = Modifier.size(20.dp)
-                                    .rotate(rotation),
-                                    painter = if (expandedMoodDetailsButton) painterResource(R.drawable.collapse)
-                                    else painterResource(R.drawable.expand),
-                                    contentDescription = null,
-                                )
+                        item {
+                            Row(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 5.dp),
+                                horizontalArrangement = Arrangement.End)
+                            {
+                                Button(
+                                    modifier = Modifier
+                                        .wrapContentSize()
+                                        .border(
+                                            shape = RoundedCornerShape(20.dp),
+                                            color = colorResource(R.color.slate_gray),
+                                            width = 1.dp
+                                        ),
+                                    onClick = {
+                                        expandedMoodDetailsButton = !expandedMoodDetailsButton
+                                    },
+                                    colors = buttonColors(colorResource(R.color.transparent))
+                                ) {
+                                    Image(modifier = Modifier.size(17.dp)
+                                        .rotate(rotation),
+                                        painter = if (expandedMoodDetailsButton) painterResource(R.drawable.collapse)
+                                        else painterResource(R.drawable.expand),
+                                        contentDescription = null
+                                    )
+                                }
                             }
+
+                        }
+
+                        items(moods, key= {it.id}) { moodItem ->
+                            MoodItemCard(
+                                moods = moodItem,
+                                moodViewModel = moodViewModel
+                            )
                         }
 
                     }
-
-                    items(moods, key= {it.id}) { moodItem ->
-                        MoodItemCard(
-                            moods = moodItem,
-                            moodViewModel = moodViewModel
-                        )
-                    }
-
                 }
             }
-
 
             Spacer(modifier = Modifier.height(24.dp))
 
@@ -183,20 +210,16 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Medium
             )
-            Card (
+            Column (
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(500.dp)
                     .border(
                         shape = RoundedCornerShape(5.dp, 5.dp, 20.dp, 20.dp),
-                        width = 1.dp,
+                        width = 0.dp,
                         color = colorResource(R.color.slate_gray)
-                    ),
-                colors = CardDefaults.cardColors(Color.Transparent)
-
-            )
-
-            {  }
+                    )
+            ) {  }
 
         }
 

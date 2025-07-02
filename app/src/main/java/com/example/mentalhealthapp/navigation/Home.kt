@@ -40,6 +40,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.mentalhealthapp.R
+import com.example.mentalhealthapp.database.MoodDatabase
 import com.example.mentalhealthapp.destinations.MoodScreen
 import com.example.mentalhealthapp.destinations.SettingsScreen
 import com.example.mentalhealthapp.ui.theme.MentalHealthAppTheme
@@ -80,7 +81,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         BottomNavItem.Home,
         BottomNavItem.Journal,
         BottomNavItem.Zen,
-        BottomNavItem.Vent,
+//        BottomNavItem.Vent,
         BottomNavItem.Settings
     )
 
@@ -114,12 +115,14 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            composable(BottomNavItem.Home.route) { MoodScreen(
+            composable(BottomNavItem.Home.route)
+            {
+                MoodScreen(
                 moodViewModel = moodViewModel
             ) }
             composable(BottomNavItem.Journal.route) { JournalScreen() }
             composable(BottomNavItem.Zen.route) { ZenModeScreen() }
-            composable(BottomNavItem.Vent.route) { VentScreen() }
+//            composable(BottomNavItem.Vent.route) { VentScreen() }
             composable(BottomNavItem.Settings.route) { SettingsScreen() }
         }
     }
@@ -165,7 +168,7 @@ fun BottomNavigationBar(navController: NavHostController, items: List<BottomNavI
 //@Preview
 @Composable fun ZenModeScreen() { CenteredText("Zen Mode", 20.sp) }
 //@Preview
-@Composable fun VentScreen() { CenteredText("AI Venting Chat", 20.sp) }
+//@Composable fun VentScreen() { CenteredText("AI Venting Chat", 20.sp) }
 //@Preview
 //@Composable fun SettingsScreen() { CenteredText("Settings", 20.sp) }
 

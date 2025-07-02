@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 
 class MoodViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val db = Room.databaseBuilder(
+    public val db = Room.databaseBuilder(
         application.applicationContext,
         MoodDatabase::class.java,
         "mood_database"

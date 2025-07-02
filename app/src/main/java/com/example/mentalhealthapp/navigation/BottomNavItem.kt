@@ -21,11 +21,11 @@ sealed class BottomNavItem (
         icon = R.drawable.zen_icon,
         label = "Zen Mode"
     )
-    object Vent : BottomNavItem(
-        route = "vent",
-        icon = R.drawable.vent_icon,
-        label = "Vent"
-    )
+//    object Vent : BottomNavItem(
+//        route = "vent",
+//        icon = R.drawable.vent_icon,
+//        label = "Vent"
+//    )
     object Settings : BottomNavItem(
         route = "settings",
         icon = R.drawable.settings_icon,
