@@ -97,7 +97,7 @@ fun EditMoodDialog(
         R.drawable.laughing,
         R.drawable.smiling,
         R.drawable.neutral,
-        R.drawable.sad,
+        R.drawable.sad ,
         R.drawable.dead
     )
     var selected by remember { mutableIntStateOf(0) }

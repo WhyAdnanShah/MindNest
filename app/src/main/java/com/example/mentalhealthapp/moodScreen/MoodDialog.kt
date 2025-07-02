@@ -60,7 +60,6 @@ fun MoodDialog(onDismiss: () -> Unit, moodViewModel: MoodViewModel) {
     var datePickerCard by remember { mutableStateOf(false) }
     var selectedDateMillis by remember { mutableStateOf<Long?>(null) }
     var moodNote by remember { mutableStateOf("") }
-    val context = LocalContext.current
     val dateFormat = remember { SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()) }
 
 
