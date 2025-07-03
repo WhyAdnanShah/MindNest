@@ -19,8 +19,7 @@ import com.github.mikephil.charting.data.LineDataSet
 
 @Composable
 fun MoodLineChart(
-    moodData: List<MoodEntity>,
-    moodViewModel: MoodViewModel
+    moodData: List<MoodEntity>
 ){
     AndroidView(
         factory = {

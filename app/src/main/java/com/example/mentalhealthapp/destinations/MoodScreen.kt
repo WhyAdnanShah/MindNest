@@ -211,8 +211,7 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
                     )
             ) {
                 MoodLineChart(
-                    moodData = moodsData,
-                    moodViewModel = moodViewModel
+                    moodData = moodsData
                 )
             }
 
