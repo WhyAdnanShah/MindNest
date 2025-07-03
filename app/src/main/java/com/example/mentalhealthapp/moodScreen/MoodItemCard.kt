@@ -28,7 +28,7 @@ import com.example.mentalhealthapp.database.MoodEntity
 import com.example.mentalhealthapp.viewModel.MoodViewModel
 
 @Composable
-fun MoodItemCard(moods: MoodEntity, moodViewModel: MoodViewModel){
+fun MoodItemCard(moodEntity: MoodEntity, moodViewModel: MoodViewModel){
 
     Card(
         modifier = Modifier
@@ -57,7 +57,7 @@ fun MoodItemCard(moods: MoodEntity, moodViewModel: MoodViewModel){
                 horizontalArrangement = Arrangement.Start
             ){ Image(modifier = Modifier.size(40.dp),
                 painter = painterResource(
-                    when (moods.mood) {
+                    when (moodEntity.mood) {
                         "laughing" -> {
                             R.drawable.laughing
                         }
@@ -83,14 +83,14 @@ fun MoodItemCard(moods: MoodEntity, moodViewModel: MoodViewModel){
                 Spacer(Modifier.width(10.dp))
 
                 Text(
-                    text = "Date: " + moods.date,
+                    text = "Date: " + moodEntity.date,
                 )
             }
 
             Spacer(Modifier.height(10.dp))
 
             Text(
-                text = moods.note,
+                text = moodEntity.note,
             )
 
             Spacer(Modifier.height(10.dp))
@@ -103,14 +103,14 @@ fun MoodItemCard(moods: MoodEntity, moodViewModel: MoodViewModel){
             ){
                 MoodEdit(
                     moodViewModel = moodViewModel,
-                    moods = moods
+                    moods = moodEntity
                 )
 
                 Spacer(Modifier.width(10.dp))
 
                 MoodDelete(
                     moodViewModel = moodViewModel,
-                    moods = moods
+                    moods = moodEntity
                 )
             }
         }

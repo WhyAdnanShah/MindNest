@@ -1,7 +1,6 @@
 package com.example.mentalhealthapp.destinations
 
 import android.annotation.SuppressLint
-import android.graphics.MeshSpecification
 import android.util.Log
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.FastOutSlowInEasing
@@ -9,6 +8,8 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -50,6 +51,7 @@ import androidx.compose.ui.text.font.FontWeight
 import com.example.mentalhealthapp.database.MoodEntity
 import com.example.mentalhealthapp.moodScreen.MoodDialog
 import com.example.mentalhealthapp.moodScreen.MoodItemCard
+import com.example.mentalhealthapp.moodScreen.MoodLineChart
 import kotlinx.coroutines.flow.Flow
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -60,7 +62,7 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
 
     var isMoodCardVisible by remember { mutableStateOf(false) }
 
-    val moods by moodViewModel.allMoods.collectAsState(initial = emptyList())
+    val moodsData by moodViewModel.allMoods.collectAsState(initial = emptyList())
 
     //These are all the moods that are in the DataBase in a ListView... This is to check if there is any item in the DataBase or not.
     val allMoods: Flow<List<MoodEntity>> = moodViewModel.db.moodDao().getAllMoods()
@@ -139,7 +141,12 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
                     }
                 }
                 else{
-                    LazyColumn{
+                    LazyColumn (
+                        modifier = Modifier.scrollable(
+                            rememberScrollState(),
+                            orientation = Orientation.Vertical
+                        )
+                    ){
 
                         item {
                             Row(modifier = Modifier
@@ -172,9 +179,9 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
 
                         }
 
-                        items(moods, key= {it.id}) { moodItem ->
+                        items(moodsData, key= {it.id}) { moodItem ->
                             MoodItemCard(
-                                moods = moodItem,
+                                moodEntity = moodItem,
                                 moodViewModel = moodViewModel
                             )
                         }
@@ -202,7 +209,12 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
                         width = 0.dp,
                         color = colorResource(R.color.slate_gray)
                     )
-            ) {  }
+            ) {
+                MoodLineChart(
+                    moodData = moodsData,
+                    moodViewModel = moodViewModel
+                )
+            }
 
         }
 
