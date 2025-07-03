@@ -40,6 +40,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.mentalhealthapp.R
+import com.example.mentalhealthapp.destinations.JournalScreen
 import com.example.mentalhealthapp.destinations.MoodScreen
 import com.example.mentalhealthapp.destinations.SettingsScreen
 import com.example.mentalhealthapp.ui.theme.MentalHealthAppTheme
@@ -163,7 +164,7 @@ fun BottomNavigationBar(navController: NavHostController, items: List<BottomNavI
 }
 
 //@Preview
-@Composable fun JournalScreen() { CenteredText("Journal", 20.sp) }
+//@Composable fun JournalScreen() { CenteredText("Journal", 20.sp) }
 //@Preview
 @Composable fun ZenModeScreen() { CenteredText("Zen Mode", 20.sp) }
 //@Preview
