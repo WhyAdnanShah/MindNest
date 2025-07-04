@@ -4,8 +4,8 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
-import com.example.mentalhealthapp.database.MoodDatabase
-import com.example.mentalhealthapp.database.MoodEntity
+import com.example.mentalhealthapp.moodROOMdatabase.MoodDatabase
+import com.example.mentalhealthapp.moodROOMdatabase.MoodEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 

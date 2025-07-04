@@ -1,14 +1,13 @@
 package com.example.mentalhealthapp.moodScreen
 
 import android.view.ViewGroup
-import androidx.compose.animation.core.Easing
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.example.mentalhealthapp.database.MoodEntity
+import com.example.mentalhealthapp.moodROOMdatabase.MoodEntity
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.Entry
@@ -69,6 +68,8 @@ fun MoodLineChart(
             chart.legend.textSize = 14f
             chart.legend.form = Legend.LegendForm.LINE
 
+
+
             chart.axisRight.isEnabled = false
             chart.axisLeft.apply {
                 setDrawGridLines(false)
@@ -76,7 +77,7 @@ fun MoodLineChart(
                 setDrawLabels(true)
                 textColor = android.graphics.Color.DKGRAY
                 textSize = 14f
-                axisMaximum = 5f
+                axisMaximum = 5.5f
                 axisMinimum = 0f
                 granularity = 1f
                 setLabelCount(5, false)

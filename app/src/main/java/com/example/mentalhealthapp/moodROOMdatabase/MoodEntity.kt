@@ -1,4 +1,4 @@
-package com.example.mentalhealthapp.database
+package com.example.mentalhealthapp.moodROOMdatabase
 
 import androidx.compose.runtime.Immutable
 import androidx.room.Entity
@@ -10,5 +10,6 @@ data class MoodEntity(
     @PrimaryKey(autoGenerate = true) var id: Int = 0,
     val mood: String,
     val note: String = "",
-    val date: String
+    val date: String,
+//    val timeStamp: Long
 )

@@ -1,4 +1,4 @@
-package com.example.mentalhealthapp.database
+package com.example.mentalhealthapp.moodROOMdatabase
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

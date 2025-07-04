@@ -39,7 +39,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
@@ -48,7 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.mentalhealthapp.R
-import com.example.mentalhealthapp.database.MoodEntity
+import com.example.mentalhealthapp.moodROOMdatabase.MoodEntity
 import com.example.mentalhealthapp.navigation.CenteredText
 import com.example.mentalhealthapp.viewModel.MoodViewModel
 import java.text.SimpleDateFormat
@@ -61,6 +60,9 @@ fun MoodDialog(onDismiss: () -> Unit, moodViewModel: MoodViewModel) {
     var selectedDateMillis by remember { mutableStateOf<Long?>(null) }
     var moodNote by remember { mutableStateOf("") }
     val dateFormat = remember { SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()) }
+
+//    val dateMillis = selectedDateMillis ?: System.currentTimeMillis()
+//    val formattedDate = dateFormat.format(dateMillis)
 
 
     val moodNames = listOf("laughing", "smiling", "neutral", "sad", "dead")
@@ -151,7 +153,8 @@ fun MoodDialog(onDismiss: () -> Unit, moodViewModel: MoodViewModel) {
                                 MoodEntity(
                                     mood = mood,
                                     note = note,
-                                    date = date
+                                    date = date,
+//                                    timeStamp = dateMillis
                                 )
                             )
 

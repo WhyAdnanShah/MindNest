@@ -24,7 +24,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.mentalhealthapp.R
-import com.example.mentalhealthapp.database.MoodEntity
+import com.example.mentalhealthapp.moodROOMdatabase.MoodEntity
 import com.example.mentalhealthapp.viewModel.MoodViewModel
 
 @Composable

@@ -48,7 +48,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import com.example.mentalhealthapp.database.MoodEntity
+import com.example.mentalhealthapp.moodROOMdatabase.MoodEntity
 import com.example.mentalhealthapp.moodScreen.MoodDialog
 import com.example.mentalhealthapp.moodScreen.MoodItemCard
 import com.example.mentalhealthapp.moodScreen.MoodLineChart
@@ -133,11 +133,8 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
                         horizontalAlignment = Alignment.CenterHorizontally,
                         verticalArrangement = Arrangement.Center
                     ){
-                        Image(modifier = Modifier.size(150.dp), painter = painterResource(R.drawable.empty_list), contentDescription = "Empty List")
                         Spacer(Modifier.height(20.dp))
-                        Text(modifier = Modifier,
-                            text = "Tap the '+' icon to add a new snapshot"
-                        )
+                        Text(text = "Tap the '+' icon to add a new snapshot")
                     }
                 }
                 else{
@@ -208,11 +205,22 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
                         shape = RoundedCornerShape(5.dp, 5.dp, 20.dp, 20.dp),
                         width = 0.dp,
                         color = colorResource(R.color.slate_gray)
-                    )
+                    ),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
             ) {
-                MoodLineChart(
-                    moodData = moodsData
-                )
+                if (allMoods.collectAsState(initial = emptyList()).value.isEmpty()){
+                    Image(modifier = Modifier.size(150.dp), painter = painterResource(R.drawable.empty_list), contentDescription = "Empty List")
+                    Text("Tap the '+' icon to add a new snapshot",
+                        fontSize = 15.sp
+                    )
+                }
+                else{
+                    MoodLineChart(
+                        moodData = moodsData
+                    )
+                }
+                
             }
 
         }
