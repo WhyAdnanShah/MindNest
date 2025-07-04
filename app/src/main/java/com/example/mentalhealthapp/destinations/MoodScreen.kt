@@ -42,6 +42,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults.buttonColors
+import androidx.compose.material3.Card
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
@@ -72,6 +73,8 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
     val rotation by animateFloatAsState(targetValue = if (expandedMoodDetailsButton) 270f else 0f)
     val moodDetailHeight = if (expandedMoodDetailsButton) 1000.dp else 450.dp
 
+
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         floatingActionButton = {
@@ -82,7 +85,6 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
                 containerColor = colorResource(R.color.blue_sky)
             ) {
                 Text(
-                    modifier = Modifier.padding(5.dp),
                     text = "+",
                     fontSize = 25.sp,
                     color = colorResource(R.color.rich_black)
@@ -94,8 +96,7 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
-                .padding(horizontal = 16.dp)
+                .padding(vertical = 10.dp, horizontal = 16.dp)
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start
@@ -220,7 +221,7 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
                         moodData = moodsData
                     )
                 }
-                
+
             }
 
         }
@@ -232,5 +233,7 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
             )
         }
     }
+
+
 }
 
