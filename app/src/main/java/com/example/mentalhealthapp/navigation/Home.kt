@@ -89,6 +89,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         BottomNavItem.Settings
     )
 
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -130,7 +131,8 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             composable(BottomNavItem.Journal.route)
             {
                 JournalScreen(
-                    journalViewModel = journalViewModel
+                    journalViewModel = journalViewModel,
+                    navController = navController
                 )
             }
 
@@ -138,7 +140,9 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
             composable(BottomNavItem.Settings.route) { SettingsScreen() }
 
-            //            composable(BottomNavItem.Vent.route) { VentScreen() }
+
+
+//          composable(BottomNavItem.Vent.route) { VentScreen() }
         }
     }
 }
@@ -178,16 +182,9 @@ fun BottomNavigationBar(navController: NavHostController, items: List<BottomNavI
     }
 }
 
-//@Preview
-//@Composable fun JournalScreen() { CenteredText("Journal", 20.sp) }
-//@Preview
-@Composable fun ZenModeScreen() { CenteredText("Zen Mode", 20.sp) }
-//@Preview
-//@Composable fun VentScreen() { CenteredText("AI Venting Chat", 20.sp) }
-//@Preview
-//@Composable fun SettingsScreen() { CenteredText("Settings", 20.sp) }
 
-//@Preview
+@Composable fun ZenModeScreen() { CenteredText("Zen Mode", 20.sp) }
+
 @Composable
 fun CenteredText(text: String, fontSize: TextUnit) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -195,5 +192,15 @@ fun CenteredText(text: String, fontSize: TextUnit) {
     }
 }
 
-
-
+//@Composable
+//fun NavHostController(journalViewModel: JournalViewModel){
+//
+//    val navController = rememberNavController()
+//    NavHost(navController = navController, startDestination = "noteList") {
+//        composable("noteList") { JournalScreen(journalViewModel, navController) }
+//        composable("noteDetail/{noteId}") { backStackEntry ->
+//            val noteId = backStackEntry.arguments?.getString("noteId") ?: ""
+//            JournalDetailScreen(noteId)
+//        }
+//    }
+//}

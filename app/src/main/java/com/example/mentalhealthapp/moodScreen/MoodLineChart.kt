@@ -64,7 +64,7 @@ fun MoodLineChart(
             chart.legend.isEnabled = false
             chart.xAxis.isEnabled = false
             chart.description.isEnabled = false
-            chart.animateXY( 600,600)
+            chart.animateY(600)
             chart.legend.textSize = 14f
             chart.legend.form = Legend.LegendForm.LINE
 

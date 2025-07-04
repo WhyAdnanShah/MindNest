@@ -14,6 +14,10 @@ import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -21,17 +25,30 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.viewModel.JournalViewModel
 
 @Composable
-fun JournalScreen(journalViewModel: JournalViewModel) {
+fun JournalScreen(journalViewModel: JournalViewModel, navController: NavHostController) {
     val context = LocalContext.current
+
+
+
+    var isJournalDetail by remember { mutableStateOf(false) }
 
     Scaffold (modifier = Modifier.fillMaxSize(),
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { Toast.makeText(context, "Toast", Toast.LENGTH_SHORT).show() },
+                onClick = {
+//                    navController.navigate("noteList"){
+//                    popUpTo("noteList"){
+//                        inclusive = true
+//                }
+                    Toast.makeText(context, "Add Journal", Toast.LENGTH_SHORT).show()
+                },
                 shape = RoundedCornerShape(20.dp),
                 elevation = FloatingActionButtonDefaults.elevation(10.dp),
                 containerColor = colorResource(R.color.blue_sky)
@@ -44,8 +61,22 @@ fun JournalScreen(journalViewModel: JournalViewModel) {
         }
     ){
             paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(5.dp)
+                .border(
+                    width = 1.dp,
+                    color = colorResource(R.color.slate_gray),
+                    shape = RoundedCornerShape(5.dp, 5.dp, 20.dp, 20.dp)
+                )
+        ){}
+
+
         Row (
-            modifier = Modifier.fillMaxWidth().padding(16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
             horizontalArrangement = Arrangement.Start,
             verticalAlignment = Alignment.CenterVertically
         ){
@@ -56,16 +87,13 @@ fun JournalScreen(journalViewModel: JournalViewModel) {
             )
         }
 
-
-    }
-
-    Column(
-        modifier = Modifier.fillMaxSize().padding(5.dp).border(
-            width = 1.dp,
-            color = colorResource(R.color.slate_gray),
-            shape = RoundedCornerShape(5.dp, 5.dp, 20.dp, 20.dp)
-        )
-    ){
-
+//        if (isJournalDetail){
+//            JournalDetailScreen("noteId")
+//        }
     }
 }
+
+//@Composable
+//fun JournalDetailScreen(noteId: String) {
+//    Text("Helloscisnc")
+//}
