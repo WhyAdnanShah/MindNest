@@ -22,9 +22,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mentalhealthapp.R
+import com.example.mentalhealthapp.viewModel.JournalViewModel
 
 @Composable
-fun JournalScreen(){
+fun JournalScreen(journalViewModel: JournalViewModel) {
     val context = LocalContext.current
 
     Scaffold (modifier = Modifier.fillMaxSize(),

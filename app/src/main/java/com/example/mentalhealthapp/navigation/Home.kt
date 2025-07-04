@@ -44,6 +44,8 @@ import com.example.mentalhealthapp.destinations.JournalScreen
 import com.example.mentalhealthapp.destinations.MoodScreen
 import com.example.mentalhealthapp.destinations.SettingsScreen
 import com.example.mentalhealthapp.ui.theme.MentalHealthAppTheme
+import com.example.mentalhealthapp.viewModel.JournalViewModel
+import com.example.mentalhealthapp.viewModel.JournalViewModelFactory
 import com.example.mentalhealthapp.viewModel.MoodViewModel
 import com.example.mentalhealthapp.viewModel.MoodViewModelFactory
 
@@ -72,6 +74,8 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     */
     val context = LocalContext.current.applicationContext as Application
     val moodViewModel : MoodViewModel = viewModel(factory = MoodViewModelFactory(context))
+
+    val journalViewModel : JournalViewModel = viewModel(factory = JournalViewModelFactory(context))
 
 
 
@@ -115,15 +119,26 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
+
             composable(BottomNavItem.Home.route)
             {
                 MoodScreen(
-                moodViewModel = moodViewModel
-            ) }
-            composable(BottomNavItem.Journal.route) { JournalScreen() }
+                    moodViewModel = moodViewModel
+                )
+            }
+
+            composable(BottomNavItem.Journal.route)
+            {
+                JournalScreen(
+                    journalViewModel = journalViewModel
+                )
+            }
+
             composable(BottomNavItem.Zen.route) { ZenModeScreen() }
-//            composable(BottomNavItem.Vent.route) { VentScreen() }
+
             composable(BottomNavItem.Settings.route) { SettingsScreen() }
+
+            //            composable(BottomNavItem.Vent.route) { VentScreen() }
         }
     }
 }
