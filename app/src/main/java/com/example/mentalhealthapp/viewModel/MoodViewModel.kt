@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
+import com.example.mentalhealthapp.destinations.MoodScreen
 import com.example.mentalhealthapp.moodROOMdatabase.MoodDatabase
 import com.example.mentalhealthapp.moodROOMdatabase.MoodEntity
 import kotlinx.coroutines.flow.Flow
@@ -11,7 +12,7 @@ import kotlinx.coroutines.launch
 
 class MoodViewModel(application: Application) : AndroidViewModel(application) {
 
-    public val db = Room.databaseBuilder(
+    val db = Room.databaseBuilder(
         application.applicationContext,
         MoodDatabase::class.java,
         "mood_database"
