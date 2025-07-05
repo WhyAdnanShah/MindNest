@@ -7,8 +7,7 @@ import androidx.room.PrimaryKey
 @Immutable
 @Entity(tableName = "Journal_table")
 data class JournalEntity (
-    @PrimaryKey(autoGenerate = true)
-    var id: Int = 0,
+    @PrimaryKey(autoGenerate = true) var id: Int = 0,
     var title: String = "",
     var content: String = "",
     var date: String = ""

@@ -40,10 +40,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.mentalhealthapp.R
-import com.example.mentalhealthapp.destinations.JournalEntry
 import com.example.mentalhealthapp.destinations.JournalScreen
 import com.example.mentalhealthapp.destinations.MoodScreen
 import com.example.mentalhealthapp.destinations.SettingsScreen
+import com.example.mentalhealthapp.journalScreen.JournalEntry
 import com.example.mentalhealthapp.ui.theme.MentalHealthAppTheme
 import com.example.mentalhealthapp.viewModel.JournalViewModel
 import com.example.mentalhealthapp.viewModel.JournalViewModelFactory

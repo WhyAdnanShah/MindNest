@@ -112,7 +112,3 @@ fun JournalScreen(journalViewModel: JournalViewModel, navController: NavHostCont
     }
 }
 
-@Composable
-fun JournalEntry(navHostController: NavHostController) {
-    CenteredText("Journal Detail Screen", 20.sp)
-}
