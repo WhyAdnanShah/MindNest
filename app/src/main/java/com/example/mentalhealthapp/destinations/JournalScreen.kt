@@ -14,10 +14,6 @@ import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -26,9 +22,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import com.example.mentalhealthapp.R
+import com.example.mentalhealthapp.navigation.CenteredText
 import com.example.mentalhealthapp.viewModel.JournalViewModel
 
 @Composable
@@ -36,18 +31,11 @@ fun JournalScreen(journalViewModel: JournalViewModel, navController: NavHostCont
     val context = LocalContext.current
 
 
-
-    var isJournalDetail by remember { mutableStateOf(false) }
-
     Scaffold (modifier = Modifier.fillMaxSize(),
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-//                    navController.navigate("noteList"){
-//                    popUpTo("noteList"){
-//                        inclusive = true
-//                }
-                    Toast.makeText(context, "Add Journal", Toast.LENGTH_SHORT).show()
+                    navController.navigate("makeNote")
                 },
                 shape = RoundedCornerShape(20.dp),
                 elevation = FloatingActionButtonDefaults.elevation(10.dp),
@@ -87,13 +75,11 @@ fun JournalScreen(journalViewModel: JournalViewModel, navController: NavHostCont
             )
         }
 
-//        if (isJournalDetail){
-//            JournalDetailScreen("noteId")
-//        }
+
     }
 }
 
-//@Composable
-//fun JournalDetailScreen(noteId: String) {
-//    Text("Helloscisnc")
-//}
+@Composable
+fun JournalDetailScreen(navHostController: NavHostController) {
+    CenteredText("Journal Detail Screen", 20.sp)
+}

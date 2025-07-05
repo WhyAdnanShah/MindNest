@@ -40,6 +40,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.mentalhealthapp.R
+import com.example.mentalhealthapp.destinations.JournalDetailScreen
 import com.example.mentalhealthapp.destinations.JournalScreen
 import com.example.mentalhealthapp.destinations.MoodScreen
 import com.example.mentalhealthapp.destinations.SettingsScreen
@@ -141,6 +142,10 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             composable(BottomNavItem.Settings.route) { SettingsScreen() }
 
 
+            composable ("NoteList") { JournalScreen(journalViewModel,navController) }
+            composable ("makeNote") { JournalDetailScreen(navController) }
+
+
 
 //          composable(BottomNavItem.Vent.route) { VentScreen() }
         }
@@ -170,7 +175,7 @@ fun BottomNavigationBar(navController: NavHostController, items: List<BottomNavI
                 icon = {
                     Icon(painter = painterResource(id = item.icon),
                         contentDescription = item.label,
-                        modifier = Modifier.size(25.dp),
+                        modifier = Modifier.size(20.dp),
                         tint = Color.Unspecified
                     )
                 },
