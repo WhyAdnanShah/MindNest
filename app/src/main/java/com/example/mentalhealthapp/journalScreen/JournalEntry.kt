@@ -1,5 +1,8 @@
 package com.example.mentalhealthapp.journalScreen
 
+import android.graphics.drawable.GradientDrawable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -7,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -29,7 +33,14 @@ fun JournalEntry(navHostController: NavHostController) {
     var noteText by remember {mutableStateOf("")}
 
     Column (
-        modifier = Modifier.fillMaxWidth().padding(16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+            .scrollable(
+                state = rememberScrollState(),
+                orientation = Orientation.Vertical,
+                reverseDirection = true,
+            ),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ){
@@ -41,13 +52,19 @@ fun JournalEntry(navHostController: NavHostController) {
             label = { Text("Title", fontSize = 20.sp) },
             shape = RoundedCornerShape(15.dp),
         )
+
         Spacer(Modifier.height(10.dp))
+
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+            modifier = Modifier.fillMaxWidth().height(500.dp),
             value = noteText,
             onValueChange = { noteText = it },
             label = { Text("Note") },
             shape = RoundedCornerShape(15.dp)
         )
+
+        Spacer(Modifier.height(10.dp))
+
+
     }
 }
