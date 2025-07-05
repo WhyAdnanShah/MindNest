@@ -63,13 +63,19 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    //material UI dependencies
     implementation("androidx.compose.material:material-ripple:1.7.0+")
     implementation ("androidx.navigation:navigation-compose:2.9.0")
 
+    //ROOM database dependency
     implementation("androidx.room:room-runtime:2.7.2")
     kapt("androidx.room:room-compiler:2.7.2")
     implementation("androidx.room:room-ktx:2.7.2")
 
     //MPAndroidChart dependency
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+    //Image Picker
+    implementation("androidx.activity:activity-compose:1.7.2")
+    implementation("androidx.activity:activity-ktx:1.7.2")
 }

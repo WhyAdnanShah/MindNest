@@ -1,6 +1,11 @@
 package com.example.mentalhealthapp.journalScreen
 
-import android.graphics.drawable.GradientDrawable
+import android.net.Uri
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
@@ -9,7 +14,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.OutlinedTextField
@@ -21,6 +25,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -28,11 +35,15 @@ import androidx.navigation.NavHostController
 
 @Composable
 fun JournalEntry(navHostController: NavHostController) {
+    val context = LocalContext.current
 
-    var titleText by remember {mutableStateOf("")}
-    var noteText by remember {mutableStateOf("")}
+    var titleText by remember { mutableStateOf("") }
+    var noteText by remember { mutableStateOf("") }
 
-    Column (
+    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+
+
+    Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
@@ -43,10 +54,12 @@ fun JournalEntry(navHostController: NavHostController) {
             ),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
-    ){
+    ) {
 
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth().height(70.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(70.dp),
             value = titleText,
             onValueChange = { titleText = it },
             label = { Text("Title", fontSize = 20.sp) },
@@ -56,7 +69,9 @@ fun JournalEntry(navHostController: NavHostController) {
         Spacer(Modifier.height(10.dp))
 
         OutlinedTextField(
-            modifier = Modifier.fillMaxWidth().height(500.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(500.dp),
             value = noteText,
             onValueChange = { noteText = it },
             label = { Text("Note") },
@@ -65,6 +80,17 @@ fun JournalEntry(navHostController: NavHostController) {
 
         Spacer(Modifier.height(10.dp))
 
+        val pickMedia = rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(5)) {
+            uris ->
+            if (uris.isNotEmpty()) {
+                selectedImageUri = uris[0]
+            }
+            else {
+                Log.d("Photo Picker", "No media selected")
+            }
+        }
+        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
 
+        Image(painter = painterResource(selectedImageUri), contentDescription = null)
     }
 }
