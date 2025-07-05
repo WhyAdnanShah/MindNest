@@ -40,7 +40,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.mentalhealthapp.R
-import com.example.mentalhealthapp.destinations.JournalDetailScreen
+import com.example.mentalhealthapp.destinations.JournalEntry
 import com.example.mentalhealthapp.destinations.JournalScreen
 import com.example.mentalhealthapp.destinations.MoodScreen
 import com.example.mentalhealthapp.destinations.SettingsScreen
@@ -143,7 +143,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
 
             composable ("NoteList") { JournalScreen(journalViewModel,navController) }
-            composable ("makeNote") { JournalDetailScreen(navController) }
+            composable ("makeNote") { JournalEntry(navController) }
 
 
 

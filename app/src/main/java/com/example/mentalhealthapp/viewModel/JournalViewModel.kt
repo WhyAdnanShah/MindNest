@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 
 class JournalViewModel (application : Application) : AndroidViewModel(application) {
 
-    private val db = Room.databaseBuilder(
+    val db = Room.databaseBuilder(
         application.applicationContext,
         JournalDatabase::class.java,
         "journal_database"

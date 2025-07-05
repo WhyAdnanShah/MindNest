@@ -53,6 +53,7 @@ import com.example.mentalhealthapp.moodROOMdatabase.MoodEntity
 import com.example.mentalhealthapp.moodScreen.MoodDialog
 import com.example.mentalhealthapp.moodScreen.MoodItemCard
 import com.example.mentalhealthapp.moodScreen.MoodLineChart
+import com.example.mentalhealthapp.navigation.CenteredText
 import kotlinx.coroutines.flow.Flow
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -129,14 +130,7 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
 
             ) {
                 if (allMoods.collectAsState(initial = emptyList()).value.isEmpty()){
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.Center
-                    ){
-                        Spacer(Modifier.height(20.dp))
-                        Text(text = "Tap the '+' icon to add a new snapshot")
-                    }
+                    CenteredText("Tap the '+' icon to add a new snapshot", fontSize = 15.sp)
                 }
                 else{
                     LazyColumn (
