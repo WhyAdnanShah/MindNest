@@ -80,17 +80,17 @@ fun JournalEntry(navHostController: NavHostController) {
 
         Spacer(Modifier.height(10.dp))
 
-        val pickMedia = rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(5)) {
-            uris ->
-            if (uris.isNotEmpty()) {
-                selectedImageUri = uris[0]
-            }
-            else {
-                Log.d("Photo Picker", "No media selected")
-            }
-        }
-        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+//        val pickMedia = rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(5)) {
+//            uris ->
+//            if (uris.isNotEmpty()) {
+//                selectedImageUri = uris[0]
+//            }
+//            else {
+//                Log.d("Photo Picker", "No media selected")
+//            }
+//        }
+//        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
 
-        Image(painter = painterResource(selectedImageUri), contentDescription = null)
+//        Image(painter = painterResource(selectedImageUri), contentDescription = null)
     }
 }

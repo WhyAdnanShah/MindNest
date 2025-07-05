@@ -10,5 +10,6 @@ data class JournalEntity (
     @PrimaryKey(autoGenerate = true) var id: Int = 0,
     var title: String = "",
     var content: String = "",
-    var date: String = ""
+    var date: String = "",
+    var images: Int
 )
