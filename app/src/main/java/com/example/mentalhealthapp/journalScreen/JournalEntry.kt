@@ -1,7 +1,12 @@
 package com.example.mentalhealthapp.journalScreen
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -10,8 +15,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 
 
@@ -19,16 +26,28 @@ import androidx.navigation.NavHostController
 fun JournalEntry(navHostController: NavHostController) {
 
     var titleText by remember {mutableStateOf("")}
+    var noteText by remember {mutableStateOf("")}
 
-    OutlinedTextField(
-        modifier = Modifier.fillMaxWidth().height(70.dp),
-        value = titleText,
-        onValueChange = { titleText = it },
-        label = { Text(titleText) },
-        placeholder = { Text("Title") },
-        shape = RoundedCornerShape(15.dp),
-        singleLine = false,
-        maxLines = 10
-    )
-    
+    Column (
+        modifier = Modifier.fillMaxWidth().padding(16.dp),
+        horizontalAlignment = Alignment.Start,
+        verticalArrangement = Arrangement.Top
+    ){
+
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth().height(70.dp),
+            value = titleText,
+            onValueChange = { titleText = it },
+            label = { Text("Title", fontSize = 20.sp) },
+            shape = RoundedCornerShape(15.dp),
+        )
+        Spacer(Modifier.height(10.dp))
+        OutlinedTextField(
+            modifier = Modifier.fillMaxWidth().wrapContentHeight(),
+            value = noteText,
+            onValueChange = { noteText = it },
+            label = { Text("Note") },
+            shape = RoundedCornerShape(15.dp)
+        )
+    }
 }
