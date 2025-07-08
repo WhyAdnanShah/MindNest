@@ -72,18 +72,7 @@ fun JournalEntry(navHostController: NavHostController) {
         )
 
         Spacer(Modifier.height(10.dp))
-//
-//        val pickMedia = rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(5)) {
-//            uris ->Adnan Shah Nxm
-//            if (uris.isNotEmpty()) {
-//                selectedImageUri = uris[5]
-//            }
-//            else {
-//                Log.d("Photo Picker", "No media selected")
-//            }
-//        }
-//        pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
 
-//        Image(painter = painterResource(selectedImageUri), contentDescription = null)
+
     }
 }
