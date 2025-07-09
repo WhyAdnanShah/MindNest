@@ -79,4 +79,7 @@ dependencies {
     //Image Picker
     implementation("androidx.activity:activity-compose:1.7.2")
     implementation("androidx.activity:activity-ktx:1.7.2")
+
+    //Coil-Compose to load file from the URI
+    implementation("io.coil-kt:coil-compose:2.7.0")
 }

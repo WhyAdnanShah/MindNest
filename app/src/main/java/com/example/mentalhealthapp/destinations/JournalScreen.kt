@@ -1,5 +1,6 @@
 package com.example.mentalhealthapp.destinations
 
+import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
@@ -36,6 +37,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun JournalScreen(journalViewModel: JournalViewModel, navController: NavHostController) {
+    Log.d("JournalScreen", "JournalScreen called")
     val context = LocalContext.current
     val journalData by journalViewModel.allJournals.collectAsState(initial = emptyList())
     val allJournals: Flow<List<JournalEntity>> = journalViewModel.db.journalDao().getAllJournals()
