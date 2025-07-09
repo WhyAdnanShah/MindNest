@@ -43,6 +43,7 @@ import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.destinations.JournalScreen
 import com.example.mentalhealthapp.destinations.MoodScreen
 import com.example.mentalhealthapp.destinations.SettingsScreen
+import com.example.mentalhealthapp.journalROOMdatabase.JournalEntity
 import com.example.mentalhealthapp.journalScreen.JournalEntry
 import com.example.mentalhealthapp.ui.theme.MentalHealthAppTheme
 import com.example.mentalhealthapp.viewModel.JournalViewModel
@@ -143,7 +144,10 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
 
             composable ("NoteList") { JournalScreen(journalViewModel,navController) }
-            composable ("makeNote") { JournalEntry(navController) }
+            composable ("makeNote") { JournalEntry(
+                navController,
+                journalViewModel = journalViewModel
+            ) }
 
 
 

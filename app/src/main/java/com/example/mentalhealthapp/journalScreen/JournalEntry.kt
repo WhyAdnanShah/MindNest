@@ -1,12 +1,12 @@
 package com.example.mentalhealthapp.journalScreen
 
+import android.R.attr.id
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -31,7 +31,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ButtonDefaults.shape
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,9 +41,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
@@ -52,10 +48,11 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.mentalhealthapp.R
-import com.example.mentalhealthapp.moodScreen.TitleText
+import com.example.mentalhealthapp.journalROOMdatabase.JournalEntity
+import com.example.mentalhealthapp.viewModel.JournalViewModel
 
 @Composable
-fun JournalEntry(navController: NavHostController) {
+fun JournalEntry(navController: NavHostController, journalViewModel: JournalViewModel ) {
     Log.d("Entry To Journal", "JournalEntry called")
     val context = LocalContext.current
 
@@ -63,6 +60,7 @@ fun JournalEntry(navController: NavHostController) {
     var noteText by remember { mutableStateOf("") }
 
     var imageUri by remember { mutableStateOf<List<Uri>>(emptyList()) }
+    val journalEntity = JournalEntity()
 
 
     /*          This is a simple Media Picker         */
@@ -92,7 +90,20 @@ fun JournalEntry(navController: NavHostController) {
             verticalAlignment = Alignment.CenterVertically
         ){
             Button(
-                onClick = { Toast.makeText(context, "Clicked Saved", Toast.LENGTH_SHORT).show() },
+                onClick = {
+                    Toast.makeText(context, "Clicked Saved", Toast.LENGTH_SHORT).show()
+                    journalViewModel.addJournal(
+                        JournalEntity(
+                            id = id,
+                            title = titleText,
+                            content = noteText,
+//                            date = TODO(),
+//                            images = imageUri
+                        )
+                    )
+                    Toast.makeText(context,  journalEntity.content
+                            + journalEntity.title, Toast.LENGTH_SHORT).show()
+                },
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(colorResource(R.color.antique_white)),
                 elevation = ButtonDefaults.buttonElevation(10.dp)
@@ -143,7 +154,7 @@ fun JournalEntry(navController: NavHostController) {
                 .wrapContentHeight(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
-            ){
+        ){
             items(imageUri){
                     uri->
                 Image(

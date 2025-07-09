@@ -158,12 +158,6 @@ fun MoodDialog(onDismiss: () -> Unit, moodViewModel: MoodViewModel) {
                                 )
                             )
 
-//                            Toast.makeText(
-//                                context,
-//                                "Saved mood: $mood\nNote: $note\nDate: $date",
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-
                             Log.d("Mood Save", "Mood: $mood, Note: $note, Date: $date")
 
                             onDismiss()
