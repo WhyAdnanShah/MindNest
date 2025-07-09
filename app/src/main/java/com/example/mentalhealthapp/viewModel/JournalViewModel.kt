@@ -14,7 +14,8 @@ class JournalViewModel (application : Application) : AndroidViewModel(applicatio
         application.applicationContext,
         JournalDatabase::class.java,
         "journal_database"
-    ).build()
+    ).fallbackToDestructiveMigration()
+        .build()
 
     var allJournals = db.journalDao().getAllJournals()
 
