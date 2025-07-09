@@ -16,8 +16,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -47,7 +50,7 @@ fun JournalEntry(navHostController: NavHostController) {
     var titleText by remember { mutableStateOf("") }
     var noteText by remember { mutableStateOf("") }
 
-    var imageUri by remember { mutableStateOf<List<Uri?>>(emptyList()) }
+    var imageUri by remember { mutableStateOf<List<Uri>>(emptyList()) }
 
 
     /*          This is a simple Media Picker         */
@@ -71,60 +74,48 @@ fun JournalEntry(navHostController: NavHostController) {
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
-//        item{
-            OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(70.dp),
-                value = titleText,
-                onValueChange = { titleText = it },
-                label = { Text("Title", fontSize = 20.sp) },
-                shape = RoundedCornerShape(15.dp),
-            )
-//        }
-
-//        item{
-            OutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(500.dp),
-                value = noteText,
-                onValueChange = { noteText = it },
-                label = { Text("Note") },
-                shape = RoundedCornerShape(15.dp)
-            )
-            Spacer(Modifier.height(16.dp))
-
-//        }
-
-//        item{
-            Button(modifier = Modifier.wrapContentSize(),
-                onClick = {
-                    pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                }
-            ) {
-                Text(text = "Select Image")
-            }
-            Spacer(Modifier.height(16.dp))
-//        }
-
-//        item {
-            SelectedImages(imageUri as Uri?
-            )
-//        }
-    }
-}
-
-@Composable
-fun SelectedImages(imageUri: Uri?) {
-    Text(text = "Image Preview", fontSize = 20.sp)
-
-    imageUri?.let{
-            uris ->
-        Image(
+        OutlinedTextField(
             modifier = Modifier
-                .size(300.dp)
-                .clip(RoundedCornerShape(10.dp)),
-            painter = rememberAsyncImagePainter(uris), contentDescription = null)
+                .fillMaxWidth()
+                .height(70.dp),
+            value = titleText,
+            onValueChange = { titleText = it },
+            label = { Text("Title", fontSize = 20.sp) },
+            shape = RoundedCornerShape(15.dp),
+        )
+
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(500.dp),
+            value = noteText,
+            onValueChange = { noteText = it },
+            label = { Text("Note") },
+            shape = RoundedCornerShape(15.dp)
+        )
+        Spacer(Modifier.height(16.dp))
+
+        Button(modifier = Modifier.wrapContentSize(),
+            onClick = {
+                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            }
+        ) {
+            Text(text = "Select Image")
+        }
+        Spacer(Modifier.height(16.dp))
+
+        LazyRow (
+
+        ){
+            items(imageUri){
+                uri->
+                Image(
+                    modifier = Modifier
+                        .width(200.dp).height(200.dp)
+                        .clip(RoundedCornerShape(10.dp)),
+                    painter = rememberAsyncImagePainter(uri), contentDescription = null)
+            }
+        }
+
     }
 }
