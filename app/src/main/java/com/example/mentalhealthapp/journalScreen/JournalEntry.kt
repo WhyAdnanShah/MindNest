@@ -97,7 +97,7 @@ fun JournalEntry(navController: NavHostController, journalViewModel: JournalView
                             id = id,
                             title = titleText,
                             content = noteText,
-//                            date = TODO(),
+//                            date = ,
 //                            images = imageUri
                         )
                     )
