@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,6 +26,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ButtonDefaults.shape
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,11 +38,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ModifierLocalBeyondBoundsLayout
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
+import com.example.mentalhealthapp.R
+
 @Composable
 fun JournalEntry(navController: NavHostController) {
     Log.d("Entry To Journal", "JournalEntry called")
@@ -72,6 +80,40 @@ fun JournalEntry(navController: NavHostController) {
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
+        Row (Modifier
+            .fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
+        ){
+            Button(
+                onClick = { Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show() },
+                shape = RoundedCornerShape(10.dp),
+                colors = ButtonDefaults.buttonColors(Color.LightGray),
+                elevation = ButtonDefaults.buttonElevation(10.dp),
+                border = (
+                        BorderStroke(
+                            width = 0.dp,
+                            color = colorResource(R.color.light_red)
+                        )
+                        )
+            ) {
+                Text("Save")
+            }
+
+            Button(
+                onClick = { Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show() },
+                shape = RoundedCornerShape(10.dp),
+                colors = ButtonDefaults.buttonColors(Color.LightGray),
+                elevation = ButtonDefaults.buttonElevation(10.dp),
+                border = (
+                        BorderStroke(
+                            width = 0.dp,
+                            color = colorResource(R.color.light_red)
+                        )
+                        )
+            ) {
+                Text("Save")
+            }
+        }
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
@@ -111,14 +153,16 @@ fun JournalEntry(navController: NavHostController) {
 
         LazyRow (
             modifier = Modifier
-                .fillMaxWidth().wrapContentHeight(),
+                .fillMaxWidth()
+                .wrapContentHeight(),
 
             ){
             items(imageUri){
                     uri->
                 Image(
                     modifier = Modifier
-                        .width(200.dp).height(200.dp)
+                        .width(200.dp)
+                        .height(200.dp)
                         .clip(RoundedCornerShape(10.dp)),
                     painter = rememberAsyncImagePainter(uri), contentDescription = null
                 )
