@@ -40,8 +40,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
-
-
 @Composable
 fun JournalEntry(navController: NavHostController) {
     Log.d("Entry To Journal", "JournalEntry called")
