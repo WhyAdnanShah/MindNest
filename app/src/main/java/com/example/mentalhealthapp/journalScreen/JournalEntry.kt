@@ -7,18 +7,18 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -43,7 +43,7 @@ import coil.compose.rememberAsyncImagePainter
 
 
 @Composable
-fun JournalEntry(navHostController: NavHostController) {
+fun JournalEntry(navController: NavHostController) {
     Log.d("Entry To Journal", "JournalEntry called")
     val context = LocalContext.current
 
@@ -69,7 +69,7 @@ fun JournalEntry(navHostController: NavHostController) {
     Column(
         modifier = Modifier
             .verticalScroll(rememberScrollState())
-            .wrapContentSize()
+            .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
@@ -77,7 +77,7 @@ fun JournalEntry(navHostController: NavHostController) {
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(70.dp),
+                .wrapContentHeight(),
             value = titleText,
             onValueChange = { titleText = it },
             label = { Text("Title", fontSize = 20.sp) },
@@ -87,7 +87,7 @@ fun JournalEntry(navHostController: NavHostController) {
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(500.dp),
+                .heightIn(min = 500.dp, max = 1000.dp),
             value = noteText,
             onValueChange = { noteText = it },
             label = { Text("Note") },
@@ -95,27 +95,36 @@ fun JournalEntry(navHostController: NavHostController) {
         )
         Spacer(Modifier.height(16.dp))
 
-        Button(modifier = Modifier.wrapContentSize(),
-            onClick = {
-                pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        Row (
+            Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.End
+        ){
+            Button(modifier = Modifier.wrapContentSize(),
+                onClick = {
+                    pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                }
+            ) {
+                Text(text = "Add Images")
             }
-        ) {
-            Text(text = "Select Image")
         }
+
         Spacer(Modifier.height(16.dp))
 
         LazyRow (
+            modifier = Modifier
+                .fillMaxWidth().wrapContentHeight(),
 
-        ){
+            ){
             items(imageUri){
-                uri->
+                    uri->
                 Image(
                     modifier = Modifier
                         .width(200.dp).height(200.dp)
                         .clip(RoundedCornerShape(10.dp)),
-                    painter = rememberAsyncImagePainter(uri), contentDescription = null)
+                    painter = rememberAsyncImagePainter(uri), contentDescription = null
+                )
             }
         }
-
     }
 }
