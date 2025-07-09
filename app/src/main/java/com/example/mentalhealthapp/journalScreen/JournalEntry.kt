@@ -1,6 +1,10 @@
 package com.example.mentalhealthapp.journalScreen
 
 import android.net.Uri
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
@@ -11,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -34,7 +39,7 @@ fun JournalEntry(navHostController: NavHostController) {
     var titleText by remember { mutableStateOf("") }
     var noteText by remember { mutableStateOf("") }
 
-    var selectedImageUri by remember { mutableStateOf<Uri?>(null) }
+    var imageUri by remember { mutableStateOf<Uri?>(null) }
 
 
     Column(
@@ -74,5 +79,23 @@ fun JournalEntry(navHostController: NavHostController) {
 
         Spacer(Modifier.height(10.dp))
 
+    }
+    val pickMedia = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) {
+            uri ->
+        if (uri != null) {
+            Toast.makeText(context, "Image Selected", Toast.LENGTH_SHORT).show()
+        }
+        else{
+            Toast.makeText(context, "No Image Selected", Toast.LENGTH_SHORT).show()
+
+        }
+    }
+
+    Button(
+        onClick = {
+            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+        }
+    ) {
+        Text(text = "Select Image")
     }
 }

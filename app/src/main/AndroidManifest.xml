@@ -29,12 +29,6 @@
             android:exported="true"
             android:theme="@style/Theme.MentalHealthApp"
             android:screenOrientation="portrait"/>
-
-<!--        <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />-->
-<!--        <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />-->
-<!--        <uses-permission android:name="android.permission.READ_MEDIA_EXTERNAL_STORAGE" />-->
-
-
     </application>
 
 </manifest>
