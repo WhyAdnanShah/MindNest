@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.google.android.gms.cast.framework.media.ImagePicker
 
 
 @Composable
@@ -72,7 +73,6 @@ fun JournalEntry(navHostController: NavHostController) {
         )
 
         Spacer(Modifier.height(10.dp))
-
 
     }
 }
