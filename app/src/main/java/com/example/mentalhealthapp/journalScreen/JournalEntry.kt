@@ -54,14 +54,20 @@ import java.util.Locale
 
 @Composable
 fun JournalEntry(navController: NavHostController, journalViewModel: JournalViewModel ) {
+    /*          There was a problem in here with saving the Image and date... I was saving the 'image' as a 'URI' in the JournalEntity which was wrong as hell...
+    *           I had to save the 'image' as a 'string' and the 'date' as a 'String' too (Later changing to Long to not mess up the 'ORDER BY date DESC')                                                                    */
+
     Log.d("Entry To Journal", "JournalEntry called")
     val context = LocalContext.current
 
+    /*          The Title and the content of the Journal            */
     var titleText by remember { mutableStateOf("") }
     var noteText by remember { mutableStateOf("") }
 
+    /*          Image is remembered as a List of URIs (emptyList btw)         */
     var imageUri by remember { mutableStateOf<List<Uri>>(emptyList()) }
 
+    /*          This is how u save the date in the journal you dumbooooooooo          */
     val currentDate = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(System.currentTimeMillis())
     val journalEntity = JournalEntity(
         title = titleText,
@@ -70,9 +76,10 @@ fun JournalEntry(navController: NavHostController, journalViewModel: JournalView
         images = imageUri.toString()
     )
 
-
-    /*          This is a simple Media Picker         */
-    val pickMedia = rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia(5)) {
+    /*          This is a simple Media Picker
+                'uris' refers to the list of URI objects that point to the location of the images or videos selected
+                 if the uris.isEmpty() then uris will be assigned to the imageUri */
+    val pickMedia = rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) {
             uris ->
         if (uris.isNotEmpty()) {
             imageUri = uris
@@ -105,11 +112,13 @@ fun JournalEntry(navController: NavHostController, journalViewModel: JournalView
                         date = currentDate ,
                         images = imageUri.toString()
                     )
-//                    Toast.makeText(context, "Clicked Saved", Toast.LENGTH_SHORT).show()
                     journalViewModel.addJournal(newJournalEntry)
                     Toast.makeText(context,  journalEntity.content
-                            + journalEntity.title, Toast.LENGTH_SHORT).show()
-                    Log.d("Clicked Saved", "What happened?...")
+                            + journalEntity.title +journalEntity.date
+                        +journalEntity.images, Toast.LENGTH_SHORT).show()
+                    Log.d("Clicked Saved" + journalEntity.content
+                            + journalEntity.title +journalEntity.date
+                            +journalEntity.images, "What happened?...")
                 },
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(colorResource(R.color.antique_white)),
