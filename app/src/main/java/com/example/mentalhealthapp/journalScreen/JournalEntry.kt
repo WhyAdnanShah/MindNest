@@ -1,6 +1,5 @@
 package com.example.mentalhealthapp.journalScreen
 
-import android.R.attr.id
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
@@ -50,6 +49,8 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.journalROOMdatabase.JournalEntity
 import com.example.mentalhealthapp.viewModel.JournalViewModel
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 @Composable
 fun JournalEntry(navController: NavHostController, journalViewModel: JournalViewModel ) {
@@ -60,7 +61,14 @@ fun JournalEntry(navController: NavHostController, journalViewModel: JournalView
     var noteText by remember { mutableStateOf("") }
 
     var imageUri by remember { mutableStateOf<List<Uri>>(emptyList()) }
-    val journalEntity = JournalEntity()
+
+    val currentDate = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(System.currentTimeMillis())
+    val journalEntity = JournalEntity(
+        title = titleText,
+        content = noteText,
+        date = currentDate ,
+        images = imageUri.toString()
+    )
 
 
     /*          This is a simple Media Picker         */
@@ -91,18 +99,17 @@ fun JournalEntry(navController: NavHostController, journalViewModel: JournalView
         ){
             Button(
                 onClick = {
-                    Toast.makeText(context, "Clicked Saved", Toast.LENGTH_SHORT).show()
-                    journalViewModel.addJournal(
-                        JournalEntity(
-                            id = id,
-                            title = titleText,
-                            content = noteText,
-//                            date = ,
-//                            images = imageUri
-                        )
+                    val newJournalEntry = JournalEntity(
+                        title = titleText,
+                        content = noteText,
+                        date = currentDate ,
+                        images = imageUri.toString()
                     )
+//                    Toast.makeText(context, "Clicked Saved", Toast.LENGTH_SHORT).show()
+                    journalViewModel.addJournal(newJournalEntry)
                     Toast.makeText(context,  journalEntity.content
                             + journalEntity.title, Toast.LENGTH_SHORT).show()
+                    Log.d("Clicked Saved", "What happened?...")
                 },
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(colorResource(R.color.antique_white)),
