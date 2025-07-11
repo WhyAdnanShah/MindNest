@@ -33,6 +33,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -52,6 +53,7 @@ import com.example.mentalhealthapp.viewModel.JournalViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
 
+@Stable
 @Composable
 fun JournalEntry(navController: NavHostController, journalViewModel: JournalViewModel ) {
     /*          There was a problem in here with saving the Image and date... I was saving the 'image' as a 'URI' in the JournalEntity which was wrong as hell...
@@ -116,9 +118,7 @@ fun JournalEntry(navController: NavHostController, journalViewModel: JournalView
                     Toast.makeText(context,  journalEntity.content
                             + journalEntity.title +journalEntity.date
                         +journalEntity.images, Toast.LENGTH_SHORT).show()
-                    Log.d("Clicked Saved" + journalEntity.content
-                            + journalEntity.title +journalEntity.date
-                            +journalEntity.images, "What happened?...")
+
                 },
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(colorResource(R.color.antique_white)),
@@ -126,6 +126,12 @@ fun JournalEntry(navController: NavHostController, journalViewModel: JournalView
             ) {
                 Image(modifier = Modifier.size(17.dp), imageVector = Icons.Default.Check, contentDescription = null)
             }
+            Log.d("Clicked Saved" , "What happened?..." + journalEntity.content+ "\n"
+                    + journalEntity.title +"\n"
+                    +journalEntity.date
+                    +"\n"
+                    +journalEntity.images
+            )
         }
         OutlinedTextField(
             modifier = Modifier
