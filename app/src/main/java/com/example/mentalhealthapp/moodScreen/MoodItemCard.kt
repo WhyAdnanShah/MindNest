@@ -103,7 +103,7 @@ fun MoodItemCard(moodEntity: MoodEntity, moodViewModel: MoodViewModel){
             ){
                 MoodEdit(
                     moodViewModel = moodViewModel,
-                    moods = moodEntity
+                    moodEntity = moodEntity
                 )
 
                 Spacer(Modifier.width(10.dp))
