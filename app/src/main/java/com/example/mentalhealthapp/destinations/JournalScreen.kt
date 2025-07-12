@@ -6,7 +6,6 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -60,8 +59,7 @@ fun JournalScreen(journalViewModel: JournalViewModel, navController: NavHostCont
                 )
             }
         }
-    ){
-            paddingValues ->
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -71,46 +69,36 @@ fun JournalScreen(journalViewModel: JournalViewModel, navController: NavHostCont
                     color = colorResource(R.color.slate_gray),
                     shape = RoundedCornerShape(5.dp, 5.dp, 20.dp, 20.dp)
                 )
-        ){}
-
-        Row (
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            Text(
+        ) {
+            Text(modifier = Modifier.padding(16.dp, 16.dp, 16.dp),
                 text = "Your Journal",
-                fontSize = 25.sp,
+                fontSize = 30.sp,
                 fontWeight = FontWeight.Bold
             )
-        }
 
-        Column (
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.Top
-        ){
-            if (allJournals.collectAsState(initial = emptyList()).value.isEmpty()){
-                CenteredText("Tap the '+' icon to add a new entry", 15.sp)
-            }
-            else{
-                LazyColumn (
-                    modifier = Modifier.scrollable(
-                        rememberScrollState(),
-                        orientation = Orientation.Vertical
-                    )
-                ){
-                    items(journalData, key = { it.id }){
-                            journalItem ->
-                        JournalItemCard(
-                            journalEntity = journalItem,
-                            journalViewModel = journalViewModel
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.Top
+            ) {
+                if (allJournals.collectAsState(initial = emptyList()).value.isEmpty()) {
+                    CenteredText("Tap the '+' icon to add a new entry", 15.sp)
+                } else {
+                    LazyColumn(
+                        modifier = Modifier.scrollable(
+                            rememberScrollState(),
+                            orientation = Orientation.Vertical
                         )
+                    ) {
+                        items(journalData, key = { it.id }) { journalItem ->
+                            JournalItemCard(
+                                journalEntity = journalItem,
+                                journalViewModel = journalViewModel
+                            )
 
+                        }
                     }
                 }
             }

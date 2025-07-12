@@ -14,15 +14,21 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.areSystemBarsVisible
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.safeGestures
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -62,7 +68,7 @@ class MainActivity : ComponentActivity() {
                 )
                 { innerPadding ->
                     LoginPage(
-                        modifier = Modifier.padding(innerPadding)
+                        modifier = Modifier
                     )
                 }
             }
@@ -72,7 +78,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun LoginPage(modifier: Modifier = Modifier) {
-    var context = LocalContext.current
+    val context = LocalContext.current
 
     val loginStatus = remember {  context.getSharedPreferences("LoginStatus", Context.MODE_PRIVATE) }
     val isLoggedIn = loginStatus.getBoolean("LoginStatus", false)
@@ -255,9 +261,10 @@ fun SkipLogin(context: Context, onSkipClick: () -> Unit) {
         fontFamily = FontFamily.Monospace,
         fontStyle = FontStyle.Italic)
 
-    Image(painter = painterResource(R.drawable.arrow)
-        ,contentDescription = null,
-        modifier = Modifier.size(13.dp))
+    Image(imageVector = Icons.Default.PlayArrow,
+        contentDescription = null,
+        modifier = Modifier.size(15.dp)
+    )
 }
 
 
