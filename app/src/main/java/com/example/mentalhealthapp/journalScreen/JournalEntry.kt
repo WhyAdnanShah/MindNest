@@ -49,6 +49,7 @@ import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.journalROOMdatabase.JournalEntity
+import com.example.mentalhealthapp.navigation.BottomNavItem
 import com.example.mentalhealthapp.viewModel.JournalViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
@@ -120,10 +121,14 @@ fun JournalEntry(navController: NavHostController, journalViewModel: JournalView
                         images = imageUri.toString()
                     )
                     journalViewModel.addJournal(newJournalEntry)
+                    navController.navigate(BottomNavItem.Journal.route)
+                    {popUpTo(BottomNavItem.Journal.route) {
+                        inclusive = true
+                    }
+                    }
                     Toast.makeText(context,  journalEntity.content
                             + journalEntity.title +journalEntity.date
-                        +journalEntity.images, Toast.LENGTH_SHORT).show()
-
+                            +journalEntity.images, Toast.LENGTH_SHORT).show()
                 },
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(colorResource(R.color.antique_white)),
