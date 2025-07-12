@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.journalROOMdatabase.JournalEntity
+import com.example.mentalhealthapp.journalScreen.JournalItemCard
 import com.example.mentalhealthapp.navigation.CenteredText
 import com.example.mentalhealthapp.viewModel.JournalViewModel
 import kotlinx.coroutines.flow.Flow
@@ -105,6 +106,10 @@ fun JournalScreen(journalViewModel: JournalViewModel, navController: NavHostCont
                 ){
                     items(journalData, key = { it.id }){
                             journalItem ->
+                        JournalItemCard(
+                            journalEntity = journalItem,
+                            journalViewModel = journalViewModel
+                        )
 
                     }
                 }
