@@ -143,13 +143,12 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             composable(BottomNavItem.Settings.route) { SettingsScreen() }
 
 
-            composable ("NoteList") { JournalScreen(journalViewModel,navController) }
+            composable (BottomNavItem.Journal.route) { JournalScreen(journalViewModel,navController) }
             composable ("makeNote") { JournalEntry(
                 navController,
                 journalViewModel = journalViewModel
-            ) }
-
-
+            )
+            }
 
 //          composable(BottomNavItem.Vent.route) { VentScreen() }
         }
@@ -173,7 +172,11 @@ fun BottomNavigationBar(navController: NavHostController, items: List<BottomNavI
                 selected = currentRoute == item.route,
                 onClick = {
                     if (currentRoute != item.route) {
-                        navController.navigate(item.route)
+                        navController.navigate(item.route){
+                            popUpTo(BottomNavItem.Home.route){
+                                inclusive = false
+                            }
+                        }
                     }
                 },
                 icon = {
