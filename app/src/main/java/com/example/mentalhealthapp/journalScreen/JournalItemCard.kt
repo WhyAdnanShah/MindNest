@@ -72,26 +72,12 @@ fun JournalItemCard(journalEntity: JournalEntity, journalViewModel: JournalViewM
                 horizontalArrangement = Arrangement.End,
                 verticalAlignment = Alignment.CenterVertically
             ){
-                Button(
-                    modifier = Modifier
-                        .wrapContentSize()
-                        .border(
-                            width = 0.dp,
-                            color = colorResource(R.color.earth_yellow),
-                            shape = RoundedCornerShape(10.dp)
-                        ),
-                    onClick = {
-                        Toast.makeText(context, "Edit Clicked", Toast.LENGTH_SHORT).show()
-                    },
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(Color.Transparent),
-                )
-                {
-                    Text("Edit", color = colorResource(R.color.earth_yellow))
-                }
+                JournalEdit(journalEntity, journalViewModel)
+
                 Spacer(modifier = Modifier.width(10.dp))
 
                 JournalDelete(journalEntity, journalViewModel)
+
 
             }
         }

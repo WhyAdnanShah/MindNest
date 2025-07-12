@@ -48,7 +48,7 @@ import kotlin.collections.listOf
 @Composable
 fun MoodEdit(
     moodViewModel: MoodViewModel,
-    moods: MoodEntity
+    moodEntity: MoodEntity
 ) {
     val context = LocalContext.current
     var showEditDialog by remember { mutableStateOf(false) }
@@ -82,7 +82,7 @@ fun MoodEdit(
     if (showEditDialog) EditMoodDialog(
         onDismiss = { showEditDialog = false },
         moodViewModel = moodViewModel,
-        moods = moods,
+        moodEntity = moodEntity,
     )
 }
 
@@ -90,7 +90,7 @@ fun MoodEdit(
 fun EditMoodDialog(
     onDismiss: () -> Unit,
     moodViewModel: MoodViewModel,
-    moods: MoodEntity
+    moodEntity : MoodEntity
 ) {
     val moodNames = listOf("laughing", "smiling", "neutral", "sad", "dead")
     val images = listOf(
@@ -101,7 +101,7 @@ fun EditMoodDialog(
         R.drawable.dead
     )
     var selected by remember { mutableIntStateOf(0) }
-    var moodNoteEdit by remember { mutableStateOf(moods.note) }
+    var moodNoteEdit by remember { mutableStateOf(moodEntity.note) }
 
 
 
@@ -155,7 +155,7 @@ fun EditMoodDialog(
 
                     Button(
                         onClick = {
-                            val updatedMood = moods.copy(
+                            val updatedMood = moodEntity.copy(
                                 mood = moodNames[selected],
                                 note = moodNoteEdit
                             )
@@ -175,27 +175,6 @@ fun EditMoodDialog(
         }
     }
 }
-
-@Composable
-fun EditNoteField(
-    value: String,
-    onValueChange: (String) -> Unit,
-    labelText: String,
-    placeholderText: String
-) {
-    OutlinedTextField(
-        modifier = Modifier
-            .fillMaxWidth(),
-        value = value,
-        onValueChange = onValueChange,
-        label = { Text(labelText) },
-        placeholder = { Text(placeholderText) },
-        shape = RoundedCornerShape(15.dp),
-        singleLine = false,
-        maxLines = 10
-    )
-}
-
 
 @Composable
 fun ImageGroup(imageResIds: List<Int>, selectedIndex: Int, onSelected: (Int) -> Unit) {
@@ -231,3 +210,26 @@ fun ImageGroup(imageResIds: List<Int>, selectedIndex: Int, onSelected: (Int) -> 
         }
     }
 }
+
+@Composable
+fun EditNoteField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    labelText: String,
+    placeholderText: String
+) {
+    OutlinedTextField(
+        modifier = Modifier
+            .fillMaxWidth(),
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text(labelText) },
+        placeholder = { Text(placeholderText) },
+        shape = RoundedCornerShape(15.dp),
+        singleLine = false,
+        maxLines = 10
+    )
+}
+
+
+

@@ -3,9 +3,9 @@ package com.example.mentalhealthapp.journalScreen
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,68 +17,56 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
 import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.journalROOMdatabase.JournalEntity
 import com.example.mentalhealthapp.viewModel.JournalViewModel
 
 @Composable
-fun JournalDelete(journalEntity: JournalEntity, journalViewModel: JournalViewModel) {
+fun JournalEdit(journalEntity: JournalEntity, journalViewModel: JournalViewModel){
     val context = LocalContext.current
-    var deleteBtnClicked by remember { mutableStateOf(false) }
+    var journalEditDialog by remember { mutableStateOf(false) }
 
     Button(
         modifier = Modifier
             .wrapContentSize()
             .border(
                 width = 0.dp,
-                color = colorResource(R.color.light_red),
+                color = colorResource(R.color.earth_yellow),
                 shape = RoundedCornerShape(10.dp)
             ),
         onClick = {
-            deleteBtnClicked = true
+            journalEditDialog = true
+//            Toast.makeText(context, "Edit Clicked", Toast.LENGTH_SHORT).show()
         },
         shape = RoundedCornerShape(10.dp),
         colors = ButtonDefaults.buttonColors(Color.Transparent),
     )
     {
-        Text("Delete", color = colorResource(R.color.light_red))
+        Text("Edit", color = colorResource(R.color.earth_yellow))
     }
 
-    if (deleteBtnClicked) {
-        DeleteJournalDialog(
-            onDismiss = { deleteBtnClicked = false },
-            journalViewModel = journalViewModel,
-            journalEntity = journalEntity
+    if (journalEditDialog) EditJournalDialog(
+        onDismiss = { journalEditDialog = false },
+        journalEntity = journalEntity,
+        journalViewModel = journalViewModel
+    )
 
-        )
-    }
 }
 
 @Composable
-fun DeleteJournalDialog(
-    onDismiss: () -> Unit, journalViewModel: JournalViewModel, journalEntity: JournalEntity) {
-    AlertDialog(
+fun EditJournalDialog(
+    onDismiss: () -> Unit,
+    journalViewModel: JournalViewModel,
+    journalEntity: JournalEntity
+) {
+    Dialog(
         onDismissRequest = onDismiss,
-        modifier = Modifier
-            .wrapContentSize(),
-        title = { Text("Are you sure?") },
-        text = { Text("Do you want to delete this journal?") },
-        confirmButton = {
-            Button(onClick = {
-                onDismiss
-                journalViewModel.removeJournal(journalEntity)
-            }
-            ) {
-                Text("Confirm")
-            }
-        },
-        dismissButton = {
-            Button(
-                onClick = onDismiss,
-                colors = ButtonDefaults.buttonColors(Color.Transparent)
-            ) {
-                Text("Cancel", color = colorResource(R.color.light_red))
-            }
+    ){
+        Card(
+            modifier = Modifier.wrapContentSize()
+        ){
+
         }
-    )
+    }
 }
