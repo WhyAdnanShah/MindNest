@@ -97,12 +97,17 @@ fun JournalEntry(navController: NavHostController, journalViewModel: JournalView
         modifier = Modifier
             .verticalScroll(rememberScrollState())
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(5.dp)
+            .border(
+                width = 1.dp,
+                color = colorResource(R.color.slate_gray),
+                shape = RoundedCornerShape(5.dp, 5.dp, 20.dp, 20.dp)
+            ),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
         Row (Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth().padding(top = 10.dp,end = 10.dp),
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ){
@@ -135,7 +140,7 @@ fun JournalEntry(navController: NavHostController, journalViewModel: JournalView
         }
         OutlinedTextField(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth().padding(horizontal = 16.dp)
                 .wrapContentHeight(),
             value = titleText,
             onValueChange = { titleText = it },
@@ -145,7 +150,7 @@ fun JournalEntry(navController: NavHostController, journalViewModel: JournalView
 
         OutlinedTextField(
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth().padding(horizontal = 16.dp)
                 .heightIn(min = 500.dp, max = 1000.dp),
             value = noteText,
             onValueChange = { noteText = it },
@@ -155,7 +160,7 @@ fun JournalEntry(navController: NavHostController, journalViewModel: JournalView
         Spacer(Modifier.height(16.dp))
 
         Row (
-            Modifier.fillMaxWidth(),
+            Modifier.fillMaxWidth().padding(end = 16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End
         ){
@@ -172,7 +177,7 @@ fun JournalEntry(navController: NavHostController, journalViewModel: JournalView
 
         LazyRow (
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth().padding(horizontal = 16.dp)
                 .wrapContentHeight(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
@@ -194,5 +199,6 @@ fun JournalEntry(navController: NavHostController, journalViewModel: JournalView
                 Spacer(Modifier.width(16.dp))
             }
         }
+        Spacer(Modifier.height(16.dp))
     }
 }

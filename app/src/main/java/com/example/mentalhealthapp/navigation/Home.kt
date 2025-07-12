@@ -80,7 +80,6 @@ fun HomeScreen(modifier: Modifier = Modifier) {
     val journalViewModel : JournalViewModel = viewModel(factory = JournalViewModelFactory(context))
 
 
-
     //For Navigation Controller
     val navController = rememberNavController()
     val items = listOf(
@@ -112,7 +111,9 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             )
         },
         bottomBar = {
-            BottomNavigationBar(navController, items)
+            if (navController.currentBackStackEntryAsState().value?.destination?.route != "makeNote"){
+                BottomNavigationBar(navController, items)
+            }
         }
     ) { innerPadding ->
         NavHost(
@@ -162,7 +163,6 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 fun BottomNavigationBar(navController: NavHostController, items: List<BottomNavItem>) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-
     NavigationBar (
         containerColor = Color.Transparent,
     ){
