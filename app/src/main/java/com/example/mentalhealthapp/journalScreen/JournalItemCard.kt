@@ -85,7 +85,7 @@ fun JournalItemCard(journalEntity: JournalEntity, journalViewModel: JournalViewM
                         ),
                     onClick = {
                         Toast.makeText(context, "Edit Clicked", Toast.LENGTH_SHORT).show()
-                              },
+                    },
                     shape = RoundedCornerShape(10.dp),
                     colors = ButtonDefaults.buttonColors(Color.Transparent),
                 )
