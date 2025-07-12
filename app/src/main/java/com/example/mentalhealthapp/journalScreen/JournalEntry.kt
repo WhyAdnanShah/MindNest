@@ -126,9 +126,11 @@ fun JournalEntry(navController: NavHostController, journalViewModel: JournalView
                         inclusive = true
                     }
                     }
-                    Toast.makeText(context,  journalEntity.content
-                            + journalEntity.title +journalEntity.date
-                            +journalEntity.images, Toast.LENGTH_SHORT).show()
+
+//                    Toast.makeText(context,  journalEntity.content
+//                            + journalEntity.title +journalEntity.date
+//                            +journalEntity.images, Toast.LENGTH_SHORT).show()
+
                 },
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(colorResource(R.color.antique_white)),

@@ -26,7 +26,7 @@ import com.example.mentalhealthapp.moodROOMdatabase.MoodEntity
 import com.example.mentalhealthapp.viewModel.MoodViewModel
 
 @Composable
-fun MoodDelete(moodViewModel: MoodViewModel, moods: MoodEntity){
+fun MoodDelete(moodViewModel: MoodViewModel, moodEntity: MoodEntity){
     var showDeleteDialog by remember { mutableStateOf(false) }
 
     Button (modifier = Modifier
@@ -58,13 +58,13 @@ fun MoodDelete(moodViewModel: MoodViewModel, moods: MoodEntity){
     if (showDeleteDialog) DeleteMoodDialog(
         onDismiss = { showDeleteDialog = false },
         moodViewModel = moodViewModel,
-        moods = moods
+        moodEntity = moodEntity
     )
 
 }
 
 @Composable
-fun DeleteMoodDialog(onDismiss: () -> Unit, moodViewModel: MoodViewModel, moods: MoodEntity) {
+fun DeleteMoodDialog(onDismiss: () -> Unit, moodViewModel: MoodViewModel, moodEntity: MoodEntity) {
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text("Delete Mood Entry") },
@@ -72,7 +72,7 @@ fun DeleteMoodDialog(onDismiss: () -> Unit, moodViewModel: MoodViewModel, moods:
         confirmButton = {
             Button(
                 onClick = {
-                    moodViewModel.removeMood(moods)
+                    moodViewModel.removeMood(moodEntity)
                     onDismiss()
                 }
             ) {

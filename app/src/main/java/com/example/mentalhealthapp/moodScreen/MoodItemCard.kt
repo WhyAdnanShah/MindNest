@@ -110,7 +110,7 @@ fun MoodItemCard(moodEntity: MoodEntity, moodViewModel: MoodViewModel){
 
                 MoodDelete(
                     moodViewModel = moodViewModel,
-                    moods = moodEntity
+                    moodEntity = moodEntity
                 )
             }
         }
