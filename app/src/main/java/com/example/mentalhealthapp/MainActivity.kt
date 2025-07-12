@@ -261,7 +261,7 @@ fun SkipLogin(context: Context, onSkipClick: () -> Unit) {
         fontFamily = FontFamily.Monospace,
         fontStyle = FontStyle.Italic)
 
-    Image(imageVector = Icons.Default.PlayArrow,
+    Image(painter = painterResource(R.drawable.arrow),
         contentDescription = null,
         modifier = Modifier.size(15.dp)
     )
