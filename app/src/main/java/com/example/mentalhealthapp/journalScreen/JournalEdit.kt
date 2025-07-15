@@ -1,15 +1,21 @@
 package com.example.mentalhealthapp.journalScreen
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -30,10 +36,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import coil.compose.AsyncImage
 import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.journalROOMdatabase.JournalEntity
 import com.example.mentalhealthapp.moodScreen.TitleText
-import com.example.mentalhealthapp.navigation.BottomNavItem
 import com.example.mentalhealthapp.viewModel.JournalViewModel
 
 @Composable
@@ -78,7 +84,7 @@ fun EditJournalDialog(
     var contentOfTheJournal by remember { mutableStateOf(journalEntity.content) }
 
     Dialog(
-        onDismissRequest = onDismiss,
+        onDismissRequest = onDismiss
     ){
         Card(
             modifier = Modifier
@@ -88,8 +94,9 @@ fun EditJournalDialog(
             Column (
                 modifier = Modifier
                     .fillMaxWidth()
-                    .wrapContentHeight(),
-                horizontalAlignment = Alignment.CenterHorizontally,
+                    .wrapContentHeight()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Top
             ){
                 TitleText("Edit Journal")
@@ -119,22 +126,59 @@ fun EditJournalDialog(
                     singleLine = false,
                     maxLines = 10
                 )
+                Spacer(modifier = Modifier.height(16.dp))
+                Text("Images")
+                Spacer(modifier = Modifier.height(16.dp))
+                val imageUris : List<Uri> = journalEntity.images.map{ Uri.parse(it)}
 
-                Button(
-                    onClick = {
-                        val updateJournal = journalEntity.copy(
-                            title = titleOfTheJournal,
-                            content = contentOfTheJournal
+                LazyRow(modifier = Modifier){
+                    items(imageUris){ uri ->
+                        AsyncImage(modifier = Modifier
+                            .size(200.dp)
+                            .border(
+                                width = 1.dp,
+                                color = colorResource(R.color.slate_gray),
+                                shape = RoundedCornerShape(10.dp)
+                            ),
+                            model = uri,
+                            contentDescription = null
                         )
-                        journalViewModel.editJournal(updateJournal)
-                        onDismiss
-                    },
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(colorResource(R.color.antique_white)),
-                    elevation = ButtonDefaults.buttonElevation(10.dp)
-                ) {
-                    Image(modifier = Modifier.size(17.dp), imageVector = Icons.Default.Check, contentDescription = null)
+
+
+                    }
                 }
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ){
+                    Button(
+                        onClick = onDismiss,
+                        colors = ButtonDefaults.buttonColors(Color.Transparent)
+                    ) {
+                        Text(
+                            "Cancel",
+                            color = colorResource(R.color.light_red)
+                        )
+                    }
+
+                    Button(
+                        onClick = {
+                            val updateJournal = journalEntity.copy(
+                                title = titleOfTheJournal,
+                                content = contentOfTheJournal
+                            )
+                            journalViewModel.editJournal(updateJournal)
+                            onDismiss()
+                        },
+                        shape = RoundedCornerShape(10.dp),
+                        colors = ButtonDefaults.buttonColors(colorResource(R.color.antique_white)),
+                        elevation = ButtonDefaults.buttonElevation(10.dp)
+                    ) {
+                        Image(modifier = Modifier.size(17.dp), imageVector = Icons.Default.Check, contentDescription = null)
+                    }
+                }
+
             }
         }
     }

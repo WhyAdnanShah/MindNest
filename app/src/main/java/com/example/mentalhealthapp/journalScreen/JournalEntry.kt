@@ -76,7 +76,7 @@ fun JournalEntry(navController: NavHostController, journalViewModel: JournalView
         title = titleText,
         content = noteText,
         date = currentDate ,
-        images = imageUri.toString()
+        images = imageUri.map { it.toString() }
     )
 
     /*          This is a simple Media Picker
@@ -118,7 +118,7 @@ fun JournalEntry(navController: NavHostController, journalViewModel: JournalView
                         title = titleText,
                         content = noteText,
                         date = currentDate ,
-                        images = imageUri.toString()
+                        images = imageUri.map { it.toString() }
                     )
                     journalViewModel.addJournal(newJournalEntry)
                     navController.navigate(BottomNavItem.Journal.route)

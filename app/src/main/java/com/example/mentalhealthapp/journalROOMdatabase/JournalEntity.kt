@@ -1,5 +1,6 @@
 package com.example.mentalhealthapp.journalROOMdatabase
 
+import android.net.Uri
 import androidx.compose.runtime.Immutable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -11,5 +12,5 @@ data class JournalEntity(
     val title: String = "",
     val content: String = "",
     val date: String = "",
-    val images: String = ""
+    val images: List<String>
 )

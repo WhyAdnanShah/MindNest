@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import com.example.mentalhealthapp.R
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -26,6 +27,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mentalhealthapp.journalROOMdatabase.JournalEntity
@@ -55,7 +58,9 @@ fun JournalItemCard(journalEntity: JournalEntity, journalViewModel: JournalViewM
         shape = RoundedCornerShape(20.dp)
     ){
         Column (
-            Modifier.fillMaxSize().padding(10.dp),
+            Modifier
+                .fillMaxSize()
+                .padding(10.dp),
             horizontalAlignment = Alignment.Start,
             verticalArrangement = Arrangement.Center
         ){
@@ -64,8 +69,15 @@ fun JournalItemCard(journalEntity: JournalEntity, journalViewModel: JournalViewM
                 fontSize = 15.sp
             )
             Text(modifier = Modifier,
-                text = journalEntity.title,
-                fontSize = 17.sp
+                text = "Title: ${journalEntity.title}",
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Medium
+            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(modifier = Modifier,
+                text = journalEntity.content.take(150) + "...",
+                fontSize = 17.sp,
+                fontStyle = FontStyle.Italic
             )
             Row(
                 Modifier.fillMaxWidth(),
