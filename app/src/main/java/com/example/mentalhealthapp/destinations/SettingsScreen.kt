@@ -56,24 +56,24 @@ fun SettingsScreen(){
             ThemeCard(
                 text = "Dark Mode",
                 color = colorResource(R.color.google_grey),
-                ColorText = colorResource(R.color.floral_white),
+                colorText = colorResource(R.color.floral_white),
                 borderColor = colorResource(R.color.floral_white),
-                onClick = { Toast.makeText(context, "Dark Mode", Toast.LENGTH_SHORT).show() }
+                onClick = Toast.makeText(context, "Dark Mode", Toast.LENGTH_SHORT).show()
 
             )
             ThemeCard(
                 text = "Light Mode",
                 color = colorResource(R.color.floral_white),
-                ColorText = colorResource(R.color.black),
+                colorText = colorResource(R.color.black),
                 borderColor = colorResource(R.color.wheat),
-                onClick = { Toast.makeText(context, "Light Mode", Toast.LENGTH_SHORT).show() }
+                onClick =  Toast.makeText(context, "Light Mode", Toast.LENGTH_SHORT).show()
             )
         }
     }
 }
 
 @Composable
-fun ThemeCard(text: String, color: Color, ColorText: Color, borderColor: Color, onClick: Any) {
+fun ThemeCard(text: String, color: Color, colorText: Color, borderColor: Color, onClick: Unit) {
     Card(
         modifier = Modifier
             .fillMaxHeight()
@@ -86,7 +86,7 @@ fun ThemeCard(text: String, color: Color, ColorText: Color, borderColor: Color, 
                     color = borderColor,
                 )
                 ),
-        onClick = onClick as () -> Unit,
+        onClick = { onClick },
     ){
         Column (
             modifier = Modifier
@@ -98,7 +98,7 @@ fun ThemeCard(text: String, color: Color, ColorText: Color, borderColor: Color, 
                 fontSize = 20.sp,
                 fontWeight = FontWeight.ExtraBold,
                 fontFamily = FontFamily.Monospace,
-                color = ColorText
+                color = colorText
             )
         }
     }
