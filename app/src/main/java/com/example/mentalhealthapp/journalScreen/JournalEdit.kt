@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
@@ -41,6 +40,7 @@ import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.journalROOMdatabase.JournalEntity
 import com.example.mentalhealthapp.moodScreen.TitleText
 import com.example.mentalhealthapp.viewModel.JournalViewModel
+import androidx.core.net.toUri
 
 @Composable
 fun JournalEdit(journalEntity: JournalEntity, journalViewModel: JournalViewModel){
@@ -129,7 +129,7 @@ fun EditJournalDialog(
                 Spacer(modifier = Modifier.height(16.dp))
                 Text("Images")
                 Spacer(modifier = Modifier.height(16.dp))
-                val imageUris : List<Uri> = journalEntity.images.map{ Uri.parse(it)}
+                val imageUris : List<Uri> = journalEntity.images.map{ it.toUri()}
 
                 LazyRow(modifier = Modifier){
                     items(imageUris){ uri ->
