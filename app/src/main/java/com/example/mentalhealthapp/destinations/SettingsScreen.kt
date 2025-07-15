@@ -1,6 +1,7 @@
 package com.example.mentalhealthapp.destinations
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -32,6 +33,7 @@ import com.example.mentalhealthapp.R
 
 @Composable
 fun SettingsScreen(){
+    Log.d("SettingsScreen","SettingsScreen Called")
     val context = LocalContext.current
     val sharedPreferences = context.getSharedPreferences("DarkMode", Context.MODE_PRIVATE)
     val isDarkMode = sharedPreferences.getBoolean("isDarkMode", true)
@@ -61,21 +63,21 @@ fun SettingsScreen(){
                 color = colorResource(R.color.google_grey),
                 colorText = colorResource(R.color.floral_white),
                 borderColor = colorResource(R.color.floral_white),
-                onClick = Toast.makeText(context, "Dark Mode", Toast.LENGTH_SHORT).show()
+                onClick = { Toast.makeText(context, "Dark Mode", Toast.LENGTH_SHORT).show() }
             )
             ThemeCard(
                 text = "Light Mode",
                 color = colorResource(R.color.floral_white),
                 colorText = colorResource(R.color.black),
                 borderColor = colorResource(R.color.wheat),
-                onClick =  Toast.makeText(context, "Light Mode", Toast.LENGTH_SHORT).show()
+                onClick = { Toast.makeText(context, "Light Mode", Toast.LENGTH_SHORT).show() }
             )
         }
     }
 }
 
 @Composable
-fun ThemeCard(text: String, color: Color, colorText: Color, borderColor: Color, onClick: Unit) {
+fun ThemeCard(text: String, color: Color, colorText: Color, borderColor: Color, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxHeight()
@@ -88,7 +90,7 @@ fun ThemeCard(text: String, color: Color, colorText: Color, borderColor: Color, 
                     color = borderColor,
                 )
                 ),
-        onClick = { onClick },
+        onClick =  onClick
     ){
         Column (
             modifier = Modifier
