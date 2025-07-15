@@ -1,14 +1,18 @@
 package com.example.mentalhealthapp.journalScreen
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -29,6 +33,7 @@ import androidx.compose.ui.window.Dialog
 import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.journalROOMdatabase.JournalEntity
 import com.example.mentalhealthapp.moodScreen.TitleText
+import com.example.mentalhealthapp.navigation.BottomNavItem
 import com.example.mentalhealthapp.viewModel.JournalViewModel
 
 @Composable
@@ -70,6 +75,7 @@ fun EditJournalDialog(
     journalEntity: JournalEntity
 ) {
     var titleOfTheJournal by remember { mutableStateOf(journalEntity.title) }
+    var contentOfTheJournal by remember { mutableStateOf(journalEntity.content) }
 
     Dialog(
         onDismissRequest = onDismiss,
@@ -101,6 +107,34 @@ fun EditJournalDialog(
                     singleLine = false,
                     maxLines = 10
                 )
+                Spacer(modifier = Modifier.height(16.dp))
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    value = contentOfTheJournal,
+                    onValueChange = { contentOfTheJournal = it },
+                    label = { Text("Edit Content") },
+                    placeholder = { Text("Edit Content") } ,
+                    shape = RoundedCornerShape(15.dp),
+                    singleLine = false,
+                    maxLines = 10
+                )
+
+                Button(
+                    onClick = {
+                        val updateJournal = journalEntity.copy(
+                            title = titleOfTheJournal,
+                            content = contentOfTheJournal
+                        )
+                        journalViewModel.editJournal(updateJournal)
+                        onDismiss
+                    },
+                    shape = RoundedCornerShape(10.dp),
+                    colors = ButtonDefaults.buttonColors(colorResource(R.color.antique_white)),
+                    elevation = ButtonDefaults.buttonElevation(10.dp)
+                ) {
+                    Image(modifier = Modifier.size(17.dp), imageVector = Icons.Default.Check, contentDescription = null)
+                }
             }
         }
     }
