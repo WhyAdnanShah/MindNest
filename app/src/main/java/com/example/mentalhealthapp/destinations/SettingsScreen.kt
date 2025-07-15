@@ -1,5 +1,6 @@
 package com.example.mentalhealthapp.destinations
 
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -32,6 +33,8 @@ import com.example.mentalhealthapp.R
 @Composable
 fun SettingsScreen(){
     val context = LocalContext.current
+    val sharedPreferences = context.getSharedPreferences("DarkMode", Context.MODE_PRIVATE)
+    val isDarkMode = sharedPreferences.getBoolean("isDarkMode", true)
 
     Column (modifier = Modifier
         .fillMaxSize()
@@ -59,7 +62,6 @@ fun SettingsScreen(){
                 colorText = colorResource(R.color.floral_white),
                 borderColor = colorResource(R.color.floral_white),
                 onClick = Toast.makeText(context, "Dark Mode", Toast.LENGTH_SHORT).show()
-
             )
             ThemeCard(
                 text = "Light Mode",
