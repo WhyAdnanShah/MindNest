@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,6 +37,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mentalhealthapp.R
+import com.example.mentalhealthapp.moodROOMdatabase.MoodEntity
+import com.example.mentalhealthapp.moodScreen.TitleText
+import com.example.mentalhealthapp.viewModel.JournalViewModel
+import com.example.mentalhealthapp.viewModel.MoodViewModel
 
 
 @Composable
@@ -44,6 +49,7 @@ fun SettingsScreen(){
     val context = LocalContext.current
     val sharedPreferences = context.getSharedPreferences("DarkMode", Context.MODE_PRIVATE)
     val isDarkMode = sharedPreferences.getBoolean("isDarkMode", true)
+
 
     Column (modifier = Modifier
         .fillMaxSize()
@@ -55,9 +61,7 @@ fun SettingsScreen(){
             fontFamily = FontFamily.Monospace
         )
         Spacer(Modifier.height(16.dp))
-        Text(text = "Theme",
-            fontSize = 20.sp,
-        )
+        TitleText(text = "Theme")
         Spacer(Modifier.height(20.dp))
         Row (
             modifier = Modifier
@@ -80,10 +84,36 @@ fun SettingsScreen(){
                 onClick = { Toast.makeText(context, "Light Mode", Toast.LENGTH_SHORT).show() }
             )
         }
-        Spacer(Modifier.height(20.dp))
+        Spacer(Modifier.height(50.dp))
 
-        Text(text = "About",
-            fontSize = 20.sp
+        TitleText(text = "Manage data")
+        Spacer(Modifier.height(16.dp))
+
+        Text(modifier = Modifier.clickable(
+            onClick = {
+                Toast.makeText(context, "Clear all Data for Mood Tracker", Toast.LENGTH_SHORT).show()
+            }
+        ), text = "Clear all Data for Mood Tracker",
+            fontSize = 20.sp,
+            color = colorResource(R.color.indian_red)
+        )
+        Spacer(Modifier.height(10.dp))
+        Text(
+            modifier = Modifier.clickable(
+                onClick = {
+                    Toast.makeText(context, "Clear all Data for Journals", Toast.LENGTH_SHORT).show()
+
+                }
+            ), text = "Clear all Data for Journals",
+            fontSize = 20.sp,
+            color = colorResource(R.color.indian_red)
+        )
+
+
+        Spacer(Modifier.height(50.dp))
+
+        TitleText(text = "About",
+//            fontSize = 20.sp
         )
 
         Spacer(Modifier.height(16.dp))
@@ -115,7 +145,9 @@ fun SettingsScreen(){
                 Image(painter = painterResource(R.drawable.arrow), contentDescription = null, modifier = Modifier.size(17.dp))
             }
         }
+
         Spacer(Modifier.height(16.dp))
+
         Card(
             modifier = Modifier
                 .fillMaxWidth()
