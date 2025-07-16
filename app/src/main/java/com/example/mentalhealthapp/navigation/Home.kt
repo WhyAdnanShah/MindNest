@@ -43,6 +43,7 @@ import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.destinations.JournalScreen
 import com.example.mentalhealthapp.destinations.MoodScreen
 import com.example.mentalhealthapp.destinations.SettingsScreen
+import com.example.mentalhealthapp.destinations.ZenModeScreen
 import com.example.mentalhealthapp.journalROOMdatabase.JournalEntity
 import com.example.mentalhealthapp.journalScreen.JournalEntry
 import com.example.mentalhealthapp.moodROOMdatabase.MoodEntity
@@ -196,24 +197,10 @@ fun BottomNavigationBar(navController: NavHostController, items: List<BottomNavI
 }
 
 
-@Composable fun ZenModeScreen() { CenteredText("Zen Mode", 20.sp) }
-
+/*          This will be MY simple Centered Text composable that i can use anywhere in the app         */
 @Composable
 fun CenteredText(text: String, fontSize: TextUnit) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Text(text, fontSize = fontSize, fontWeight = FontWeight.Bold)
     }
 }
-
-//@Composable
-//fun NavHostController(journalViewModel: JournalViewModel){
-//
-//    val navController = rememberNavController()
-//    NavHost(navController = navController, startDestination = "noteList") {
-//        composable("noteList") { JournalScreen(journalViewModel, navController) }
-//        composable("noteDetail/{noteId}") { backStackEntry ->
-//            val noteId = backStackEntry.arguments?.getString("noteId") ?: ""
-//            JournalDetailScreen(noteId)
-//        }
-//    }
-//}
