@@ -1,6 +1,5 @@
 package com.example.mentalhealthapp.journalROOMdatabase
 
-import android.net.Uri
 import androidx.compose.runtime.Immutable
 import androidx.room.Entity
 import androidx.room.PrimaryKey

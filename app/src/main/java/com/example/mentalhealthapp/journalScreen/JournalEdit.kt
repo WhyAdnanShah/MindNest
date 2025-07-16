@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -35,12 +33,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import coil.compose.AsyncImage
 import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.journalROOMdatabase.JournalEntity
 import com.example.mentalhealthapp.moodScreen.TitleText
 import com.example.mentalhealthapp.viewModel.JournalViewModel
-import androidx.core.net.toUri
 import coil.compose.rememberAsyncImagePainter
 
 @Composable
@@ -143,21 +139,6 @@ fun EditJournalDialog(
                         ),
                     painter = rememberAsyncImagePainter(imageUris), contentDescription = null
                 )
-//                LazyRow(modifier = Modifier){
-//                    items(imageUris){ uri ->
-//                        Image(
-//                            modifier = Modifier
-//                                .size(200.dp)
-//                                .border(
-//                                    width = 1.dp,
-//                                    color = colorResource(R.color.slate_gray),
-//                                    shape = RoundedCornerShape(10.dp)
-//                                ),
-//                            painter = rememberAsyncImagePainter(model = uri),
-//                            contentDescription = null
-//                        )
-//                    }
-//                }
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
