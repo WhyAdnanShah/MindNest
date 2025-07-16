@@ -12,5 +12,5 @@ data class JournalEntity(
     val title: String = "",
     val content: String = "",
     val date: String = "",
-    val images: List<String>
+    val images: String
 )

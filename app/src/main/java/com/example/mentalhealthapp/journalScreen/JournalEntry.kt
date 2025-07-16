@@ -1,5 +1,6 @@
 package com.example.mentalhealthapp.journalScreen
 
+import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
@@ -53,6 +54,7 @@ import com.example.mentalhealthapp.navigation.BottomNavItem
 import com.example.mentalhealthapp.viewModel.JournalViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
+import androidx.core.net.toUri
 
 @Stable
 @Composable
@@ -67,8 +69,8 @@ fun JournalEntry(navController: NavHostController, journalViewModel: JournalView
     var titleText by remember { mutableStateOf("") }
     var noteText by remember { mutableStateOf("") }
 
-    /*          Image is remembered as a List of URIs (emptyList btw)         */
-    var imageUri by remember { mutableStateOf<List<Uri>>(emptyList()) }
+    /*          Image is remembered as a URI         */
+    var imageUri by remember { mutableStateOf<Uri?>(null)}
 
     /*          This is how u save the date in the journal you dumbooooooooo          */
     val currentDate = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(System.currentTimeMillis())
@@ -76,16 +78,17 @@ fun JournalEntry(navController: NavHostController, journalViewModel: JournalView
         title = titleText,
         content = noteText,
         date = currentDate ,
-        images = imageUri.map { it.toString() }
+        images = imageUri.toString()
     )
 
     /*          This is a simple Media Picker
                 'uris' refers to the list of URI objects that point to the location of the images or videos selected
                  if the uris.isEmpty() then uris will be assigned to the imageUri */
-    val pickMedia = rememberLauncherForActivityResult(ActivityResultContracts.PickMultipleVisualMedia()) {
-            uris ->
-        if (uris.isNotEmpty()) {
-            imageUri = uris
+    val pickMedia = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) {
+            uri ->
+        if (uri != null) {
+            imageUri = uri
+            context.contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
             Toast.makeText(context, "Image Selected", Toast.LENGTH_SHORT).show()
         }
         else{
@@ -118,7 +121,7 @@ fun JournalEntry(navController: NavHostController, journalViewModel: JournalView
                         title = titleText,
                         content = noteText,
                         date = currentDate ,
-                        images = imageUri.map { it.toString() }
+                        images = imageUri.toString()
                     )
                     journalViewModel.addJournal(newJournalEntry)
                     navController.navigate(BottomNavItem.Journal.route)
@@ -182,30 +185,18 @@ fun JournalEntry(navController: NavHostController, journalViewModel: JournalView
 
         Spacer(Modifier.height(16.dp))
 
-        LazyRow (
+        val uriOfImage = journalEntity.images.toUri()
+        Image(
             modifier = Modifier
-                .fillMaxWidth().padding(horizontal = 16.dp)
-                .wrapContentHeight(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
-        ){
-            items(imageUri){
-                    uri->
-                Image(
-                    modifier = Modifier
-                        .width(200.dp)
-                        .height(200.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .border(
-                            width = 1.dp,
-                            color = colorResource(R.color.davys_gray),
-                            shape = RoundedCornerShape(10.dp)
-                        ),
-                    painter = rememberAsyncImagePainter(uri), contentDescription = null
-                )
-                Spacer(Modifier.width(16.dp))
-            }
-        }
+                .size(200.dp)
+                .border(
+                    width = 1.dp,
+                    color = colorResource(R.color.slate_gray),
+                    shape = RoundedCornerShape(10.dp)
+                ),
+            painter = rememberAsyncImagePainter(uriOfImage), contentDescription = null
+        )
+
         Spacer(Modifier.height(16.dp))
     }
 }

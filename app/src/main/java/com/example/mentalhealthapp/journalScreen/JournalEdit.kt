@@ -41,6 +41,7 @@ import com.example.mentalhealthapp.journalROOMdatabase.JournalEntity
 import com.example.mentalhealthapp.moodScreen.TitleText
 import com.example.mentalhealthapp.viewModel.JournalViewModel
 import androidx.core.net.toUri
+import coil.compose.rememberAsyncImagePainter
 
 @Composable
 fun JournalEdit(journalEntity: JournalEntity, journalViewModel: JournalViewModel){
@@ -129,24 +130,34 @@ fun EditJournalDialog(
                 Spacer(modifier = Modifier.height(16.dp))
                 Text("Images")
                 Spacer(modifier = Modifier.height(16.dp))
-                val imageUris : List<Uri> = journalEntity.images.map{ it.toUri()}
-
-                LazyRow(modifier = Modifier){
-                    items(imageUris){ uri ->
-                        AsyncImage(modifier = Modifier
-                            .size(200.dp)
-                            .border(
-                                width = 1.dp,
-                                color = colorResource(R.color.slate_gray),
-                                shape = RoundedCornerShape(10.dp)
-                            ),
-                            model = uri,
-                            contentDescription = null
-                        )
 
 
-                    }
-                }
+                val imageUris = Uri.parse(journalEntity.images)
+                Image(
+                    modifier = Modifier
+                        .size(200.dp)
+                        .border(
+                            width = 1.dp,
+                            color = colorResource(R.color.slate_gray),
+                            shape = RoundedCornerShape(10.dp)
+                        ),
+                    painter = rememberAsyncImagePainter(imageUris), contentDescription = null
+                )
+//                LazyRow(modifier = Modifier){
+//                    items(imageUris){ uri ->
+//                        Image(
+//                            modifier = Modifier
+//                                .size(200.dp)
+//                                .border(
+//                                    width = 1.dp,
+//                                    color = colorResource(R.color.slate_gray),
+//                                    shape = RoundedCornerShape(10.dp)
+//                                ),
+//                            painter = rememberAsyncImagePainter(model = uri),
+//                            contentDescription = null
+//                        )
+//                    }
+//                }
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
