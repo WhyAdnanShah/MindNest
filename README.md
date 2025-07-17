@@ -7,12 +7,11 @@ MindNest is a mental wellness companion app built for Android.
 - 🟢 **Mood Tracker** — Log and track your emotional states daily
 - 📓 **Journal** — Reflect with private, secure journaling
 - 🌬️ **Zen Mode** — Simple breathing tools to help you relax
-- 🤖 **Vent** — Talk to an AI when you need to vent, reflect, or feel heard
 
 ### 📱 Built With
 
 - Kotlin + Jetpack Compose
-- Firebase (Auth, Firestore, etc.)
+- Firebase (Auth, Firestore, etc.) (in development)
 - MVVM Architecture
 - Room DB (for offline journaling)
 
