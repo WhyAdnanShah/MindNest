@@ -1,25 +1,27 @@
 package com.example.mentalhealthapp.destinations
 
 import android.widget.Toast
-import androidx.compose.foundation.border
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Card
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.navigation.CenteredText
 
 
@@ -48,6 +50,20 @@ fun ZenModeScreen() {
                         }
                     ),
             ){
+                Row(
+                    Modifier.fillMaxWidth().padding(8.dp),
+                    horizontalArrangement = Arrangement.End
+                ){
+                    Image(
+                        modifier = Modifier
+                            .size(30.dp)
+                            .clickable(
+                                onClick = { Toast.makeText(context, "Info for ${items[index]}", Toast.LENGTH_SHORT).show() }
+                            ),
+                        imageVector = Icons.Default.Info,
+                        contentDescription = null
+                    )
+                }
                 CenteredText(items[index], fontSize = 20.sp)
             }
         }
