@@ -128,7 +128,6 @@ fun SettingsScreen(){
                     shape = RoundedCornerShape(10.dp)
                 ),
             shape = RoundedCornerShape(10.dp),
-            colors = CardDefaults.cardColors(colorResource(R.color.davys_gray)),
             onClick = {
                 val githubPageIntent : Intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/WhyAdnanShah/MindNest"))
                 context.startActivity(githubPageIntent)
@@ -158,7 +157,6 @@ fun SettingsScreen(){
                     shape = RoundedCornerShape(10.dp)
                 ),
             shape = RoundedCornerShape(10.dp),
-            colors = CardDefaults.cardColors(colorResource(R.color.davys_gray)),
             onClick = {
                 val linkedInPageIntent : Intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://in.linkedin.com/in/whyadnan"))
                 context.startActivity(linkedInPageIntent)
