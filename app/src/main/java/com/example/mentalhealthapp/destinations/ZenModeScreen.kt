@@ -105,12 +105,11 @@ fun InfoDialog(onDismiss: () -> Unit, title: String) {
                 .fillMaxWidth()
                 .height(300.dp)
         ){
-            Text(
-                title,
+            Text(modifier = Modifier.padding(16.dp),
+                text = title,
                 fontSize = 25.sp,
                 fontWeight = FontWeight.Bold
             )
-            Toast.makeText(context,"Info for $title",Toast.LENGTH_SHORT).show()
         }
     }
 }
