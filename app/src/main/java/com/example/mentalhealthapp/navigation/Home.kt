@@ -1,5 +1,6 @@
 package com.example.mentalhealthapp.navigation
 
+import android.R.attr.fontWeight
 import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -199,6 +200,6 @@ fun BottomNavigationBar(navController: NavHostController, items: List<BottomNavI
 @Composable
 fun CenteredText(text: String, fontSize: TextUnit) {
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text, fontSize = fontSize, fontWeight = FontWeight.Bold)
+        Text(text, fontSize = fontSize, modifier = Modifier)
     }
 }

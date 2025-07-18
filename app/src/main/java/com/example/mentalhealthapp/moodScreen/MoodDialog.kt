@@ -115,7 +115,7 @@ fun MoodDialog(onDismiss: () -> Unit, moodViewModel: MoodViewModel) {
                 ) {
                     CenteredText(
                         text = selectedDateMillis?.let { dateFormat.format(it) } ?: "Pick date",
-                        fontSize = 15.sp
+                        fontSize = 15.sp,
                     )
                 }
 

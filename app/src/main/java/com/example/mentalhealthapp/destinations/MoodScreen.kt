@@ -42,7 +42,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults.buttonColors
-import androidx.compose.material3.Card
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
@@ -130,7 +129,7 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
 
             ) {
                 if (allMoods.collectAsState(initial = emptyList()).value.isEmpty()){
-                    CenteredText("Tap the '+' icon to add a new snapshot", fontSize = 15.sp)
+                    CenteredText("Tap the '+' icon to add a new snapshot", fontSize = 15.sp,)
                 }
                 else{
                     LazyColumn (
@@ -227,7 +226,5 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
             )
         }
     }
-
-
 }
 
