@@ -18,8 +18,8 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -37,12 +37,11 @@ fun ZenModeScreen() {
 
     val items = listOf("Equal Breathing", "Box Breathing", "4-7-8 Breathing")
     var isInfoButtonClicked by remember { mutableStateOf(false) }
-    var rememberIndex by remember { mutableStateOf(0) }
+    var rememberIndex by remember { mutableIntStateOf(0) }
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier.height(200.dp),
-//        state = TODO(),
         contentPadding = PaddingValues(16.dp),
         verticalArrangement =Arrangement.spacedBy(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
@@ -84,20 +83,19 @@ fun ZenModeScreen() {
                         fontWeight = FontWeight.Bold
                     )
                 }
-                if (isInfoButtonClicked) {
-                    InfoDialog(
-                        onDismiss = { isInfoButtonClicked = false },
-                        items,
-                        rememberIndex
-                    )
-                }
             }
         }
+    }
+    if (isInfoButtonClicked) {
+        InfoDialog(
+            onDismiss = { isInfoButtonClicked = false },
+            title = items[rememberIndex],
+        )
     }
 }
 
 @Composable
-fun InfoDialog(onDismiss: () -> Unit, items: List<String>, rememberIndex : Int) {
+fun InfoDialog(onDismiss: () -> Unit, title: String) {
     val context = LocalContext.current
     Dialog(
         onDismissRequest = onDismiss
@@ -108,11 +106,11 @@ fun InfoDialog(onDismiss: () -> Unit, items: List<String>, rememberIndex : Int) 
                 .height(300.dp)
         ){
             Text(
-                items[rememberIndex],
+                title,
                 fontSize = 25.sp,
                 fontWeight = FontWeight.Bold
             )
-            Toast.makeText(context,"Info for ${items[rememberIndex]}",Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,"Info for $title",Toast.LENGTH_SHORT).show()
         }
     }
 }
