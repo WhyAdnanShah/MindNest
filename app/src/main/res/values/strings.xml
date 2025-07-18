@@ -1,3 +1,61 @@
 <resources>
     <string name="app_name">MindNest</string>
+    <string name="Equal_Breathing">
+How to Practice:\n
+1. Sit comfortably with a straight spine or lie down.\n\n
+2. Inhale deeply through the nose for a count of 4.\n\n
+3. Exhale smoothly through the nose for the same count of 4.\n\n
+4. Gradually increase the count (e.g., 5-6 seconds) as you become more comfortable.\n\n
+
+\nBenefits:\n
+1. Reduces stress and anxiety by activating the parasympathetic nervous system.\n\n
+2. Improves focus and mental clarity.\n\n
+3. Balances energy and promotes relaxation.\n\n
+4. Enhances lung capacity and respiratory efficiency.\n\n
+
+\nBest For:\n
+Beginners, as it’s simple yet powerful. It can be practiced anytime—before sleep, during work breaks, or to start meditation.\n\n
+    </string>
+
+
+    <string name="Box_Breathing">
+How to Practice:\n
+1. Sit upright in a comfortable position, keeping your spine straight.\n\n
+2. Inhale deeply through your nose for a count of 4.\n\n
+3. Hold your breath for a count of 4.\n\n
+4. Exhale slowly through your nose for a count of 4.\n\n
+5. Hold your breath again for a count of 4 before repeating.\n\n
+6. Continue this cycle for 3-5 minutes, maintaining even counts.\n\n
+
+\nBenefits:\n
+1. Calms the nervous system, reducing stress and anxiety.\n\n
+2. Enhances focus and mental clarity by regulating breath control.\n\n
+3. Improves emotional regulation and resilience.\n\n
+4. Boosts oxygenation and lung efficiency.\n\n
+5. Used by athletes, military personnel, and professionals for peak performance.\n\n
+
+\nBest For:\n
+Those seeking deep relaxation, improved concentration, or stress relief. Ideal before high-pressure situations, meditation, or bedtime. Also beneficial for beginners due to its structured, easy-to-follow pattern.
+</string>
+
+
+    <string name="four_seven_eight_Breathing">
+How to Practice:\n
+1. Sit or lie down in a comfortable position, placing the tip of your tongue against the ridge behind your upper front teeth.\n\n
+2. Exhale completely through your mouth, making a "whoosh" sound.\n\n
+3. Close your mouth and inhale quietly through your nose for a count of 4.\n\n
+4. Hold your breath for a count of 7.\n\n
+5. Exhale fully through your mouth (with the "whoosh" sound) for a count of 8.\n\n
+6. Repeat this cycle 3-4 times initially, gradually working up to 8 cycles.\n\n
+
+\nBenefits:\n
+1. Rapidly reduces stress and anxiety by activating the parasympathetic nervous system.\n\n
+2. Promotes better sleep and relaxation when practiced before bedtime.\n\n
+3. Helps control cravings and emotional responses.\n\n
+4. Improves focus and mindfulness by regulating breath patterns.\n\n
+5. May lower blood pressure and ease tension.\n\n
+
+\nBest For:\n
+Those dealing with insomnia, anxiety, or acute stress. Also useful for quick relaxation during the day. Not recommended for beginners to do excessively—start with fewer cycles to avoid lightheadedness.
+    </string>
 </resources>
