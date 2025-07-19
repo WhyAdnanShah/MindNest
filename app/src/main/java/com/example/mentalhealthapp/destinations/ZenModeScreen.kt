@@ -61,7 +61,6 @@ fun ZenModeScreen() {
                     .size(200.dp, 300.dp)
                     .clickable(
                         onClick = {
-                            Toast.makeText(context, items[index], Toast.LENGTH_SHORT).show()
                             exerciseButton = true
                             rememberIndex = index
                         }

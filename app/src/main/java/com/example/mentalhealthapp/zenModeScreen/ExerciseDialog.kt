@@ -23,6 +23,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -42,6 +43,7 @@ fun ExerciseDialog(onDismiss: () -> Unit, title: String) {
     val context = LocalContext.current
     var chipEnabled by remember { mutableStateOf(false) }
     val timings = listOf("1 min","5 min","10 min","15 min","20 min")
+    var rememberChipIndex by remember { mutableIntStateOf(-1) }
     Dialog(onDismissRequest = onDismiss){
         Card(
             Modifier.wrapContentSize()
@@ -63,69 +65,23 @@ fun ExerciseDialog(onDismiss: () -> Unit, title: String) {
                 )
                 LazyRow (
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .verticalScroll(rememberScrollState()),
+                        .fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Start
-                ){
-                    item{
+                ) {
+                    items(timings.size) { index ->
+                        val isSelected  = index == rememberChipIndex
                         AssistChip(
                             onClick = {
-                                Toast.makeText(context, "1 min", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(context, timings[index], Toast.LENGTH_SHORT).show()
+                                rememberChipIndex = if (isSelected) -1 else index
                                 chipEnabled = true
                             },
-                            label = { Text(text = "1 min", fontSize = 15.sp) },
+                            label = { Text(text = timings[index], fontSize = 15.sp) },
                             modifier = Modifier.wrapContentSize(),
 //                        leadingIcon = Icon(Icons.Default.),
-                            shape = RoundedCornerShape(10.dp)
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
-                    }
-                    item{
-                        AssistChip(
-                            onClick = {
-                                Toast.makeText(context, "5 min", Toast.LENGTH_SHORT).show()
-                            },
-                            label = { Text(text = "5 min", fontSize = 15.sp) },
-                            modifier = Modifier.wrapContentSize(),
-//                        leadingIcon = Icon(Icons.Default.),
-                            shape = RoundedCornerShape(10.dp)
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
-                    }
-                    item{
-                        AssistChip(
-                            onClick = {
-                                Toast.makeText(context, "10 min", Toast.LENGTH_SHORT).show()
-                            },
-                            label = { Text(text = "10 min", fontSize = 15.sp) },
-                            modifier = Modifier.wrapContentSize(),
-//                        leadingIcon = Icon(Icons.Default.),
-                            shape = RoundedCornerShape(10.dp)
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
-                    }
-                    item{
-                        AssistChip(
-                            onClick = {
-                                Toast.makeText(context, "15 min", Toast.LENGTH_SHORT).show()
-                            },
-                            label = { Text(text = "15 min", fontSize = 15.sp) },
-                            modifier = Modifier.wrapContentSize(),
-//                        leadingIcon = Icon(Icons.Default.),
-                            shape = RoundedCornerShape(10.dp)
-                        )
-                        Spacer(modifier = Modifier.width(10.dp))
-                    }
-                    item{
-                        AssistChip(
-                            onClick = {
-                                Toast.makeText(context, "20 min", Toast.LENGTH_SHORT).show()
-                            },
-                            label = { Text(text = "20 min", fontSize = 15.sp) },
-                            modifier = Modifier.wrapContentSize(),
-//                        leadingIcon = Icon(Icons.Default.),
-                            shape = RoundedCornerShape(10.dp)
+                            shape = RoundedCornerShape(10.dp),
+                            colors = if (isSelected) AssistChipDefaults.assistChipColors(colorResource(R.color.polished_pine) )else AssistChipDefaults.assistChipColors(Color.Transparent)
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                     }
