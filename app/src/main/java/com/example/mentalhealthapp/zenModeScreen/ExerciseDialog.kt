@@ -74,7 +74,7 @@ fun ExerciseDialog(onDismiss: () -> Unit, title: String) {
                         val isSelected  = index == rememberChipIndex
                         AssistChip(
                             onClick = {
-                                Toast.makeText(context, timings[index], Toast.LENGTH_SHORT).show()
+//                                Toast.makeText(context, timings[index], Toast.LENGTH_SHORT).show()
                                 rememberChipIndex = if (isSelected) -1 else index
                             },
                             label = { Text(text = timings[index], fontSize = 15.sp) },
@@ -104,7 +104,15 @@ fun ExerciseDialog(onDismiss: () -> Unit, title: String) {
 
                     Button(
                         modifier = Modifier.wrapContentSize(),
-                        onClick = { Toast.makeText(context, "Start Exercise", Toast.LENGTH_SHORT).show() },
+                        onClick = {
+                            when (rememberChipIndex){
+                                0-> Toast.makeText(context, "1 min Exercise", Toast.LENGTH_SHORT).show()
+                                1-> Toast.makeText(context, "5 min Exercise", Toast.LENGTH_SHORT).show()
+                                2-> Toast.makeText(context, "10 min Exercise", Toast.LENGTH_SHORT).show()
+                                3-> Toast.makeText(context, "15 min Exercise", Toast.LENGTH_SHORT).show()
+                                4-> Toast.makeText(context, "20 min Exercise", Toast.LENGTH_SHORT).show()
+                            }
+                        },
                         colors = ButtonDefaults.buttonColors(colorResource(R.color.baby_blue))
                     ) {
                         Text("Start")
