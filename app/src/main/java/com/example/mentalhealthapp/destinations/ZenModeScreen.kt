@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -44,6 +45,7 @@ fun ZenModeScreen() {
     val context = LocalContext.current
 
     val items = listOf("Equal Breathing", "Box Breathing", "4-7-8 Breathing")
+    val itemsDetails = listOf("Equal Breathing helps you to relax and focus", "Box Breathing is powerful stress reliever", "4-7-8 Breathing promotes better sleep")
     var isInfoButtonClicked by remember { mutableStateOf(false) }
     var rememberIndex by remember { mutableIntStateOf(0) }
     var exerciseButton by remember { mutableStateOf(false) }
@@ -65,7 +67,7 @@ fun ZenModeScreen() {
                             rememberIndex = index
                         }
                     ),
-                colors = if (items[index] == "Equal Breathing") CardDefaults.cardColors(colorResource(R.color.light_blue))
+                colors = if (items[index] == "Equal Breathing") CardDefaults.cardColors(colorResource(R.color.sea_green))
                 else if(items[index] == "Box Breathing") CardDefaults.cardColors(colorResource(R.color.light_sea_green))
                 else CardDefaults.cardColors(colorResource(R.color.polished_pine))
             ){
@@ -94,6 +96,11 @@ fun ZenModeScreen() {
                     Text(items[index],
                         fontSize = 25.sp,
                         fontWeight = FontWeight.Bold
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(itemsDetails[index],
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Normal
                     )
                 }
             }

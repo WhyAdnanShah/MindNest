@@ -1,6 +1,7 @@
 package com.example.mentalhealthapp.zenModeScreen
 
 import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,6 +18,7 @@ import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -38,12 +40,14 @@ import com.example.mentalhealthapp.R
 @Composable
 fun ExerciseDialog(onDismiss: () -> Unit, title: String) {
     val context = LocalContext.current
-    var chipEnabled by remember { mutableStateOf(false) }
     val timings = listOf("1 min","5 min","10 min","15 min","20 min")
     var rememberChipIndex by remember { mutableIntStateOf(-1) }
     Dialog(onDismissRequest = onDismiss){
         Card(
-            Modifier.wrapContentSize()
+            Modifier.wrapContentSize(),
+            colors = if (title == "Equal Breathing") CardDefaults.cardColors(colorResource(R.color.sea_green))
+            else if (title == "Box Breathing") CardDefaults.cardColors(colorResource(R.color.light_sea_green))
+            else CardDefaults.cardColors(colorResource(R.color.polished_pine))
         ){
             Column (
                 modifier = Modifier
@@ -72,12 +76,15 @@ fun ExerciseDialog(onDismiss: () -> Unit, title: String) {
                             onClick = {
                                 Toast.makeText(context, timings[index], Toast.LENGTH_SHORT).show()
                                 rememberChipIndex = if (isSelected) -1 else index
-                                chipEnabled = true
                             },
                             label = { Text(text = timings[index], fontSize = 15.sp) },
                             modifier = Modifier.wrapContentSize(),
                             shape = RoundedCornerShape(10.dp),
-                            colors = if (isSelected) AssistChipDefaults.assistChipColors(colorResource(R.color.polished_pine) )else AssistChipDefaults.assistChipColors(Color.Transparent)
+                            colors = if (isSelected) AssistChipDefaults.assistChipColors(colorResource(R.color.dim_gray) )else AssistChipDefaults.assistChipColors(Color.Transparent),
+                            border = BorderStroke(
+                                width = 1.dp,
+                                color = Color.Gray
+                            )
                         )
                         Spacer(modifier = Modifier.width(10.dp))
                     }
@@ -92,12 +99,13 @@ fun ExerciseDialog(onDismiss: () -> Unit, title: String) {
                         onClick =  onDismiss,
                         colors = ButtonDefaults.buttonColors(Color.Transparent)
                     ) {
-                        Text("Cancel", color = colorResource(R.color.indian_red))
+                        Text("Cancel", color = colorResource(R.color.indian_red), fontWeight = FontWeight.ExtraBold)
                     }
 
                     Button(
                         modifier = Modifier.wrapContentSize(),
-                        onClick = { Toast.makeText(context, "Start Exercise", Toast.LENGTH_SHORT).show() }
+                        onClick = { Toast.makeText(context, "Start Exercise", Toast.LENGTH_SHORT).show() },
+                        colors = ButtonDefaults.buttonColors(colorResource(R.color.baby_blue))
                     ) {
                         Text("Start")
                     }
