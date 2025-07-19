@@ -63,6 +63,7 @@ fun ZenModeScreen() {
                         onClick = {
                             Toast.makeText(context, items[index], Toast.LENGTH_SHORT).show()
                             exerciseButton = true
+                            rememberIndex = index
                         }
                     ),
                 colors = if (items[index] == "Equal Breathing") CardDefaults.cardColors(colorResource(R.color.light_blue))
