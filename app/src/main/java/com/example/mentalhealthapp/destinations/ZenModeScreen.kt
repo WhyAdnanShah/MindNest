@@ -26,6 +26,7 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -72,6 +73,9 @@ fun ZenModeScreen() {
                             Toast.makeText(context, items[index], Toast.LENGTH_SHORT).show()
                         }
                     ),
+                colors = if (items[index] == "Equal Breathing") CardDefaults.cardColors(colorResource(R.color.light_blue))
+                else if(items[index] == "Box Breathing") CardDefaults.cardColors(colorResource(R.color.light_sea_green))
+                else CardDefaults.cardColors(colorResource(R.color.polished_pine))
             ){
                 Row(
                     Modifier
