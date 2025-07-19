@@ -2,6 +2,7 @@ package com.example.mentalhealthapp.zenModeScreen
 
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyRow
@@ -92,13 +94,14 @@ fun ExerciseDialog(onDismiss: () -> Unit, title: String) {
                 }
                 Spacer(modifier = Modifier.height(40.dp))
                 Row(modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End,
+                    horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ){
                     Button(
                         modifier = Modifier.wrapContentSize(),
                         onClick =  onDismiss,
-                        colors = ButtonDefaults.buttonColors(Color.Transparent)
+                        colors = ButtonDefaults.buttonColors(Color.Transparent),
+                        shape = RoundedCornerShape(40.dp)
                     ) {
                         Text("Cancel", color = colorResource(R.color.indian_red), fontWeight = FontWeight.ExtraBold)
                     }
@@ -107,15 +110,16 @@ fun ExerciseDialog(onDismiss: () -> Unit, title: String) {
                         modifier = Modifier.wrapContentSize(),
                         onClick = {
                             when (rememberChipIndex){
-                                0-> Toast.makeText(context, "1 min Exercise", Toast.LENGTH_SHORT).show()
-                                1-> Toast.makeText(context, "5 min Exercise", Toast.LENGTH_SHORT).show()
-                                2-> Toast.makeText(context, "10 min Exercise", Toast.LENGTH_SHORT).show()
-                                3-> Toast.makeText(context, "15 min Exercise", Toast.LENGTH_SHORT).show()
-                                4-> Toast.makeText(context, "20 min Exercise", Toast.LENGTH_SHORT).show()
-                                else -> Toast.makeText(context, "Select a time", Toast.LENGTH_SHORT).show()
+                                0-> Toast.makeText(context, "1 min Exercise $title", Toast.LENGTH_SHORT).show()
+                                1-> Toast.makeText(context, "5 min Exercise $title", Toast.LENGTH_SHORT).show()
+                                2-> Toast.makeText(context, "10 min Exercise $title", Toast.LENGTH_SHORT).show()
+                                3-> Toast.makeText(context, "15 min Exercise $title", Toast.LENGTH_SHORT).show()
+                                4-> Toast.makeText(context, "20 min Exercise $title", Toast.LENGTH_SHORT).show()
+                                else -> Toast.makeText(context, "Select a time for $title", Toast.LENGTH_SHORT).show()
                             }
                         },
-                        colors = ButtonDefaults.buttonColors(colorResource(R.color.baby_blue))
+                        colors = ButtonDefaults.buttonColors(colorResource(R.color.baby_blue)),
+                        shape = RoundedCornerShape(40.dp)
                     ) {
                         Text("Start")
                     }
