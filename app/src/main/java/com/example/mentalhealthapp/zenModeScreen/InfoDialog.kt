@@ -10,6 +10,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,7 +33,13 @@ fun InfoDialog(onDismiss: () -> Unit, title: String) {
             Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()),
+            colors = when(title){
+                "Equal Breathing" -> CardDefaults.cardColors(colorResource(R.color.sea_green))
+                "Box Breathing" -> CardDefaults.cardColors(colorResource(R.color.light_sea_green))
+                else -> CardDefaults.cardColors(colorResource(R.color.polished_pine))
+
+            }
         ){
             Text(modifier = Modifier.padding(16.dp),
                 text = title,
