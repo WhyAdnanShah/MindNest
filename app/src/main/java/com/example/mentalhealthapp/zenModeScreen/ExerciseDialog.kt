@@ -79,7 +79,6 @@ fun ExerciseDialog(onDismiss: () -> Unit, title: String) {
                             },
                             label = { Text(text = timings[index], fontSize = 15.sp) },
                             modifier = Modifier.wrapContentSize(),
-//                        leadingIcon = Icon(Icons.Default.),
                             shape = RoundedCornerShape(10.dp),
                             colors = if (isSelected) AssistChipDefaults.assistChipColors(colorResource(R.color.polished_pine) )else AssistChipDefaults.assistChipColors(Color.Transparent)
                         )
