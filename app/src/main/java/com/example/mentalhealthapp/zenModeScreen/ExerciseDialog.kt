@@ -23,7 +23,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -45,9 +44,11 @@ fun ExerciseDialog(onDismiss: () -> Unit, title: String) {
     Dialog(onDismissRequest = onDismiss){
         Card(
             Modifier.wrapContentSize(),
-            colors = if (title == "Equal Breathing") CardDefaults.cardColors(colorResource(R.color.sea_green))
-            else if (title == "Box Breathing") CardDefaults.cardColors(colorResource(R.color.light_sea_green))
-            else CardDefaults.cardColors(colorResource(R.color.polished_pine))
+            colors = when (title) {
+                "Equal Breathing" -> CardDefaults.cardColors(colorResource(R.color.sea_green))
+                "Box Breathing" -> CardDefaults.cardColors(colorResource(R.color.light_sea_green))
+                else -> CardDefaults.cardColors(colorResource(R.color.polished_pine))
+            }
         ){
             Column (
                 modifier = Modifier
@@ -111,6 +112,7 @@ fun ExerciseDialog(onDismiss: () -> Unit, title: String) {
                                 2-> Toast.makeText(context, "10 min Exercise", Toast.LENGTH_SHORT).show()
                                 3-> Toast.makeText(context, "15 min Exercise", Toast.LENGTH_SHORT).show()
                                 4-> Toast.makeText(context, "20 min Exercise", Toast.LENGTH_SHORT).show()
+                                else -> Toast.makeText(context, "Select a time", Toast.LENGTH_SHORT).show()
                             }
                         },
                         colors = ButtonDefaults.buttonColors(colorResource(R.color.baby_blue))
