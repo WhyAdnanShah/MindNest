@@ -1,11 +1,10 @@
 package com.example.mentalhealthapp.destinations
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
@@ -50,6 +48,7 @@ import com.example.mentalhealthapp.R
 
 @Composable
 fun ZenModeScreen() {
+    Log.d("ZenModeScreen", "ZenModeScreen called")
     val context = LocalContext.current
 
     val items = listOf("Equal Breathing", "Box Breathing", "4-7-8 Breathing")
@@ -110,7 +109,7 @@ fun ZenModeScreen() {
     if (isInfoButtonClicked) {
         InfoDialog(
             onDismiss = { isInfoButtonClicked = false },
-            title = items[rememberIndex],
+            title = items[rememberIndex]
         )
     }
 }
