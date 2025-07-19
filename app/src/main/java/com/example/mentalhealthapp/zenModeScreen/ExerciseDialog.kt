@@ -1,13 +1,10 @@
 package com.example.mentalhealthapp.zenModeScreen
 
 import android.widget.Toast
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,23 +16,35 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.example.mentalhealthapp.R
 
 @Composable
 fun ExerciseDialog(onDismiss: () -> Unit, title: String) {
     val context = LocalContext.current
+    var chipEnabled by remember { mutableStateOf(false) }
+    val timings = listOf("1 min","5 min","10 min","15 min","20 min")
     Dialog(onDismissRequest = onDismiss){
         Card(
-            Modifier.size(400.dp)
+            Modifier.wrapContentSize()
         ){
             Column (
                 modifier = Modifier
@@ -63,6 +72,7 @@ fun ExerciseDialog(onDismiss: () -> Unit, title: String) {
                         AssistChip(
                             onClick = {
                                 Toast.makeText(context, "1 min", Toast.LENGTH_SHORT).show()
+                                chipEnabled = true
                             },
                             label = { Text(text = "1 min", fontSize = 15.sp) },
                             modifier = Modifier.wrapContentSize(),
@@ -120,6 +130,27 @@ fun ExerciseDialog(onDismiss: () -> Unit, title: String) {
                         Spacer(modifier = Modifier.width(10.dp))
                     }
                 }
+                Spacer(modifier = Modifier.height(40.dp))
+                Row(modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
+                ){
+                    Button(
+                        modifier = Modifier.wrapContentSize(),
+                        onClick =  onDismiss,
+                        colors = ButtonDefaults.buttonColors(Color.Transparent)
+                    ) {
+                        Text("Cancel", color = colorResource(R.color.indian_red))
+                    }
+
+                    Button(
+                        modifier = Modifier.wrapContentSize(),
+                        onClick = { Toast.makeText(context, "Start Exercise", Toast.LENGTH_SHORT).show() }
+                    ) {
+                        Text("Start")
+                    }
+                }
+
             }
         }
     }
