@@ -1,5 +1,6 @@
 package com.example.mentalhealthapp.zenModeScreen
 
+import android.app.Activity
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +22,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -35,12 +37,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.mentalhealthapp.R
+import kotlin.math.exp
 
 @Composable
 fun ExerciseDialog(onDismiss: () -> Unit, title: String) {
     val context = LocalContext.current
     val timings = listOf("1 min","5 min","10 min","15 min","20 min")
     var rememberChipIndex by remember { mutableIntStateOf(-1) }
+
     Dialog(onDismissRequest = onDismiss){
         Card(
             Modifier.wrapContentSize(),
@@ -75,7 +79,6 @@ fun ExerciseDialog(onDismiss: () -> Unit, title: String) {
                         val isSelected  = index == rememberChipIndex
                         AssistChip(
                             onClick = {
-//                                Toast.makeText(context, timings[index], Toast.LENGTH_SHORT).show()
                                 rememberChipIndex = if (isSelected) -1 else index
                             },
                             label = { Text(text = timings[index], fontSize = 15.sp) },

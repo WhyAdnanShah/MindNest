@@ -1,7 +1,8 @@
 package com.example.mentalhealthapp.destinations
 
+import android.app.Activity
 import android.util.Log
-import android.widget.Toast
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -22,6 +23,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -34,6 +36,9 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.zenModeScreen.ExerciseDialog
 import com.example.mentalhealthapp.zenModeScreen.InfoDialog
@@ -49,6 +54,8 @@ fun ZenModeScreen() {
     var isInfoButtonClicked by remember { mutableStateOf(false) }
     var rememberIndex by remember { mutableIntStateOf(0) }
     var exerciseButton by remember { mutableStateOf(false) }
+
+
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier.height(200.dp),
@@ -115,7 +122,7 @@ fun ZenModeScreen() {
     if (exerciseButton){
         ExerciseDialog(
             onDismiss = { exerciseButton = false },
-            title = items[rememberIndex]
+            title = items[rememberIndex],
         )
     }
 }
