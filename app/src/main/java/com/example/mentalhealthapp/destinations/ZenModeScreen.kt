@@ -1,8 +1,6 @@
 package com.example.mentalhealthapp.destinations
 
-import android.app.Activity
 import android.util.Log
-import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -23,7 +21,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -36,16 +33,14 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
+import androidx.navigation.NavHostController
 import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.zenModeScreen.ExerciseDialog
 import com.example.mentalhealthapp.zenModeScreen.InfoDialog
 
 
 @Composable
-fun ZenModeScreen() {
+fun ZenModeScreen(navController: NavHostController) {
     Log.d("ZenModeScreen", "ZenModeScreen called")
     val context = LocalContext.current
 
@@ -123,6 +118,7 @@ fun ZenModeScreen() {
         ExerciseDialog(
             onDismiss = { exerciseButton = false },
             title = items[rememberIndex],
+            navController = navController
         )
     }
 }

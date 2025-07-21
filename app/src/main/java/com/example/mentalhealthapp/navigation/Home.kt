@@ -1,6 +1,5 @@
 package com.example.mentalhealthapp.navigation
 
-import android.R.attr.fontWeight
 import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -36,10 +35,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.destinations.JournalScreen
 import com.example.mentalhealthapp.destinations.MoodScreen
@@ -51,6 +52,7 @@ import com.example.mentalhealthapp.viewModel.JournalViewModel
 import com.example.mentalhealthapp.viewModel.JournalViewModelFactory
 import com.example.mentalhealthapp.viewModel.MoodViewModel
 import com.example.mentalhealthapp.viewModel.MoodViewModelFactory
+import com.example.mentalhealthapp.zenModeScreen.GuidedBreathingScreen
 
 class Home : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -140,16 +142,31 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                 )
             }
 
-            composable(BottomNavItem.Zen.route) { ZenModeScreen() }
+            composable(BottomNavItem.Zen.route) { ZenModeScreen(navController) }
 
             composable(BottomNavItem.Settings.route) { SettingsScreen() }
 
 
-            composable (BottomNavItem.Journal.route) { JournalScreen(journalViewModel,navController) }
             composable ("makeNote") { JournalEntry(
                 navController,
                 journalViewModel = journalViewModel
             )
+            }
+
+
+            composable ("GuidedBreathingScreen/{title}/{rememberChipIndex}",
+                arguments = listOf(
+                    navArgument("title") {
+                        type = NavType.StringType
+                    },
+                    navArgument("rememberChipIndex") {
+                        type = NavType.IntType
+                    }
+                )
+            ) {backStackEntry ->
+                val title = backStackEntry.arguments?.getString("title") ?: ""
+                val rememberChipIndex = backStackEntry.arguments?.getInt("rememberChipIndex") ?: -1
+                GuidedBreathingScreen(navController = navController ,title, rememberChipIndex)
             }
 
 //          composable(BottomNavItem.Vent.route) { VentScreen() }
