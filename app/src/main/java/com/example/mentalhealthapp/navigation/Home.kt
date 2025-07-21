@@ -169,7 +169,6 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                 GuidedBreathingScreen(navController = navController ,title, rememberChipIndex)
             }
 
-//          composable(BottomNavItem.Vent.route) { VentScreen() }
         }
     }
 }

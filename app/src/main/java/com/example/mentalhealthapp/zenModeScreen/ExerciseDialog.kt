@@ -116,18 +116,22 @@ fun ExerciseDialog(onDismiss: () -> Unit, title: String, navController: NavHostC
                                 }
                                 1-> {
                                     Toast.makeText(context, "5 min Exercise $title",Toast.LENGTH_SHORT).show()
+                                    navController.navigate("GuidedBreathingScreen/$title/$rememberChipIndex")
                                     onDismiss
                                 }
                                 2-> {
                                     Toast.makeText(context, "10 min Exercise $title",Toast.LENGTH_SHORT).show()
+                                    navController.navigate("GuidedBreathingScreen/$title/$rememberChipIndex")
                                     onDismiss
                                 }
                                 3-> {
                                     Toast.makeText(context, "15 min Exercise $title",Toast.LENGTH_SHORT).show()
+                                    navController.navigate("GuidedBreathingScreen/$title/$rememberChipIndex")
                                     onDismiss
                                 }
                                 4-> {
                                     Toast.makeText(context, "20 min Exercise $title",Toast.LENGTH_SHORT).show()
+                                    navController.navigate("GuidedBreathingScreen/$title/$rememberChipIndex")
                                     onDismiss
                                 }
                                 else -> {
