@@ -96,25 +96,28 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = {
-                    Row(modifier = Modifier
-                        .wrapContentSize(),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Start) {
-                        Image(
-                            painter = painterResource(id = R.drawable.cropped_icon_image),
-                            contentDescription = null,
-                            modifier = Modifier.size(40.dp)
-                        )
-                        Spacer(Modifier.width(8.dp))
-                        Text("MindNest", fontSize = 30.sp, fontWeight = FontWeight.Bold)
+            if (navController.currentBackStackEntryAsState().value?.destination?.route != "makeNote" && navController.currentBackStackEntryAsState().value?.destination?.route != "GuidedBreathingScreen/{title}/{rememberChipIndex}"){
+                TopAppBar(
+                    title = {
+                        Row(modifier = Modifier
+                            .wrapContentSize(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Start) {
+                            Image(
+                                painter = painterResource(id = R.drawable.cropped_icon_image),
+                                contentDescription = null,
+                                modifier = Modifier.size(40.dp)
+                            )
+                            Spacer(Modifier.width(8.dp))
+                            Text("MindNest", fontSize = 30.sp, fontWeight = FontWeight.Bold)
+                        }
                     }
-                }
-            )
+                )
+            }
+
         },
         bottomBar = {
-            if (navController.currentBackStackEntryAsState().value?.destination?.route != "makeNote"){
+            if (navController.currentBackStackEntryAsState().value?.destination?.route != "makeNote" && navController.currentBackStackEntryAsState().value?.destination?.route != "GuidedBreathingScreen/{title}/{rememberChipIndex}"){
                 BottomNavigationBar(navController, items)
             }
         }
