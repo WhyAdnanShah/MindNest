@@ -97,12 +97,7 @@ fun JournalEntry(navController: NavHostController, journalViewModel: JournalView
         modifier = Modifier
             .verticalScroll(rememberScrollState())
             .fillMaxSize()
-            .padding(5.dp)
-            .border(
-                width = 1.dp,
-                color = colorResource(R.color.slate_gray),
-                shape = RoundedCornerShape(5.dp, 5.dp, 20.dp, 20.dp)
-            ),
+            .padding(5.dp),
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.Top
     ) {
@@ -125,10 +120,6 @@ fun JournalEntry(navController: NavHostController, journalViewModel: JournalView
                         inclusive = true
                     }
                     }
-
-//                    Toast.makeText(context,  journalEntity.content
-//                            + journalEntity.title +journalEntity.date
-//                            +journalEntity.images, Toast.LENGTH_SHORT).show()
 
                 },
                 shape = RoundedCornerShape(10.dp),

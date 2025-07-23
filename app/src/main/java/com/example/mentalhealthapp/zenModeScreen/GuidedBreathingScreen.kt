@@ -8,8 +8,17 @@ import androidx.compose.ui.res.colorResource
 import androidx.navigation.NavHostController
 import com.example.mentalhealthapp.R
 
+enum class Phase{
+    Exhale,
+    Hold,
+    Inhale
+}
 @Composable
 fun GuidedBreathingScreen(navController: NavHostController, title: String, rememberChipIndex: Int)  {
+    val exhaleSec : Int
+    val holdSec : Int
+    val inhaleSec : Int
+
     Box(
         modifier = Modifier.background(
             color = when(title){

@@ -65,7 +65,7 @@ fun JournalScreen(journalViewModel: JournalViewModel, navController: NavHostCont
                 .fillMaxSize()
                 .padding(5.dp)
                 .border(
-                    width = 1.dp,
+                    width = 0.dp,
                     color = colorResource(R.color.slate_gray),
                     shape = RoundedCornerShape(5.dp, 5.dp, 20.dp, 20.dp)
                 )
@@ -79,7 +79,7 @@ fun JournalScreen(journalViewModel: JournalViewModel, navController: NavHostCont
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
+                    .padding(horizontal = 16.dp),
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Top
             ) {
