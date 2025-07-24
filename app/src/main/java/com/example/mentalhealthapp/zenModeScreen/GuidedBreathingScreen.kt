@@ -21,9 +21,9 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.mentalhealthapp.R
+import com.example.mentalhealthapp.moodScreen.TitleText
 import com.example.mentalhealthapp.navigation.BottomNavItem
 import kotlinx.coroutines.delay
-
 
 @Composable
 fun GuidedBreathingScreen(navController: NavHostController, title: String, rememberChipIndex: Int)  {
@@ -31,11 +31,11 @@ fun GuidedBreathingScreen(navController: NavHostController, title: String, remem
     var initialSec by remember { mutableIntStateOf(4) }
     var totalTime by remember { mutableIntStateOf(
         when (rememberChipIndex){
-            0-> 60000
-            1 -> 300000
-            2-> 600000
-            3-> 900000
-            4-> 1200000
+            0-> 60
+            1 -> 60*5
+            2-> 60*10
+            3-> 60*15
+            4-> 60*20
             else -> 0
         }
     ) }
@@ -68,94 +68,59 @@ fun GuidedBreathingScreen(navController: NavHostController, title: String, remem
     when(title){
         "Equal Breathing" -> {
 
-            LaunchedEffect(initialSec) {
-                while (initialSec > 0){
-                    delay(1_000L)
-                    initialSec--
-                }
-            }
-            when(initialSec){
-                0-> LaunchedEffect(inhaleSec) {
-                    while (inhaleSec > 0){
-                        delay(1_000L)
-                        inhaleSec--
+            LaunchedEffect(totalTime) {
+                while (totalTime > 0){
+                    delay(1000L)
+                    when{
+                        initialSec > 0 -> initialSec--
+                        inhaleSec > 0 -> inhaleSec--
+                        exhaleSec > 0 -> exhaleSec--
+                        else -> {
+                            inhaleSec = 4
+                            exhaleSec = 4
+                        }
                     }
+                    totalTime--
                 }
             }
-            when(inhaleSec){
-                0-> LaunchedEffect(exhaleSec) {
-                    while (exhaleSec > 0){
-                        delay(1_000L)
-                        exhaleSec--
-                    }
-                }
-            }
-
         }
         "Box Breathing" -> {
 
-            LaunchedEffect(initialSec) {
-                while (initialSec > 0){
-                    delay(1_000L)
-                    initialSec--
-                }
-            }
-            when(initialSec){
-                0-> LaunchedEffect(inhaleSec) {
-                    while (inhaleSec > 0){
-                        delay(1_000L)
-                        inhaleSec--
+            LaunchedEffect(totalTime) {
+                while (totalTime > 0){
+                    delay(1000L)
+                    when{
+                        initialSec > 0 -> initialSec--
+                        inhaleSec > 0 -> inhaleSec--
+                        holdSec > 0 -> holdSec--
+                        exhaleSec > 0 -> exhaleSec--
+                        else -> {
+                            inhaleSec = 4
+                            holdSec = 4
+                            exhaleSec = 4
+                        }
                     }
+                    totalTime--
                 }
             }
-            when(inhaleSec){
-                0-> LaunchedEffect(holdSec) {
-                    while (holdSec > 0){
-                        delay(1_000L)
-                        holdSec--
-                    }
-                }
-            }
-            when(holdSec){
-                0-> LaunchedEffect(exhaleSec) {
-                    while (exhaleSec > 0){
-                        delay(1_000L)
-                        exhaleSec--
-                    }
-                }
-            }
-
         }
         else -> {
 
-            LaunchedEffect(initialSec) {
-                while (initialSec > 0){
-                    delay(1_000L)
-                    initialSec--
-                }
-            }
-            when(initialSec){
-                0-> LaunchedEffect(inhaleSec) {
-                    while (inhaleSec > 0){
-                        delay(1_000L)
-                        inhaleSec--
+            LaunchedEffect(totalTime) {
+                while (totalTime > 0){
+                    delay(1000L)
+                    when{
+                        initialSec > 0 -> initialSec--
+                        inhaleSec > 0 -> inhaleSec--
+                        holdSec > 0 -> holdSec--
+                        exhaleSec > 0 -> exhaleSec--
+                        else -> {
+                            inhaleSec = 4
+                            holdSec = 7
+                            exhaleSec = 8
+                        }
                     }
-                }
-            }
-            when(inhaleSec){
-                0-> LaunchedEffect(holdSec) {
-                    while (holdSec > 0){
-                        delay(1_000L)
-                        holdSec--
-                    }
-                }
-            }
-            when(holdSec){
-                0-> LaunchedEffect(exhaleSec) {
-                    while (exhaleSec > 0){
-                        delay(1_000L)
-                        exhaleSec--
-                    }
+                    totalTime--
                 }
             }
         }
@@ -180,8 +145,7 @@ fun GuidedBreathingScreen(navController: NavHostController, title: String, remem
         horizontalAlignment = Alignment.CenterHorizontally,
     )
     {
-
-
+        TitleText("$totalTime")
         Text(
             text = when {
                 initialSec > 0-> "$initialSec"
