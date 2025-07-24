@@ -81,7 +81,6 @@ fun GuidedBreathingScreen(navController: NavHostController, title: String, remem
         else -> 8
     }) }
 
-    var hasTheSoundPlayed by remember { mutableStateOf(false) }
     val expandingCircle by animateDpAsState(
         targetValue = when{
             initialSec > 0 -> 100.dp
