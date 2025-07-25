@@ -86,7 +86,7 @@ fun GuidedBreathingScreen(navController: NavHostController, title: String, remem
             initialSec > 0 -> 100.dp
             inhaleSec > 0 -> 200.dp
             holdSec > 0 -> 150.dp
-            exhaleSec > 0 -> 400.dp
+            exhaleSec > 0 -> 350.dp
             else -> 200.dp
         }, animationSpec = tween(durationMillis = 1000)
     )
@@ -160,6 +160,7 @@ fun GuidedBreathingScreen(navController: NavHostController, title: String, remem
     }
 
     Log.d("", "")
+
     val currentPhase = when {
         initialSec > 0 -> "initial"
         inhaleSec > 0 -> "inhale"
@@ -172,7 +173,11 @@ fun GuidedBreathingScreen(navController: NavHostController, title: String, remem
 
     LaunchedEffect(currentPhase) {
         if (currentPhase != lastPlayedPhase && currentPhase != "done") {
-            val mediaPlayer = MediaPlayer.create(context, R.raw.bell)
+            val sound = when (currentPhase) {
+                "initial" -> R.raw.initial
+                else-> R.raw.bell
+            }
+            val mediaPlayer = MediaPlayer.create(context, sound)
             mediaPlayer.setOnCompletionListener { it.release() }
             mediaPlayer.start()
             lastPlayedPhase = currentPhase
@@ -198,7 +203,7 @@ fun GuidedBreathingScreen(navController: NavHostController, title: String, remem
         horizontalAlignment = Alignment.CenterHorizontally,
     )
     {
-        TitleText("Time remaining: $totalTime")
+        TitleText("Time remaining: $totalTime sec")
         Text(
             text = when {
                 initialSec > 0-> "$initialSec"
