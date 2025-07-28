@@ -2,10 +2,13 @@ package com.example.mentalhealthapp.destinations
 
 import android.annotation.SuppressLint
 import android.util.Log
+import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.Orientation
@@ -19,8 +22,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
@@ -40,12 +45,16 @@ import com.example.mentalhealthapp.viewModel.MoodViewModel
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults.buttonColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import com.example.mentalhealthapp.moodROOMdatabase.MoodEntity
@@ -60,7 +69,7 @@ import kotlinx.coroutines.flow.Flow
 @Stable
 fun MoodScreen(moodViewModel: MoodViewModel) {
     Log.d("MoodScreen", "Recomposing MoodScreen")
-
+    val context = LocalContext.current
     var isMoodCardVisible by remember { mutableStateOf(false) }
 
     val moodsData by moodViewModel.allMoods.collectAsState(initial = emptyList())
@@ -69,10 +78,12 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
     val allMoods: Flow<List<MoodEntity>> = moodViewModel.db.moodDao().getAllMoods()
 
     //Animations that I like
-    var expandedMoodDetailsButton by remember { mutableStateOf(false) }
+    val expandedMoodDetailsButton by moodViewModel.expandedMoodDetailsButton.collectAsState()
     val rotation by animateFloatAsState(targetValue = if (expandedMoodDetailsButton) 270f else 0f)
     val moodDetailHeight = if (expandedMoodDetailsButton) 1000.dp else 450.dp
 
+    val moodEmojis = listOf("laughing", "smiling", "neutral", "sad", "dead")
+    var rememberMoodChipIndex = remember { mutableStateOf("") }
 
 
     Scaffold(
@@ -138,7 +149,6 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
                             orientation = Orientation.Vertical
                         )
                     ){
-
                         item {
                             Row(modifier = Modifier
                                 .fillMaxWidth()
@@ -154,7 +164,7 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
                                             width = 1.dp
                                         ),
                                     onClick = {
-                                        expandedMoodDetailsButton = !expandedMoodDetailsButton
+                                        moodViewModel.toggleExpanded()
                                     },
                                     colors = buttonColors(colorResource(R.color.transparent))
                                 ) {
@@ -169,8 +179,60 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
                             }
 
                         }
+                        item {
+                            LazyRow(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .scrollable(
+                                        rememberScrollState(),
+                                        orientation = Orientation.Horizontal,
+                                    ),
+                                horizontalArrangement = Arrangement.Center,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                items(moodEmojis){index->
+                                    AnimatedVisibility(expandedMoodDetailsButton) {
+                                        val isSelected = index == rememberMoodChipIndex.value
+                                        AssistChip(
+                                            onClick = {
+                                                rememberMoodChipIndex.value = if (isSelected) "" else index
+                                                Toast.makeText(context, "Filter by $index", Toast.LENGTH_SHORT).show()
+                                            },
+                                            label = {
+                                                Image(
+                                                    painterResource(
+                                                        when (index) {
+                                                            "laughing" -> R.drawable.laughing
+                                                            "smiling" -> R.drawable.smiling
+                                                            "neutral" -> R.drawable.neutral
+                                                            "sad" -> R.drawable.sad
+                                                            else -> R.drawable.dead
+                                                        }
+                                                    ),
+                                                    null,
+                                                    modifier = Modifier
+                                                        .size(25.dp)
+                                                )
+                                            },
+                                            colors = if(isSelected) AssistChipDefaults.assistChipColors(Color.Gray)
+                                                    else  AssistChipDefaults.assistChipColors(Color.Transparent),
+                                            border = (
+                                                    BorderStroke(
+                                                        width = 1.dp,
+                                                        color = colorResource(R.color.slate_gray)
+                                                    )
+                                                    )
+                                        )
+                                    }
+                                    Spacer(Modifier.width(8.dp))
+                                }
+                            }
+                        }
 
-                        items(moodsData, key= {it.id}) { moodItem ->
+                        items(when{
+                            rememberMoodChipIndex.value == "" -> moodsData
+                            else -> moodsData.filter { it.mood == rememberMoodChipIndex.value }
+                        }, key= {it.id}) { moodItem ->
                             MoodItemCard(
                                 moodEntity = moodItem,
                                 moodViewModel = moodViewModel
@@ -211,7 +273,8 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
                 }
                 else{
                     MoodLineChart(
-                        moodData = moodsData
+                        moodData = moodsData,
+                        rememberMoodChipIndex
                     )
                 }
 
@@ -226,5 +289,12 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
             )
         }
     }
+}
+
+@Composable
+fun MoodFilter(expandedMoodDetailsButton: Boolean) {
+
+
+
 }
 

@@ -4,6 +4,7 @@ import android.view.ViewGroup
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -18,7 +19,8 @@ import com.github.mikephil.charting.data.LineDataSet
 
 @Composable
 fun MoodLineChart(
-    moodData: List<MoodEntity>
+    moodData: List<MoodEntity>,
+    rememberMoodChipIndex: MutableState<String>
 ){
     AndroidView(
         factory = {
@@ -35,16 +37,30 @@ fun MoodLineChart(
         modifier = Modifier.wrapContentSize().padding(vertical = 16.dp),
         update = {
             chart ->
-            val entries = moodData.mapIndexed { index, moodEntity ->
-                val moodValue = when (moodEntity.mood) {
-                    "laughing" -> 5f
-                    "smiling" -> 4f
-                    "neutral" -> 3f
-                    "sad" -> 2f
-                    "dead" -> 1f
-                    else -> 0f
+            val entries = when {
+                rememberMoodChipIndex.value == "" -> moodData.mapIndexed { index, moodEntity ->
+                    val moodValue = when (moodEntity.mood) {
+                        "laughing" -> 5f
+                        "smiling" -> 4f
+                        "neutral" -> 3f
+                        "sad" -> 2f
+                        "dead" -> 1f
+                        else -> 0f
+                    }
+                    Entry(index.toFloat(), moodValue)
+            }
+                else -> moodData.filter { it.mood == rememberMoodChipIndex.value }.mapIndexed { index, moodEntity ->
+                    val moodValue = when (moodEntity.mood) {
+                        "laughing" -> 5f
+                        "smiling" -> 4f
+                        "neutral" -> 3f
+                        "sad" -> 2f
+                        "dead" -> 1f
+                        else -> 0f
+                    }
+                    Entry(index.toFloat(), moodValue)
+
                 }
-                Entry(index.toFloat(), moodValue)
             }
             val dataSet = LineDataSet(entries, "Mood Data").apply {
                 color = android.graphics.Color.DKGRAY

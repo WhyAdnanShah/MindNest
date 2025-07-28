@@ -72,14 +72,11 @@ class Home : ComponentActivity() {
 @Preview
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
-    //MoodScreen View Model
-    /* This is being done because there was a problem regarding the Instance of the View Model.
-       The MoodViewModel was being initiated in two different places in the MoodScreen which created issues.
-       The best way is to pass ONE instance of the MoodViewModel to the MoodScreen.
-    */
     val context = LocalContext.current.applicationContext as Application
-    val moodViewModel : MoodViewModel = viewModel(factory = MoodViewModelFactory(context))
 
+    //MoodScreen View Model
+    val moodViewModel : MoodViewModel = viewModel(factory = MoodViewModelFactory(context))
+    //JournalScreen View Model
     val journalViewModel : JournalViewModel = viewModel(factory = JournalViewModelFactory(context))
 
 
@@ -89,7 +86,6 @@ fun HomeScreen(modifier: Modifier = Modifier) {
         BottomNavItem.Home,
         BottomNavItem.Journal,
         BottomNavItem.Zen,
-//        BottomNavItem.Vent,
         BottomNavItem.Settings
     )
 
@@ -105,7 +101,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                             horizontalArrangement = Arrangement.Start) {
                             Image(
                                 painter = painterResource(id = R.drawable.cropped_icon_image),
-                                contentDescription = null,
+                                contentDescription = "Icon Image",
                                 modifier = Modifier.size(40.dp)
                             )
                             Spacer(Modifier.width(8.dp))
@@ -150,10 +146,11 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             composable(BottomNavItem.Settings.route) { SettingsScreen() }
 
 
-            composable ("makeNote") { JournalEntry(
-                navController,
-                journalViewModel = journalViewModel
-            )
+            composable ("makeNote") {
+                JournalEntry(
+                    navController,
+                    journalViewModel = journalViewModel
+                )
             }
 
 
@@ -171,7 +168,6 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                 val rememberChipIndex = backStackEntry.arguments?.getInt("rememberChipIndex") ?: -1
                 GuidedBreathingScreen(navController = navController ,title, rememberChipIndex)
             }
-
         }
     }
 }
