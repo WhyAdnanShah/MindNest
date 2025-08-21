@@ -47,6 +47,7 @@ import com.example.mentalhealthapp.destinations.MoodScreen
 import com.example.mentalhealthapp.destinations.SettingsScreen
 import com.example.mentalhealthapp.destinations.ZenModeScreen
 import com.example.mentalhealthapp.journalScreen.JournalEntry
+import com.example.mentalhealthapp.moodROOMdatabase.MoodEntity
 import com.example.mentalhealthapp.ui.theme.MentalHealthAppTheme
 import com.example.mentalhealthapp.viewModel.JournalViewModel
 import com.example.mentalhealthapp.viewModel.JournalViewModelFactory

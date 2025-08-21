@@ -22,7 +22,7 @@ class MoodViewModel(application: Application) : AndroidViewModel(application) {
         application.applicationContext,
         MoodDatabase::class.java,
         "mood_database"
-    ).build()
+    ).fallbackToDestructiveMigration().build()
 
     var allMoods: Flow<List<MoodEntity>> = db.moodDao().getAllMoods()
 

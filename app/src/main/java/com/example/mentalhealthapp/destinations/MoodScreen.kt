@@ -49,7 +49,13 @@ import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults.buttonColors
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.rotate
@@ -69,7 +75,6 @@ import kotlinx.coroutines.flow.Flow
 @Stable
 fun MoodScreen(moodViewModel: MoodViewModel) {
     Log.d("MoodScreen", "Recomposing MoodScreen")
-    val context = LocalContext.current
     var isMoodCardVisible by remember { mutableStateOf(false) }
 
     val moodsData by moodViewModel.allMoods.collectAsState(initial = emptyList())
@@ -83,7 +88,7 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
     val moodDetailHeight = if (expandedMoodDetailsButton) 1000.dp else 450.dp
 
     val moodEmojis = listOf("laughing", "smiling", "neutral", "sad", "dead")
-    var rememberMoodChipIndex = remember { mutableStateOf("") }
+    val rememberMoodChipIndex = remember { mutableStateOf("") }
 
 
     Scaffold(
@@ -142,6 +147,7 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
                 if (allMoods.collectAsState(initial = emptyList()).value.isEmpty()){
                     CenteredText("Tap the '+' icon to add a new snapshot", fontSize = 15.sp,)
                 }
+
                 else{
                     LazyColumn (
                         modifier = Modifier.scrollable(
@@ -179,55 +185,22 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
                             }
 
                         }
-                        item {
-                            LazyRow(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .scrollable(
-                                        rememberScrollState(),
-                                        orientation = Orientation.Horizontal,
-                                    ),
-                                horizontalArrangement = Arrangement.Center,
-                                verticalAlignment = Alignment.CenterVertically
+                        item{
+                            Column(
+                                Modifier.fillMaxWidth().padding(start = 16.dp),
                             ) {
-                                items(moodEmojis){index->
-                                    AnimatedVisibility(expandedMoodDetailsButton) {
-                                        val isSelected = index == rememberMoodChipIndex.value
-                                        AssistChip(
-                                            onClick = {
-                                                rememberMoodChipIndex.value = if (isSelected) "" else index
-                                                Toast.makeText(context, "Filter by $index", Toast.LENGTH_SHORT).show()
-                                            },
-                                            label = {
-                                                Image(
-                                                    painterResource(
-                                                        when (index) {
-                                                            "laughing" -> R.drawable.laughing
-                                                            "smiling" -> R.drawable.smiling
-                                                            "neutral" -> R.drawable.neutral
-                                                            "sad" -> R.drawable.sad
-                                                            else -> R.drawable.dead
-                                                        }
-                                                    ),
-                                                    null,
-                                                    modifier = Modifier
-                                                        .size(25.dp)
-                                                )
-                                            },
-                                            colors = if(isSelected) AssistChipDefaults.assistChipColors(Color.Gray)
-                                                    else  AssistChipDefaults.assistChipColors(Color.Transparent),
-                                            border = (
-                                                    BorderStroke(
-                                                        width = 1.dp,
-                                                        color = colorResource(R.color.slate_gray)
-                                                    )
-                                                    )
-                                        )
-                                    }
-                                    Spacer(Modifier.width(8.dp))
+                                AnimatedVisibility(expandedMoodDetailsButton) {
+                                    Text("Filter")
                                 }
                             }
                         }
+                        item {
+                            MoodFilter(expandedMoodDetailsButton, moodEmojis, rememberMoodChipIndex)
+                        }
+
+//                        item{
+//                            DateFilter(expandedMoodDetailsButton)
+//                        }
 
                         items(when{
                             rememberMoodChipIndex.value == "" -> moodsData
@@ -291,10 +264,105 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
     }
 }
 
+//@Composable
+//fun DateFilter(expandedMoodDetailsButton: Boolean) {
+//    var isFilterByDate by remember { mutableStateOf(false) }
+//    AnimatedVisibility(expandedMoodDetailsButton) {
+//        Column(Modifier
+//            .fillMaxWidth(),
+//            horizontalAlignment = Alignment.CenterHorizontally
+//        ){
+//            Button(modifier = Modifier.wrapContentSize(),
+//                onClick = {
+//                    isFilterByDate = true
+//                },
+//            ) {
+//                Text(text = "Filter By Date")
+//            }
+//        }
+//    }
+//    if (isFilterByDate){
+//        FilterDatePicker(
+//            onDismiss = { isFilterByDate = false }
+//        )
+//    }
+//}
+//
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun FilterDatePicker(onDismiss:() -> Unit ) {
+//    val datePickerState = rememberDatePickerState()
+//    DatePickerDialog(
+//        onDismissRequest = onDismiss,
+//        confirmButton = {
+//            TextButton(onClick = onDismiss) {
+//                Text("Confirm")
+//            }
+//        },
+//        dismissButton = {
+//            TextButton(onClick = onDismiss) {
+//                Text("Cancel")
+//            }
+//        }
+//    ) {
+//        DatePicker(state = datePickerState)
+//    }
+//}
+
 @Composable
-fun MoodFilter(expandedMoodDetailsButton: Boolean) {
-
-
-
+fun MoodFilter(
+    expandedMoodDetailsButton: Boolean,
+    moodEmojis: List<String>,
+    rememberMoodChipIndex: MutableState<String>
+) {
+    Column (
+        modifier = Modifier
+            .fillMaxWidth()
+    ){  }
+    LazyRow(
+        modifier = Modifier
+            .fillMaxWidth()
+            .scrollable(
+                rememberScrollState(),
+                orientation = Orientation.Horizontal,
+            ),
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        items(moodEmojis){index->
+            AnimatedVisibility(expandedMoodDetailsButton) {
+                val isSelected = index == rememberMoodChipIndex.value
+                AssistChip(
+                    onClick = {
+                        rememberMoodChipIndex.value = if (isSelected) "" else index
+                    },
+                    label = {
+                        Image(
+                            painterResource(
+                                when (index) {
+                                    "laughing" -> R.drawable.laughing
+                                    "smiling" -> R.drawable.smiling
+                                    "neutral" -> R.drawable.neutral
+                                    "sad" -> R.drawable.sad
+                                    else -> R.drawable.dead
+                                }
+                            ),
+                            null,
+                            modifier = Modifier
+                                .size(30.dp)
+                        )
+                    },
+                    colors = if(isSelected) AssistChipDefaults.assistChipColors(Color.Gray)
+                    else  AssistChipDefaults.assistChipColors(Color.Transparent),
+                    border = (
+                            BorderStroke(
+                                width = 1.dp,
+                                color = colorResource(R.color.slate_gray)
+                            )
+                            )
+                )
+            }
+            Spacer(Modifier.width(8.dp))
+        }
+    }
 }
-
