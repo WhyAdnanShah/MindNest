@@ -39,7 +39,7 @@ MindNest is a mental wellness companion app built for Android.
 width="500"/>
 
 #### Settings
-<img src="Screenshots/settings.jpg" 
+<img src="Screenshots/Settings.jpg" 
 width="500"/>
 
 ---
