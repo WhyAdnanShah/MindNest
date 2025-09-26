@@ -68,7 +68,6 @@ class Home : ComponentActivity() {
     }
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
@@ -106,7 +105,18 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                                 modifier = Modifier.size(40.dp)
                             )
                             Spacer(Modifier.width(8.dp))
-                            Text("MindNest", fontSize = 30.sp, fontWeight = FontWeight.Bold)
+                            if (navController.currentBackStackEntryAsState().value?.destination?.route == BottomNavItem.Home.route){
+                                Text("MindNest", fontSize = 30.sp, fontWeight = FontWeight.Bold)
+                            }
+                            else if (navController.currentBackStackEntryAsState().value?.destination?.route == BottomNavItem.Journal.route){
+                                Text("Your Journal", fontSize = 30.sp, fontWeight = FontWeight.Bold)
+                            }
+                            else if (navController.currentBackStackEntryAsState().value?.destination?.route == BottomNavItem.Zen.route){
+                                Text("Zen", fontSize = 30.sp, fontWeight = FontWeight.Bold)
+                            }
+                            else if (navController.currentBackStackEntryAsState().value?.destination?.route == BottomNavItem.Settings.route){
+                                Text("Settings", fontSize = 30.sp, fontWeight = FontWeight.Bold)
+                            }
                         }
                     }
                 )
@@ -114,9 +124,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
         },
         bottomBar = {
-            if (navController.currentBackStackEntryAsState().value?.destination?.route != "makeNote" && navController.currentBackStackEntryAsState().value?.destination?.route != "GuidedBreathingScreen/{title}/{rememberChipIndex}"){
-                BottomNavigationBar(navController, items)
-            }
+            BottomNavigationBar(navController, items)
         }
     ) { innerPadding ->
         NavHost(
@@ -146,29 +154,6 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
             composable(BottomNavItem.Settings.route) { SettingsScreen() }
 
-
-            composable ("makeNote") {
-                JournalEntry(
-                    navController,
-                    journalViewModel = journalViewModel
-                )
-            }
-
-
-            composable ("GuidedBreathingScreen/{title}/{rememberChipIndex}",
-                arguments = listOf(
-                    navArgument("title") {
-                        type = NavType.StringType
-                    },
-                    navArgument("rememberChipIndex") {
-                        type = NavType.IntType
-                    }
-                )
-            ) {backStackEntry ->
-                val title = backStackEntry.arguments?.getString("title") ?: ""
-                val rememberChipIndex = backStackEntry.arguments?.getInt("rememberChipIndex") ?: -1
-                GuidedBreathingScreen(navController = navController ,title, rememberChipIndex)
-            }
         }
     }
 }
@@ -188,11 +173,12 @@ fun BottomNavigationBar(navController: NavHostController, items: List<BottomNavI
             NavigationBarItem(
                 selected = currentRoute == item.route,
                 onClick = {
-                    if (currentRoute != item.route) {
-                        navController.navigate(item.route){
-                            popUpTo(BottomNavItem.Home.route){
-                                inclusive = false
-                            }
+                    navController.navigate(item.route){
+                        launchSingleTop = true
+                        restoreState = true
+                        popUpTo(BottomNavItem.Home.route){
+                            inclusive = false
+                            saveState = true
                         }
                     }
                 },

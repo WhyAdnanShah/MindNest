@@ -1,7 +1,9 @@
 package com.example.mentalhealthapp.viewModel
 
 import android.app.Application
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -49,5 +51,7 @@ class MoodViewModel(application: Application) : AndroidViewModel(application) {
     fun toggleExpanded(){
         expandedMoodDetailsButton.value =! expandedMoodDetailsButton.value
     }
-
+    /*          MoodDialog             */
+    private val _isMoodCardVisible = mutableStateOf(false)
+    val isMoodCardVisible: MutableState<Boolean> = _isMoodCardVisible
 }

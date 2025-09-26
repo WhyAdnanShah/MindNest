@@ -2,32 +2,34 @@ package com.example.mentalhealthapp.destinations
 
 import android.annotation.SuppressLint
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,222 +39,121 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.viewModel.MoodViewModel
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AssistChip
-import androidx.compose.material3.AssistChipDefaults
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults.buttonColors
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.Stable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.rotate
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionResult
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.mentalhealthapp.moodROOMdatabase.MoodEntity
 import com.example.mentalhealthapp.moodScreen.MoodDialog
 import com.example.mentalhealthapp.moodScreen.MoodItemCard
 import com.example.mentalhealthapp.moodScreen.MoodLineChart
-import com.example.mentalhealthapp.navigation.CenteredText
 import kotlinx.coroutines.flow.Flow
+
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-@Stable
 fun MoodScreen(moodViewModel: MoodViewModel) {
     Log.d("MoodScreen", "Recomposing MoodScreen")
-    var isMoodCardVisible by remember { mutableStateOf(false) }
+    var isMoodCardVisible by moodViewModel.isMoodCardVisible
 
     val moodsData by moodViewModel.allMoods.collectAsState(initial = emptyList())
-
-    //These are all the moods that are in the DataBase in a ListView... This is to check if there is any item in the DataBase or not.
     val allMoods: Flow<List<MoodEntity>> = moodViewModel.db.moodDao().getAllMoods()
 
-    //Animations that I like
+    // Animations
     val expandedMoodDetailsButton by moodViewModel.expandedMoodDetailsButton.collectAsState()
-    val rotation by animateFloatAsState(targetValue = if (expandedMoodDetailsButton) 270f else 0f)
-    val moodDetailHeight = if (expandedMoodDetailsButton) 1000.dp else 450.dp
+    val rotation by animateFloatAsState(
+        targetValue = if (expandedMoodDetailsButton) 180f else 0f,
+        animationSpec = tween(durationMillis = 300)
+    )
+
+    val moodDetailHeight by animateDpAsState(
+        targetValue = if (expandedMoodDetailsButton) 600.dp else 400.dp,
+        animationSpec = tween(durationMillis = 500, easing = FastOutSlowInEasing)
+    )
 
     val moodEmojis = listOf("laughing", "smiling", "neutral", "sad", "dead")
     val rememberMoodChipIndex = remember { mutableStateOf("") }
 
-
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         floatingActionButton = {
-            FloatingActionButton(
+            ExtendedFloatingActionButton(
                 onClick = { isMoodCardVisible = true },
-                shape = RoundedCornerShape(20.dp),
-                elevation = FloatingActionButtonDefaults.elevation(10.dp),
-                containerColor = colorResource(R.color.blue_sky)
-            ) {
-                Text(
-                    text = "+",
-                    fontSize = 25.sp,
-                    color = colorResource(R.color.rich_black)
-                )
-            }
+                shape = RoundedCornerShape(16.dp),
+                elevation = FloatingActionButtonDefaults.elevation(8.dp),
+                containerColor = MaterialTheme.colorScheme.primary,
+                contentColor = MaterialTheme.colorScheme.onPrimary,
+                icon = {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add mood"
+                    )
+                },
+                text = {
+                    Text(
+                        text = "Add Snapshot",
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+            )
         }
     ) { paddingValues ->
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(vertical = 10.dp, horizontal = 16.dp)
+                .padding(top = 16.dp)
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.Start
+            verticalArrangement = Arrangement.spacedBy(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            // Header with stats
+            MoodStatsHeader(moodsData)
 
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp),
-                text = "Moment Snapshots",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Medium
+            // Moment Snapshots Section
+            MomentSnapshotsSection(
+                allMoods = allMoods,
+                expandedMoodDetailsButton = expandedMoodDetailsButton,
+                moodDetailHeight = moodDetailHeight,
+                moodViewModel = moodViewModel,
+                rotation = rotation,
+                moodsData = moodsData,
+                moodEmojis = moodEmojis,
+                rememberMoodChipIndex = rememberMoodChipIndex,
+                onAddMood = { isMoodCardVisible = true }
             )
 
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .animateContentSize(
-                        animationSpec = tween(
-                            700, easing = FastOutSlowInEasing
-                        )
-                    )
-                    .height(moodDetailHeight)
-                    .border(
-                        shape = RoundedCornerShape(5.dp, 5.dp, 20.dp, 20.dp),
-                        width = 0.dp,
-                        color = colorResource(R.color.slate_gray)
-                    )
-
-
-            ) {
-                if (allMoods.collectAsState(initial = emptyList()).value.isEmpty()){
-                    CenteredText("Tap the '+' icon to add a new snapshot", fontSize = 15.sp,)
-                }
-
-                else{
-                    LazyColumn (
-                        modifier = Modifier.scrollable(
-                            rememberScrollState(),
-                            orientation = Orientation.Vertical
-                        )
-                    ){
-                        item {
-                            Row(modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = 16.dp, vertical = 5.dp),
-                                horizontalArrangement = Arrangement.End)
-                            {
-                                Button(
-                                    modifier = Modifier
-                                        .wrapContentSize()
-                                        .border(
-                                            shape = RoundedCornerShape(20.dp),
-                                            color = colorResource(R.color.slate_gray),
-                                            width = 1.dp
-                                        ),
-                                    onClick = {
-                                        moodViewModel.toggleExpanded()
-                                    },
-                                    colors = buttonColors(colorResource(R.color.transparent))
-                                ) {
-                                    Image(modifier = Modifier
-                                        .size(17.dp)
-                                        .rotate(rotation),
-                                        painter = if (expandedMoodDetailsButton) painterResource(R.drawable.collapse)
-                                        else painterResource(R.drawable.expand),
-                                        contentDescription = null
-                                    )
-                                }
-                            }
-
-                        }
-                        item{
-                            Column(
-                                Modifier.fillMaxWidth().padding(start = 16.dp),
-                            ) {
-                                AnimatedVisibility(expandedMoodDetailsButton) {
-                                    Text("Filter")
-                                }
-                            }
-                        }
-                        item {
-                            MoodFilter(expandedMoodDetailsButton, moodEmojis, rememberMoodChipIndex)
-                        }
-
-//                        item{
-//                            DateFilter(expandedMoodDetailsButton)
-//                        }
-
-                        items(when{
-                            rememberMoodChipIndex.value == "" -> moodsData
-                            else -> moodsData.filter { it.mood == rememberMoodChipIndex.value }
-                        }, key= {it.id}) { moodItem ->
-                            MoodItemCard(
-                                moodEntity = moodItem,
-                                moodViewModel = moodViewModel
-                            )
-                        }
-
-                    }
-                }
-            }
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp),
-                text = "Trend Analysis",
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Medium
+            // Trend Analysis Section
+            TrendAnalysisSection(
+                allMoods = allMoods,
+                moodsData = moodsData,
+                rememberMoodChipIndex = rememberMoodChipIndex
             )
-            Column (
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(500.dp)
-                    .border(
-                        shape = RoundedCornerShape(5.dp, 5.dp, 20.dp, 20.dp),
-                        width = 0.dp,
-                        color = colorResource(R.color.slate_gray)
-                    ),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
-            ) {
-                if (allMoods.collectAsState(initial = emptyList()).value.isEmpty()){
-                    Image(modifier = Modifier.size(150.dp), painter = painterResource(R.drawable.empty_list), contentDescription = "Empty List")
-                    Text("Tap the '+' icon to add a new snapshot",
-                        fontSize = 15.sp
-                    )
-                }
-                else{
-                    MoodLineChart(
-                        moodData = moodsData,
-                        rememberMoodChipIndex
-                    )
-                }
-
-            }
-
         }
 
         if (isMoodCardVisible) {
@@ -264,105 +165,329 @@ fun MoodScreen(moodViewModel: MoodViewModel) {
     }
 }
 
-//@Composable
-//fun DateFilter(expandedMoodDetailsButton: Boolean) {
-//    var isFilterByDate by remember { mutableStateOf(false) }
-//    AnimatedVisibility(expandedMoodDetailsButton) {
-//        Column(Modifier
-//            .fillMaxWidth(),
-//            horizontalAlignment = Alignment.CenterHorizontally
-//        ){
-//            Button(modifier = Modifier.wrapContentSize(),
-//                onClick = {
-//                    isFilterByDate = true
-//                },
-//            ) {
-//                Text(text = "Filter By Date")
-//            }
-//        }
-//    }
-//    if (isFilterByDate){
-//        FilterDatePicker(
-//            onDismiss = { isFilterByDate = false }
-//        )
-//    }
-//}
-//
-//@OptIn(ExperimentalMaterial3Api::class)
-//@Composable
-//fun FilterDatePicker(onDismiss:() -> Unit ) {
-//    val datePickerState = rememberDatePickerState()
-//    DatePickerDialog(
-//        onDismissRequest = onDismiss,
-//        confirmButton = {
-//            TextButton(onClick = onDismiss) {
-//                Text("Confirm")
-//            }
-//        },
-//        dismissButton = {
-//            TextButton(onClick = onDismiss) {
-//                Text("Cancel")
-//            }
-//        }
-//    ) {
-//        DatePicker(state = datePickerState)
-//    }
-//}
-
 @Composable
-fun MoodFilter(
-    expandedMoodDetailsButton: Boolean,
-    moodEmojis: List<String>,
-    rememberMoodChipIndex: MutableState<String>
-) {
-    Column (
+fun MoodStatsHeader(moodsData: List<MoodEntity>) {
+    val currentMood = moodsData.lastOrNull()?.mood ?: "neutral"
+    val moodCount = moodsData.size
+
+    Card(
         modifier = Modifier
             .fillMaxWidth()
-    ){  }
-    LazyRow(
-        modifier = Modifier
-            .fillMaxWidth()
-            .scrollable(
-                rememberScrollState(),
-                orientation = Orientation.Horizontal,
-            ),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
+            .padding(horizontal = 16.dp),
+        shape = RoundedCornerShape(20.dp),
+        elevation = CardDefaults.cardElevation(4.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        )
     ) {
-        items(moodEmojis){index->
-            AnimatedVisibility(expandedMoodDetailsButton) {
-                val isSelected = index == rememberMoodChipIndex.value
-                AssistChip(
-                    onClick = {
-                        rememberMoodChipIndex.value = if (isSelected) "" else index
-                    },
-                    label = {
-                        Image(
-                            painterResource(
-                                when (index) {
-                                    "laughing" -> R.drawable.laughing
-                                    "smiling" -> R.drawable.smiling
-                                    "neutral" -> R.drawable.neutral
-                                    "sad" -> R.drawable.sad
-                                    else -> R.drawable.dead
-                                }
-                            ),
-                            null,
-                            modifier = Modifier
-                                .size(30.dp)
-                        )
-                    },
-                    colors = if(isSelected) AssistChipDefaults.assistChipColors(Color.Gray)
-                    else  AssistChipDefaults.assistChipColors(Color.Transparent),
-                    border = (
-                            BorderStroke(
-                                width = 1.dp,
-                                color = colorResource(R.color.slate_gray)
-                            )
-                            )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp),
+            horizontalArrangement = Arrangement.SpaceAround,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    text = "Current Mood",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Image(
+                    painter = painterResource(getMoodDrawable(currentMood)),
+                    contentDescription = "Current mood",
+                    modifier = Modifier.size(40.dp)
                 )
             }
-            Spacer(Modifier.width(8.dp))
+
+            Divider(
+                modifier = Modifier
+                    .height(40.dp)
+                    .width(1.dp),
+                color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.3f)
+            )
+
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    text = moodCount.toString(),
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+                Text(
+                    text = "Total Entries",
+                    style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            }
         }
+    }
+}
+
+@Composable
+fun MomentSnapshotsSection(
+    allMoods: Flow<List<MoodEntity>>,
+    expandedMoodDetailsButton: Boolean,
+    moodDetailHeight: Dp,
+    moodViewModel: MoodViewModel,
+    rotation: Float,
+    moodsData: List<MoodEntity>,
+    moodEmojis: List<String>,
+    rememberMoodChipIndex: MutableState<String>,
+    onAddMood: () -> Unit
+) {
+    val isEmpty = allMoods.collectAsState(initial = emptyList()).value.isEmpty()
+    val noDataFox = rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.no_data))
+
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+            .animateContentSize(
+                animationSpec = tween(durationMillis = 500, easing = FastOutSlowInEasing)
+            ),
+        shape = RoundedCornerShape(20.dp),
+        onClick = {
+            if (!isEmpty) {
+                moodViewModel.toggleExpanded()
+            }
+        }
+    ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            // Section Header
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(20.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Moment Snapshots",
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+
+                if (!isEmpty) {
+                    IconButton(
+                        onClick = { moodViewModel.toggleExpanded() },
+                        modifier = Modifier.size(40.dp)
+                    ) {
+                        Icon(
+                            painter = if (expandedMoodDetailsButton) painterResource(R.drawable.collapse) else painterResource(R.drawable.expand),
+                            contentDescription = if (expandedMoodDetailsButton) "Collapse" else "Expand",
+                            modifier = Modifier.rotate(rotation),
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                }
+            }
+
+            // Content
+            AnimatedVisibility(
+                visible = expandedMoodDetailsButton || isEmpty,
+                enter = fadeIn() + expandVertically(),
+                exit = fadeOut() + shrinkVertically()
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(max = moodDetailHeight)
+                ) {
+                    if (isEmpty) {
+                        EmptyState(
+                            title = "No Snapshots Yet",
+                            description = "Tap the + button to add your first mood snapshot",
+                            animation = noDataFox
+                        )
+                    } else {
+                        // Filter Chips
+                        MoodFilterSection(
+                            moodEmojis = moodEmojis,
+                            rememberMoodChipIndex = rememberMoodChipIndex,
+                            expandedMoodDetailsButton = expandedMoodDetailsButton
+                        )
+
+                        // Mood List
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f),
+                            verticalArrangement = Arrangement.spacedBy(12.dp),
+                            contentPadding = PaddingValues(16.dp)
+                        ) {
+                            items(
+                                items = when {
+                                    rememberMoodChipIndex.value.isNotEmpty() ->
+                                        moodsData.filter { it.mood == rememberMoodChipIndex.value }
+                                    else -> moodsData
+                                },
+                                key = { it.id }
+                            ) { moodItem ->
+                                MoodItemCard(
+                                    moodEntity = moodItem,
+                                    moodViewModel = moodViewModel
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun MoodFilterSection(
+    moodEmojis: List<String>,
+    rememberMoodChipIndex: MutableState<String>,
+    expandedMoodDetailsButton: Boolean
+) {
+    AnimatedVisibility(
+        visible = expandedMoodDetailsButton,
+        enter = fadeIn() + slideInVertically(),
+        exit = fadeOut() + slideOutVertically()
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+        ) {
+            Text(
+                text = "Filter by Mood",
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+
+            LazyRow(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                contentPadding = PaddingValues(vertical = 8.dp)
+            ) {
+                items(moodEmojis) { mood ->
+                    val isSelected = mood == rememberMoodChipIndex.value
+                    FilterChip(
+                        selected = isSelected,
+                        onClick = {
+                            rememberMoodChipIndex.value = if (isSelected) "" else mood
+                        },
+                        label = {
+                            Image(
+                                painter = painterResource(getMoodDrawable(mood)),
+                                contentDescription = mood,
+                                modifier = Modifier.size(24.dp)
+                            )
+                        },
+                        colors = FilterChipDefaults.filterChipColors(
+                            selectedContainerColor = MaterialTheme.colorScheme.primary,
+                            selectedLabelColor = MaterialTheme.colorScheme.onPrimary,
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant
+                        ),
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun TrendAnalysisSection(
+    allMoods: Flow<List<MoodEntity>>,
+    moodsData: List<MoodEntity>,
+    rememberMoodChipIndex: MutableState<String>
+) {
+    val isEmpty = allMoods.collectAsState(initial = emptyList()).value.isEmpty()
+    val noDataChart = rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.chart_animation))
+
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .height(400.dp),
+        shape = RoundedCornerShape(24.dp),
+        elevation = CardDefaults.cardElevation(4.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(20.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Trend Analysis",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.align(Alignment.Start)
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            if (isEmpty) {
+                EmptyState(
+                    title = "No Data Yet",
+                    description = "Add mood entries to see your trends",
+                    animation = noDataChart
+                )
+            } else {
+                MoodLineChart(
+                    moodData = moodsData,
+                    rememberMoodChipIndex = rememberMoodChipIndex
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun EmptyState(
+    title: String,
+    description: String,
+    animation: LottieCompositionResult
+) {
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(40.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        LottieAnimation(animation.value, iterations = LottieConstants.IterateForever ,modifier = Modifier
+            .size(200.dp)
+            .align(Alignment.CenterHorizontally))
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.Medium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        Text(
+            text = description,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+            textAlign = TextAlign.Center,
+            modifier = Modifier.padding(top = 8.dp)
+        )
+    }
+}
+
+fun getMoodDrawable(mood: String): Int {
+    return when (mood) {
+        "laughing" -> R.drawable.laughing
+        "smiling" -> R.drawable.smiling
+        "neutral" -> R.drawable.neutral
+        "sad" -> R.drawable.sad
+        else -> R.drawable.dead
     }
 }

@@ -20,6 +20,13 @@ interface MoodDAO {
     @Update
     suspend fun updateMood(moodEntity: MoodEntity)
 
+    @Query("SELECT * FROM mood_table WHERE date BETWEEN :startDate AND :endDate ORDER BY date DESC")
+    fun getMoodsByDateRange(startDate: Long, endDate: Long): Flow<List<MoodEntity>>
+
+    // Get moods for a specific day
+    @Query("SELECT * FROM mood_table WHERE date >= :dayStart AND date < :dayEnd ORDER BY date DESC")
+    fun getMoodsForDay(dayStart: Long, dayEnd: Long): Flow<List<MoodEntity>>
+
     @Query("SELECT * FROM mood_table ORDER BY date DESC")
     fun getAllMoods(): Flow<List<MoodEntity>>
 }

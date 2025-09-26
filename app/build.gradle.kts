@@ -57,6 +57,10 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.play.services.cast.framework)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.animation)
+    implementation(libs.vision.internal.vkp)
+    implementation(libs.material3)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -67,20 +71,28 @@ dependencies {
 
     //material UI dependencies
     implementation("androidx.compose.material:material-ripple:1.7.0+")
-    implementation ("androidx.navigation:navigation-compose:2.9.0")
+    implementation ("androidx.navigation:navigation-compose:2.9.5")
+
+    //Material 3
+    implementation("androidx.compose.material3:material3-android:1.4.0")
+    implementation(platform("androidx.compose:compose-bom:2024.02.00"))
+    implementation("androidx.compose.material:material-icons-core")
 
     //ROOM database dependency
-    implementation("androidx.room:room-runtime:2.7.2")
-    kapt("androidx.room:room-compiler:2.7.2")
-    implementation("androidx.room:room-ktx:2.7.2")
+    implementation("androidx.room:room-runtime:2.8.1")
+    kapt("androidx.room:room-compiler:2.8.1")
+    implementation("androidx.room:room-ktx:2.8.1")
 
     //MPAndroidChart dependency
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
     //Image Picker
     implementation("androidx.activity:activity-compose:1.7.2")
-    implementation("androidx.activity:activity-ktx:1.7.2")
+    implementation("androidx.activity:activity-ktx:1.11.0")
 
     //Coil-Compose to load file from the URI
     implementation("io.coil-kt:coil-compose:2.7.0")
+
+    //Lottie
+    implementation("com.airbnb.android:lottie-compose:6.6.9")
 }

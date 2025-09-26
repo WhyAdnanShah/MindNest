@@ -17,6 +17,10 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,6 +33,8 @@ import com.example.mentalhealthapp.viewModel.MoodViewModel
 
 @Composable
 fun MoodItemCard(moodEntity: MoodEntity, moodViewModel: MoodViewModel){
+    var showEditDialog by remember { mutableStateOf(false) }
+
 
     Card(
         modifier = Modifier
@@ -42,7 +48,8 @@ fun MoodItemCard(moodEntity: MoodEntity, moodViewModel: MoodViewModel){
                     color = colorResource(R.color.slate_gray)
                 )
                 ),
-        ){
+        onClick = { showEditDialog = true }
+    ){
         Column (
             modifier = Modifier
                 .padding(16.dp, 10.dp, 16.dp, 10.dp),
@@ -83,7 +90,7 @@ fun MoodItemCard(moodEntity: MoodEntity, moodViewModel: MoodViewModel){
                 Spacer(Modifier.width(10.dp))
 
                 Text(
-                    text = "Date: " + moodEntity.date,
+                    text = "Date: " + moodEntity.formattedDate,
                 )
             }
 
@@ -101,18 +108,18 @@ fun MoodItemCard(moodEntity: MoodEntity, moodViewModel: MoodViewModel){
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.End
             ){
-                MoodEdit(
-                    moodViewModel = moodViewModel,
-                    moodEntity = moodEntity
-                )
-
-                Spacer(Modifier.width(10.dp))
-
                 MoodDelete(
                     moodViewModel = moodViewModel,
                     moodEntity = moodEntity
                 )
             }
         }
+    }
+    if (showEditDialog){
+        EditMoodDialog(
+            onDismiss = { showEditDialog = false },
+            moodViewModel = moodViewModel,
+            moodEntity = moodEntity,
+        )
     }
 }

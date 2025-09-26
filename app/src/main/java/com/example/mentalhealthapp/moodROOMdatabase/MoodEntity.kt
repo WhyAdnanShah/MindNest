@@ -10,6 +10,6 @@ data class MoodEntity(
     @PrimaryKey(autoGenerate = true) var id: Int = 0,
     val mood: String,
     var note: String = "",
-    val date: String,
-//    val timeStamp: Long
+    val date: Long,
+    val formattedDate: String
 )

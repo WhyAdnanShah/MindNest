@@ -1,5 +1,6 @@
 package com.example.mentalhealthapp.journalScreen
 
+import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
@@ -7,9 +8,12 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,29 +23,49 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.SegmentedButtonDefaults.Icon
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
 import com.example.mentalhealthapp.R
@@ -52,138 +76,219 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import androidx.core.net.toUri
 
-@Stable
 @Composable
-fun JournalEntry(navController: NavHostController, journalViewModel: JournalViewModel ) {
-    /*          There was a problem in here with saving the Image and date... I was saving the 'image' as a 'URI' in the JournalEntity which was wrong as hell...
-    *           I had to save the 'image' as a 'string' and the 'date' as a 'String' too (Later changing to Long to not mess up the 'ORDER BY date DESC')                                                                    */
-
+fun JournalEntry(onDismiss: () -> Unit, journalViewModel: JournalViewModel) {
     Log.d("Entry To Journal", "JournalEntry called")
     val context = LocalContext.current
 
-    /*          The Title and the content of the Journal            */
-    var titleText by remember { mutableStateOf("") }
-    var noteText by remember { mutableStateOf("") }
+    var titleText by rememberSaveable { mutableStateOf("") }
+    var noteText by rememberSaveable { mutableStateOf("") }
+    var imageUri by rememberSaveable { mutableStateOf<Uri?>(null) }
 
-    /*          Image is remembered as a URI         */
-    var imageUri by remember { mutableStateOf<Uri?>(null)}
-
-    /*          This is how u save the date in the journal you dumbooooooooo          */
     val currentDate = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()).format(System.currentTimeMillis())
-    val journalEntity = JournalEntity(
-        title = titleText,
-        content = noteText,
-        date = currentDate ,
-        images = imageUri.toString()
-    )
 
-    /*          This is a simple Media Picker
-                'uris' refers to the list of URI objects that point to the location of the images or videos selected
-                 if the uris.isEmpty() then uris will be assigned to the imageUri */
-    val pickMedia = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) {
-            uri ->
+    val pickMedia = rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
         if (uri != null) {
             imageUri = uri
             context.contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
             Toast.makeText(context, "Image Selected", Toast.LENGTH_SHORT).show()
-        }
-        else{
+        } else {
             Toast.makeText(context, "No Image Selected", Toast.LENGTH_SHORT).show()
         }
     }
 
-
-    Column(
-        modifier = Modifier
-            .verticalScroll(rememberScrollState())
-            .fillMaxSize()
-            .padding(5.dp),
-        horizontalAlignment = Alignment.Start,
-        verticalArrangement = Arrangement.Top
+    Dialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(usePlatformDefaultWidth = false)
     ) {
-        Row (Modifier
-            .fillMaxWidth().padding(top = 10.dp,end = 10.dp),
-            horizontalArrangement = Arrangement.End,
-            verticalAlignment = Alignment.CenterVertically
-        ){
-            Button(
-                onClick = {
-                    val newJournalEntry = JournalEntity(
-                        title = titleText,
-                        content = noteText,
-                        date = currentDate ,
-                        images = imageUri.toString()
+        Surface(
+            modifier = Modifier
+                .fillMaxSize(),
+            shape = RoundedCornerShape(20.dp),
+            color = MaterialTheme.colorScheme.surface
+        ) {
+            Column(
+                modifier = Modifier
+                    .verticalScroll(rememberScrollState())
+                    .fillMaxSize()
+                    .padding(24.dp),
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.Top
+            ) {
+                // Header with title and close button
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "New Journal Entry",
+                        style = MaterialTheme.typography.headlineSmall,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
-                    journalViewModel.addJournal(newJournalEntry)
-                    navController.navigate(BottomNavItem.Journal.route)
-                    {popUpTo(BottomNavItem.Journal.route) {
-                        inclusive = true
+
+                    Row {
+                        // Cancel button
+                        IconButton(
+                            onClick = onDismiss,
+                            modifier = Modifier.size(40.dp)
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = "Close",
+                                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.width(8.dp))
+
+                        // Save button
+                        FloatingActionButton(
+                            onClick = {
+                                if (titleText.isNotEmpty() || noteText.isNotEmpty()) {
+                                    val newJournalEntry = JournalEntity(
+                                        title = titleText,
+                                        content = noteText,
+                                        date = currentDate,
+                                        images = imageUri.toString()
+                                    )
+                                    journalViewModel.addJournal(newJournalEntry)
+                                    onDismiss()
+                                } else {
+                                    Toast.makeText(context, "Please add some content", Toast.LENGTH_SHORT).show()
+                                }
+                            },
+                            modifier = Modifier.size(40.dp),
+                            containerColor = MaterialTheme.colorScheme.primary
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Check,
+                                contentDescription = "Save",
+                                tint = MaterialTheme.colorScheme.onPrimary
+                            )
+                        }
                     }
-                    }
-
-                },
-                shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(colorResource(R.color.antique_white)),
-                elevation = ButtonDefaults.buttonElevation(10.dp)
-            ) {
-                Image(modifier = Modifier.size(17.dp), imageVector = Icons.Default.Check, contentDescription = null)
-            }
-            Log.d("Clicked Saved" , "What happened?..." + journalEntity.content+ "\n"
-                    + journalEntity.title +"\n"
-                    +journalEntity.date
-                    +"\n"
-                    +journalEntity.images
-            )
-        }
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth().padding(horizontal = 16.dp)
-                .wrapContentHeight(),
-            value = titleText,
-            onValueChange = { titleText = it },
-            label = { Text("Title", fontSize = 20.sp) },
-            shape = RoundedCornerShape(15.dp),
-        )
-
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth().padding(horizontal = 16.dp)
-                .heightIn(min = 500.dp, max = 1000.dp),
-            value = noteText,
-            onValueChange = { noteText = it },
-            label = { Text("Note") },
-            shape = RoundedCornerShape(15.dp)
-        )
-        Spacer(Modifier.height(16.dp))
-
-        Row (
-            Modifier.fillMaxWidth().padding(end = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.End
-        ){
-            Button(modifier = Modifier.wrapContentSize(),
-                onClick = {
-                    pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                 }
-            ) {
-                Text(text = "Add Images")
+
+                // Date display
+                Text(
+                    text = currentDate,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+
+                // Title field
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 16.dp),
+                    value = titleText,
+                    onValueChange = { titleText = it },
+                    label = { Text("Title") },
+                    placeholder = { Text("Enter journal title...") },
+                    shape = RoundedCornerShape(12.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                        focusedLabelColor = MaterialTheme.colorScheme.primary,
+                    ),
+                    textStyle = MaterialTheme.typography.titleMedium,
+                    singleLine = true
+                )
+
+                // Content field
+                OutlinedTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
+                        .padding(bottom = 16.dp),
+                    value = noteText,
+                    onValueChange = { noteText = it },
+                    label = { Text("Content") },
+                    placeholder = { Text("Write your thoughts here...") },
+                    shape = RoundedCornerShape(12.dp),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline,
+                        focusedLabelColor = MaterialTheme.colorScheme.primary,
+                    ),
+                    textStyle = MaterialTheme.typography.bodyLarge
+                )
+
+                // Image section
+                Column(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    // Add image button
+                    OutlinedButton(
+                        onClick = {
+                            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp),
+                        shape = RoundedCornerShape(12.dp),
+                        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
+                        colors = ButtonDefaults.outlinedButtonColors(
+                            contentColor = MaterialTheme.colorScheme.onSurface
+                        )
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = null,
+                            modifier = Modifier.size(20.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text("Add Image")
+                    }
+
+                    // Display selected image
+                    if (imageUri != null) {
+                        Card(
+                            modifier = Modifier
+                                .size(200.dp)
+                                .padding(bottom = 16.dp),
+                            shape = RoundedCornerShape(12.dp),
+                            elevation = CardDefaults.cardElevation(4.dp)
+                        ) {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.TopEnd
+                            ) {
+                                Image(
+                                    painter = rememberAsyncImagePainter(imageUri),
+                                    contentDescription = "Selected image",
+                                    modifier = Modifier.fillMaxSize(),
+                                    contentScale = ContentScale.Crop
+                                )
+
+                                // Remove image button
+                                IconButton(
+                                    onClick = { imageUri = null },
+                                    modifier = Modifier
+                                        .size(36.dp)
+                                        .background(
+                                            color = MaterialTheme.colorScheme.errorContainer,
+                                            shape = CircleShape
+                                        )
+                                        .padding(4.dp)
+                                ) {
+                                    Icon(
+                                        imageVector = Icons.Default.Close,
+                                        contentDescription = "Remove image",
+                                        tint = MaterialTheme.colorScheme.onErrorContainer,
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
-
-        Spacer(Modifier.height(16.dp))
-
-        val uriOfImage = journalEntity.images.toUri()
-        Image(
-            modifier = Modifier
-                .size(200.dp)
-                .border(
-                    width = 1.dp,
-                    color = colorResource(R.color.slate_gray),
-                    shape = RoundedCornerShape(10.dp)
-                ),
-            painter = rememberAsyncImagePainter(uriOfImage), contentDescription = null
-        )
-
-        Spacer(Modifier.height(16.dp))
     }
 }

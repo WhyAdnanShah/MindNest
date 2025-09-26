@@ -23,6 +23,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -42,6 +43,7 @@ fun ExerciseDialog(onDismiss: () -> Unit, title: String, navController: NavHostC
     val context = LocalContext.current
     val timings = listOf("1 min","5 min","10 min","15 min","20 min")
     var rememberChipIndex by remember { mutableIntStateOf(-1) }
+    var isExercise by remember { mutableStateOf(false) } 
 
     Dialog(onDismissRequest = onDismiss){
         Card(
@@ -111,27 +113,27 @@ fun ExerciseDialog(onDismiss: () -> Unit, title: String, navController: NavHostC
                             when (rememberChipIndex){
                                 0-> {
                                     Toast.makeText(context, "1 min Exercise $title",Toast.LENGTH_SHORT).show()
-                                    navController.navigate("GuidedBreathingScreen/$title/$rememberChipIndex")
+                                    isExercise = true
                                     onDismiss
                                 }
                                 1-> {
                                     Toast.makeText(context, "5 min Exercise $title",Toast.LENGTH_SHORT).show()
-                                    navController.navigate("GuidedBreathingScreen/$title/$rememberChipIndex")
+                                    isExercise = true
                                     onDismiss
                                 }
                                 2-> {
                                     Toast.makeText(context, "10 min Exercise $title",Toast.LENGTH_SHORT).show()
-                                    navController.navigate("GuidedBreathingScreen/$title/$rememberChipIndex")
+                                    isExercise = true
                                     onDismiss
                                 }
                                 3-> {
                                     Toast.makeText(context, "15 min Exercise $title",Toast.LENGTH_SHORT).show()
-                                    navController.navigate("GuidedBreathingScreen/$title/$rememberChipIndex")
+                                    isExercise = true
                                     onDismiss
                                 }
                                 4-> {
                                     Toast.makeText(context, "20 min Exercise $title",Toast.LENGTH_SHORT).show()
-                                    navController.navigate("GuidedBreathingScreen/$title/$rememberChipIndex")
+                                    isExercise = true
                                     onDismiss
                                 }
                                 else -> {
@@ -148,5 +150,12 @@ fun ExerciseDialog(onDismiss: () -> Unit, title: String, navController: NavHostC
 
             }
         }
+    }
+    if (isExercise){
+        GuidedBreathingScreen(
+            onDismiss = { isExercise = false },
+            title = title,
+            rememberChipIndex = rememberChipIndex
+        )
     }
 }

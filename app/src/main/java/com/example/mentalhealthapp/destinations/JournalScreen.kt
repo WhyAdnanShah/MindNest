@@ -1,5 +1,6 @@
 package com.example.mentalhealthapp.destinations
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.Orientation
@@ -7,8 +8,8 @@ import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -20,35 +21,38 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.journalROOMdatabase.JournalEntity
+import com.example.mentalhealthapp.journalScreen.JournalEntry
 import com.example.mentalhealthapp.journalScreen.JournalItemCard
-import com.example.mentalhealthapp.navigation.CenteredText
 import com.example.mentalhealthapp.viewModel.JournalViewModel
 import kotlinx.coroutines.flow.Flow
-
 @Composable
 fun JournalScreen(journalViewModel: JournalViewModel, navController: NavHostController) {
     Log.d("JournalScreen", "JournalScreen called")
-    val context = LocalContext.current
+    var isJournalEntry by journalViewModel.isJournalEntry
     val journalData by journalViewModel.allJournals.collectAsState(initial = emptyList())
     val allJournals: Flow<List<JournalEntity>> = journalViewModel.db.journalDao().getAllJournals()
 
+    val ghosty = rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.astronaut))
 
     Scaffold (modifier = Modifier.fillMaxSize(),
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {
-                    navController.navigate("makeNote")
-                },
+                onClick = { isJournalEntry = true },
                 shape = RoundedCornerShape(20.dp),
                 elevation = FloatingActionButtonDefaults.elevation(10.dp),
                 containerColor = colorResource(R.color.blue_sky)
@@ -63,46 +67,44 @@ fun JournalScreen(journalViewModel: JournalViewModel, navController: NavHostCont
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(5.dp)
+                .padding(top = 16.dp)
                 .border(
                     width = 0.dp,
                     color = colorResource(R.color.slate_gray),
                     shape = RoundedCornerShape(5.dp, 5.dp, 20.dp, 20.dp)
-                )
+                ),
+            horizontalAlignment = if (journalData.isEmpty()) Alignment.CenterHorizontally else Alignment.Start,
+            verticalArrangement = if (journalData.isEmpty()) Arrangement.Center else Arrangement.Top
         ) {
-            Text(modifier = Modifier.padding(16.dp, 16.dp, 16.dp),
-                text = "Your Journal",
-                fontSize = 30.sp,
-                fontWeight = FontWeight.Bold
-            )
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.Top
-            ) {
-                if (allJournals.collectAsState(initial = emptyList()).value.isEmpty()) {
-                    CenteredText("Tap the '+' icon to add a new entry", 15.sp)
-                } else {
-                    LazyColumn(
-                        modifier = Modifier.scrollable(
-                            rememberScrollState(),
-                            orientation = Orientation.Vertical
+            if (journalData.isEmpty()) {
+                LottieAnimation(ghosty.value,
+                    iterations = LottieConstants.IterateForever,
+                    modifier = Modifier
+                        .size(250.dp)
+                )
+                Text(text = "Tap the '+' icon to add a new entry", fontSize =  17.sp)
+            } else {
+                LazyColumn(
+                    modifier = Modifier.scrollable(
+                        rememberScrollState(),
+                        orientation = Orientation.Vertical
+                    )
+                ) {
+                    items(journalData, key = { it.id }) { journalItem ->
+                        JournalItemCard(
+                            journalEntity = journalItem,
+                            journalViewModel = journalViewModel
                         )
-                    ) {
-                        items(journalData, key = { it.id }) { journalItem ->
-                            JournalItemCard(
-                                journalEntity = journalItem,
-                                journalViewModel = journalViewModel
-                            )
 
-                        }
                     }
                 }
             }
         }
     }
+    if (isJournalEntry){
+        JournalEntry(
+            onDismiss = { isJournalEntry = false } ,
+            journalViewModel
+        )
+    }
 }
-

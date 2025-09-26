@@ -1,6 +1,9 @@
 package com.example.mentalhealthapp.viewModel
 
 import android.app.Application
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.room.Room
@@ -36,4 +39,7 @@ class JournalViewModel (application : Application) : AndroidViewModel(applicatio
             db.journalDao().updateJournal(journalEntity)
         }
     }
+
+    private var _isJournalEntry = mutableStateOf(false)
+    var isJournalEntry : MutableState<Boolean> = _isJournalEntry
 }

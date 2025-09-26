@@ -1,6 +1,8 @@
 package com.example.mentalhealthapp.moodScreen
 
 import android.util.Log
+import android.widget.Toast
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,8 +17,16 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -24,46 +34,60 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SegmentedButtonDefaults.Icon
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarData
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.moodROOMdatabase.MoodEntity
 import com.example.mentalhealthapp.navigation.CenteredText
 import com.example.mentalhealthapp.viewModel.MoodViewModel
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
-
 @Composable
 fun MoodDialog(onDismiss: () -> Unit, moodViewModel: MoodViewModel) {
-    var selected by remember { mutableIntStateOf(0) }
-    var datePickerCard by remember { mutableStateOf(false) }
-    var selectedDateMillis by remember { mutableStateOf<Long?>(null) }
-    var moodNote by remember { mutableStateOf("") }
-    val dateFormat = remember { SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()) }
+    val context = LocalContext.current
+    var selected by rememberSaveable { mutableIntStateOf(0) }
+    var datePickerCard by rememberSaveable { mutableStateOf(false) }
+    var selectedDateMillis by rememberSaveable { mutableLongStateOf(System.currentTimeMillis()) }
+    var moodNote by rememberSaveable { mutableStateOf("") }
 
-//    val dateMillis = selectedDateMillis ?: System.currentTimeMillis()
-//    val formattedDate = dateFormat.format(dateMillis)
-
+    val dateFormat = remember { SimpleDateFormat("dd MMM yyyy", Locale.getDefault()) }
+    val formattedDate = remember(selectedDateMillis) {
+        dateFormat.format(Date(selectedDateMillis))
+    }
 
     val moodNames = listOf("laughing", "smiling", "neutral", "sad", "dead")
     val moodImages = listOf(
@@ -74,20 +98,57 @@ fun MoodDialog(onDismiss: () -> Unit, moodViewModel: MoodViewModel) {
         R.drawable.dead
     )
 
-    Dialog(onDismissRequest = onDismiss) {
-        Card(
-            modifier = Modifier.wrapContentSize()
+    Dialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(usePlatformDefaultWidth = false)
+    ) {
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth(0.9f)
+                .wrapContentHeight()
+                .verticalScroll(rememberScrollState()),
+            shape = RoundedCornerShape(24.dp)
         ) {
             Column(
                 modifier = Modifier
-                    .wrapContentSize()
-                    .padding(16.dp),
+                    .fillMaxWidth()
+                    .padding(24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Top
             ) {
-                TitleText(text = "How are you feeling right now?")
+                // Header
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "How are you feeling?",
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.SemiBold
+                    )
 
-                Spacer(modifier = Modifier.height(25.dp))
+                    IconButton(
+                        onClick = onDismiss ,
+                        modifier = Modifier.size(32.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Close,
+                            contentDescription = "Close",
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                // Mood Selection
+                Text(
+                    text = "Select your mood",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.align(Alignment.Start)
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
 
                 ImageRadioGroup(
                     imageResIds = moodImages,
@@ -95,79 +156,163 @@ fun MoodDialog(onDismiss: () -> Unit, moodViewModel: MoodViewModel) {
                     onSelected = { selected = it }
                 )
 
-                Spacer(modifier = Modifier.height(25.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
+                // Note Field
                 NoteField(
                     value = moodNote,
                     onValueChange = { moodNote = it },
                     labelText = "What affected your mood?",
-                    placeholderText = "Enter Note",
+                    placeholderText = "Share what's on your mind...",
                 )
 
-                Spacer(modifier = Modifier.height(25.dp))
+                Spacer(modifier = Modifier.height(24.dp))
 
-                Card(
+                // Date Picker
+                Text(
+                    text = "Select date",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.align(Alignment.Start)
+                )
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                OutlinedCard(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .height(70.dp)
                         .clickable { datePickerCard = true },
-                    colors = CardDefaults.cardColors(colorResource(R.color.slate_gray))
+                    shape = RoundedCornerShape(12.dp),
+                    border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
                 ) {
-                    CenteredText(
-                        text = selectedDateMillis?.let { dateFormat.format(it) } ?: "Pick date",
-                        fontSize = 15.sp,
-                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = formattedDate,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Icon(
+                            imageVector = Icons.Default.DateRange,
+                            contentDescription = "Select date",
+                            tint = MaterialTheme.colorScheme.secondary,
+                            modifier = Modifier.size(20.dp)
+                        )
+                    }
                 }
 
                 if (datePickerCard) {
                     DatePickerDialogModal(
-                        onDateSelected = {
-                            selectedDateMillis = it
+                        onDateSelected = { dateMillis ->
+                            dateMillis?.let {
+                                selectedDateMillis = it
+                            }
                             datePickerCard = false
                         },
-                        onDismiss = { datePickerCard = false }
+                        onDismiss = { datePickerCard = false },
+                        initialDateMillis = selectedDateMillis
                     )
                 }
 
-                Spacer(modifier = Modifier.height(25.dp))
+                Spacer(modifier = Modifier.height(32.dp))
 
+                // Action Buttons
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceAround
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    dialogButtons(
-                        text = "Cancel",
+                    // Cancel Button
+                    TextButton(
                         onClick = onDismiss,
-                        color = Color.Transparent,
-                        textColors = colorResource(R.color.light_red),
-                    )
+                        modifier = Modifier.padding(end = 12.dp),
+                        shape = RoundedCornerShape(10.dp)
+                    ) {
+                        Text(
+                            "Cancel",
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
 
-                    dialogButtons(
-                        text = "Save",
+                    // Save Button
+                    Button(
                         onClick = {
                             val mood = moodNames[selected]
                             val note = moodNote
-                            val date = selectedDateMillis?.let { dateFormat.format(it) }.toString()
+                            val date = selectedDateMillis
+                            val formattedDate = dateFormat.format(Date(date))
 
-                            moodViewModel.addMood(
-                                MoodEntity(
-                                    mood = mood,
-                                    note = note,
-                                    date = date,
-//                                    timeStamp = dateMillis
+                            if (mood.isNotEmpty() && note.isNotEmpty()) {
+                                moodViewModel.addMood(
+                                    MoodEntity(
+                                        mood = mood,
+                                        note = note,
+                                        date = date,
+                                        formattedDate = formattedDate
+                                    )
                                 )
-                            )
-
-                            Log.d("Mood Save", "Mood: $mood, Note: $note, Date: $date")
-
-                            onDismiss()
+                                onDismiss()
+                            }else{
+                                Toast.makeText(context, "Please fill all fields", Toast.LENGTH_SHORT).show()
+                            }
+                            Log.d("Mood Save", "Mood: $mood, Note: $note, Date: $date, Formatted: $formattedDate")
                         },
-                        color = colorResource(R.color.blue_sky),
-                        textColors = Color.Black
-                    )
+                        shape = RoundedCornerShape(10.dp)
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Default.Check,
+                                contentDescription = "Save",
+                                modifier = Modifier.size(18.dp)
+                            )
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text("Save Mood", fontWeight = FontWeight.Medium)
+                        }
+                    }
                 }
             }
         }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DatePickerDialogModal(
+    onDateSelected: (Long?) -> Unit,
+    onDismiss: () -> Unit,
+    initialDateMillis: Long = System.currentTimeMillis()
+) {
+    val datePickerState = rememberDatePickerState(
+        initialSelectedDateMillis = initialDateMillis
+    )
+
+    DatePickerDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            TextButton(
+                modifier = Modifier.clip(RoundedCornerShape(8.dp)),
+                onClick = {
+                    onDateSelected(datePickerState.selectedDateMillis)
+                },
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Text("OK", fontWeight = FontWeight.Medium)
+            }
+        },
+        dismissButton = {
+            TextButton(
+                onClick = onDismiss,
+                shape = RoundedCornerShape(8.dp)
+            ) {
+                Text("Cancel", fontWeight = FontWeight.Medium)
+            }
+        }
+    ) {
+        DatePicker(state = datePickerState)
     }
 }
 @Composable
@@ -227,42 +372,4 @@ fun NoteField(value: String, onValueChange: (String) -> Unit, labelText: String,
         singleLine = false,
         maxLines = 10
     )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun DatePickerDialogModal(
-    onDateSelected: (Long?) -> Unit,
-    onDismiss: () -> Unit
-) {
-    val datePickerState = rememberDatePickerState()
-    DatePickerDialog(
-        onDismissRequest = onDismiss,
-        confirmButton = {
-            TextButton(onClick = {
-                onDateSelected(datePickerState.selectedDateMillis)
-                onDismiss()
-            }) { Text("Confirm") }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) { Text("Cancel") }
-        }
-    ) {
-        DatePicker(state = datePickerState)
-    }
-}
-
-@Composable
-fun dialogButtons(text: String, onClick: () -> Unit, color: Color, textColors: Color) {
-    Button(
-        onClick = onClick,
-        modifier = Modifier.wrapContentSize(),
-        colors = ButtonDefaults.buttonColors(color),
-        shape = RoundedCornerShape(20.dp),
-    ) {
-        Text(
-            text,
-            color = textColors,
-        )
-    }
 }

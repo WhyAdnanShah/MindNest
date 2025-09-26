@@ -23,35 +23,7 @@ import com.example.mentalhealthapp.viewModel.JournalViewModel
 
 @Composable
 fun JournalDelete(journalEntity: JournalEntity, journalViewModel: JournalViewModel) {
-    val context = LocalContext.current
-    var deleteBtnClicked by remember { mutableStateOf(false) }
 
-    Button(
-        modifier = Modifier
-            .wrapContentSize()
-            .border(
-                width = 0.dp,
-                color = colorResource(R.color.light_red),
-                shape = RoundedCornerShape(10.dp)
-            ),
-        onClick = {
-            deleteBtnClicked = true
-        },
-        shape = RoundedCornerShape(10.dp),
-        colors = ButtonDefaults.buttonColors(Color.Transparent),
-    )
-    {
-        Text("Delete", color = colorResource(R.color.light_red))
-    }
-
-    if (deleteBtnClicked) {
-        DeleteJournalDialog(
-            onDismiss = { deleteBtnClicked = false },
-            journalViewModel = journalViewModel,
-            journalEntity = journalEntity
-
-        )
-    }
 }
 
 @Composable

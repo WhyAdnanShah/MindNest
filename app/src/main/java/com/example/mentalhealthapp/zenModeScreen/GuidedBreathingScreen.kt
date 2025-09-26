@@ -31,13 +31,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.moodScreen.TitleText
 import kotlinx.coroutines.delay
 
 @Composable
-fun GuidedBreathingScreen(navController: NavHostController, title: String, rememberChipIndex: Int)  {
+fun GuidedBreathingScreen(onDismiss: () -> Unit, title: String, rememberChipIndex: Int)  {
     val context = LocalContext.current
     var initialSec by remember { mutableIntStateOf(10) }
     LaunchedEffect(initialSec) {
@@ -177,76 +178,81 @@ fun GuidedBreathingScreen(navController: NavHostController, title: String, remem
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(
-                when (title) {
-                    "Equal Breathing" -> colorResource(R.color.sea_green)
-                    "Box Breathing" -> {
-                        colorResource(R.color.light_sea_green)
-                    }
-
-                    else -> {
-                        colorResource(R.color.polished_pine)
-                    }
-                }
-            ),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-    )
-    {
-        TitleText("Time remaining: $totalTime sec")
-        Text(
-            text = when {
-                initialSec > 0-> "$initialSec"
-                inhaleSec > 0 -> "$inhaleSec"
-                holdSec > 0 -> "$holdSec"
-                else -> "$exhaleSec"
-            }, fontSize = 70.sp
-        )
-        Text(
-            text = when {
-                initialSec >= 5-> "Relax and get Comfortable"
-                initialSec > 0 -> "Focus of your breathing"
-                inhaleSec > 0 -> "Breathe In"
-                holdSec > 0 -> "Hold"
-                else -> "Breathe Out"
-            }, fontSize = 25.sp
-        )
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
+    Dialog(
+        onDismissRequest = onDismiss,
+        properties = DialogProperties(usePlatformDefaultWidth = false),
     ){
-        Card(
+        Column(
             modifier = Modifier
-                .size(expandingCircle),
-            shape = RoundedCornerShape(400.dp),
-            colors = CardDefaults.cardColors((Color.Gray.copy(alpha = 0.3f)))
-        ){}
-    }
+                .fillMaxSize()
+                .background(
+                    when (title) {
+                        "Equal Breathing" -> colorResource(R.color.sea_green)
+                        "Box Breathing" -> {
+                            colorResource(R.color.light_sea_green)
+                        }
+
+                        else -> {
+                            colorResource(R.color.polished_pine)
+                        }
+                    }
+                ),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        )
+        {
+            TitleText("Time remaining: $totalTime sec")
+            Text(
+                text = when {
+                    initialSec > 0-> "$initialSec"
+                    inhaleSec > 0 -> "$inhaleSec"
+                    holdSec > 0 -> "$holdSec"
+                    else -> "$exhaleSec"
+                }, fontSize = 70.sp
+            )
+            Text(
+                text = when {
+                    initialSec >= 5-> "Relax and get Comfortable"
+                    initialSec > 0 -> "Focus of your breathing"
+                    inhaleSec > 0 -> "Breathe In"
+                    holdSec > 0 -> "Hold"
+                    else -> "Breathe Out"
+                }, fontSize = 25.sp
+            )
+        }
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ){
+            Card(
+                modifier = Modifier
+                    .size(expandingCircle),
+                shape = RoundedCornerShape(400.dp),
+                colors = CardDefaults.cardColors((Color.Gray.copy(alpha = 0.3f)))
+            ){}
+        }
 
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(40.dp),
-        verticalArrangement = Arrangement.Bottom,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ){
-        Button(modifier = Modifier.fillMaxWidth(),
-            onClick = { navController.navigateUp() },
-            colors = ButtonDefaults.buttonColors(colorResource(R.color.baby_blue)),
-            enabled = when(totalTime){
-                0 -> true
-                else -> false
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(40.dp),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ){
+            Button(modifier = Modifier.fillMaxWidth(),
+                onClick = onDismiss,
+                colors = ButtonDefaults.buttonColors(colorResource(R.color.baby_blue)),
+                enabled = when(totalTime){
+                    0 -> true
+                    else -> false
+                }
+            ) {
+                Text("Go back")
             }
-        ) {
-            Text("Go back")
         }
     }
 }

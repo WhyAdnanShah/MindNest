@@ -1,66 +1,90 @@
 package com.example.mentalhealthapp.moodScreen
 
 import android.view.ViewGroup
+import androidx.compose.animation.core.Easing
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
+import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.moodROOMdatabase.MoodEntity
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.Legend
+import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.ValueFormatter
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
 
 
 @Composable
 fun MoodLineChart(
     moodData: List<MoodEntity>,
     rememberMoodChipIndex: MutableState<String>
-){
+) {
+    // Sort data by date to ensure chronological order
+    val sortedData = remember(moodData, rememberMoodChipIndex.value) {
+        when {
+            rememberMoodChipIndex.value.isNotEmpty() ->
+                moodData.filter { it.mood == rememberMoodChipIndex.value }.sortedBy { it.date }
+            else -> moodData.sortedBy { it.date }
+        }
+    }
+
     AndroidView(
-        factory = {
-            context ->
+        factory = { context ->
             LineChart(context).apply {
                 layoutParams = ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT
                 )
-
-
             }
         },
-        modifier = Modifier.wrapContentSize().padding(vertical = 16.dp),
-        update = {
-            chart ->
-            val entries = when {
-                rememberMoodChipIndex.value == "" -> moodData.mapIndexed { index, moodEntity ->
-                    val moodValue = when (moodEntity.mood) {
-                        "laughing" -> 5f
-                        "smiling" -> 4f
-                        "neutral" -> 3f
-                        "sad" -> 2f
-                        "dead" -> 1f
-                        else -> 0f
-                    }
-                    Entry(index.toFloat(), moodValue)
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        update = { chart ->
+            if (sortedData.isEmpty()) {
+                // Handle empty data state
+                chart.clear()
+                chart.setNoDataText("No mood data available")
+                chart.setNoDataTextColor(android.graphics.Color.GRAY)
+                chart.setNoDataTextTypeface(android.graphics.Typeface.DEFAULT)
+                return@AndroidView
             }
-                else -> moodData.filter { it.mood == rememberMoodChipIndex.value }.mapIndexed { index, moodEntity ->
-                    val moodValue = when (moodEntity.mood) {
-                        "laughing" -> 5f
-                        "smiling" -> 4f
-                        "neutral" -> 3f
-                        "sad" -> 2f
-                        "dead" -> 1f
-                        else -> 0f
-                    }
-                    Entry(index.toFloat(), moodValue)
 
+            // Create entries with date as x-value
+            val entries = sortedData.mapIndexed { index, moodEntity ->
+                // Use the actual date (Long) as x-value, converted to days for better scaling
+                val daysSinceFirst = if (sortedData.size > 1) {
+                    val firstDate = sortedData.first().date
+                    val currentDate = moodEntity.date
+                    ((currentDate - firstDate) / (1000 * 60 * 60 * 24)).toFloat() // Convert to days
+                } else {
+                    0f
                 }
+
+                val moodValue = when (moodEntity.mood) {
+                    "laughing" -> 5f
+                    "smiling" -> 4f
+                    "neutral" -> 3f
+                    "sad" -> 2f
+                    "dead" -> 1f
+                    else -> 0f
+                }
+                Entry(daysSinceFirst, moodValue)
             }
+
             val dataSet = LineDataSet(entries, "Mood Data").apply {
                 color = android.graphics.Color.DKGRAY
                 lineWidth = 5f
@@ -97,8 +121,6 @@ fun MoodLineChart(
                 granularity = 1f
                 setLabelCount(5, false)
             }
-
-
             chart.invalidate()
         }
     )

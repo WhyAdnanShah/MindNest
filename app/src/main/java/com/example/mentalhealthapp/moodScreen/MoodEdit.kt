@@ -1,6 +1,5 @@
 package com.example.mentalhealthapp.moodScreen
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -34,58 +32,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.moodROOMdatabase.MoodEntity
 import com.example.mentalhealthapp.viewModel.MoodViewModel
 import kotlin.collections.listOf
-
-@Composable
-fun MoodEdit(
-    moodViewModel: MoodViewModel,
-    moodEntity: MoodEntity
-) {
-    val context = LocalContext.current
-    var showEditDialog by remember { mutableStateOf(false) }
-
-
-    Button(
-        modifier = Modifier
-            .wrapContentSize(),
-        onClick = {
-            showEditDialog = true
-            moodViewModel
-        },
-        border = (
-                BorderStroke(
-                    width = 0.dp,
-                    color = colorResource(R.color.earth_yellow)
-                )
-                ),
-        colors = ButtonDefaults.buttonColors(Color.Transparent)
-    ) {
-        Image(painter = painterResource(R.drawable.edit), contentDescription = null, modifier = Modifier.size(13.dp))
-        Spacer(Modifier.width(5.dp))
-        Text(
-            text = "Edit",
-            fontSize = 13.sp,
-            color = colorResource(R.color.earth_yellow)
-
-        )
-    }
-
-    if (showEditDialog) EditMoodDialog(
-        onDismiss = { showEditDialog = false },
-        moodViewModel = moodViewModel,
-        moodEntity = moodEntity,
-    )
-}
-
 @Composable
 fun EditMoodDialog(
     onDismiss: () -> Unit,

@@ -21,7 +21,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
@@ -141,7 +146,7 @@ fun SettingsScreen(){
                 verticalAlignment = Alignment.CenterVertically
             ){
                 Text(text ="Github Page", fontSize = 17.sp)
-                Image(painter = painterResource(R.drawable.arrow), contentDescription = null, modifier = Modifier.size(17.dp))
+                Image(imageVector = Icons.Default.KeyboardArrowRight, contentDescription = null, modifier = Modifier.wrapContentSize())
             }
         }
 
@@ -170,7 +175,7 @@ fun SettingsScreen(){
                 verticalAlignment = Alignment.CenterVertically
             ){
                 Text(text ="LinkedIn Page", fontSize = 17.sp)
-                Image(painter = painterResource(R.drawable.arrow), contentDescription = null, modifier = Modifier.size(17.dp))
+                Image(imageVector = Icons.Default.KeyboardArrowRight, contentDescription = null, modifier = Modifier.wrapContentSize())
             }
         }
     }

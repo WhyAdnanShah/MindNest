@@ -112,7 +112,7 @@ fun ZenModeScreen(navController: NavHostController) {
         InfoDialog(
             onDismiss = { isInfoButtonClicked = false },
             title = items[rememberIndex]
-        )
+        ) 
     }
     if (exerciseButton){
         ExerciseDialog(
