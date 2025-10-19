@@ -6,7 +6,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,39 +29,31 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.navArgument
 import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.destinations.JournalScreen
 import com.example.mentalhealthapp.destinations.MoodScreen
 import com.example.mentalhealthapp.destinations.SettingsScreen
 import com.example.mentalhealthapp.destinations.ZenModeScreen
-import com.example.mentalhealthapp.journalScreen.JournalEntry
-import com.example.mentalhealthapp.moodROOMdatabase.MoodEntity
 import com.example.mentalhealthapp.ui.theme.MentalHealthAppTheme
 import com.example.mentalhealthapp.viewModel.JournalViewModel
 import com.example.mentalhealthapp.viewModel.JournalViewModelFactory
 import com.example.mentalhealthapp.viewModel.MoodViewModel
 import com.example.mentalhealthapp.viewModel.MoodViewModelFactory
-import com.example.mentalhealthapp.zenModeScreen.GuidedBreathingScreen
 
 class Home : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MentalHealthAppTheme {
-                HomeScreen(
-                    modifier = Modifier
-                )
+                HomeScreen()
             }
         }
     }
@@ -71,7 +62,7 @@ class Home : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen() {
     val context = LocalContext.current.applicationContext as Application
 
     //MoodScreen View Model
@@ -105,17 +96,19 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                                 modifier = Modifier.size(40.dp)
                             )
                             Spacer(Modifier.width(8.dp))
-                            if (navController.currentBackStackEntryAsState().value?.destination?.route == BottomNavItem.Home.route){
-                                Text("MindNest", fontSize = 30.sp, fontWeight = FontWeight.Bold)
-                            }
-                            else if (navController.currentBackStackEntryAsState().value?.destination?.route == BottomNavItem.Journal.route){
-                                Text("Your Journal", fontSize = 30.sp, fontWeight = FontWeight.Bold)
-                            }
-                            else if (navController.currentBackStackEntryAsState().value?.destination?.route == BottomNavItem.Zen.route){
-                                Text("Zen", fontSize = 30.sp, fontWeight = FontWeight.Bold)
-                            }
-                            else if (navController.currentBackStackEntryAsState().value?.destination?.route == BottomNavItem.Settings.route){
-                                Text("Settings", fontSize = 30.sp, fontWeight = FontWeight.Bold)
+                            when (navController.currentBackStackEntryAsState().value?.destination?.route) {
+                                BottomNavItem.Home.route -> {
+                                    Text("MindNest", fontSize = 30.sp, fontWeight = FontWeight.Bold)
+                                }
+                                BottomNavItem.Journal.route -> {
+                                    Text("Your Journal", fontSize = 30.sp, fontWeight = FontWeight.Bold)
+                                }
+                                BottomNavItem.Zen.route -> {
+                                    Text("Zen", fontSize = 30.sp, fontWeight = FontWeight.Bold)
+                                }
+                                BottomNavItem.Settings.route -> {
+                                    Text("Settings", fontSize = 30.sp, fontWeight = FontWeight.Bold)
+                                }
                             }
                         }
                     }
@@ -145,8 +138,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
             composable(BottomNavItem.Journal.route)
             {
                 JournalScreen(
-                    journalViewModel = journalViewModel,
-                    navController = navController
+                    journalViewModel = journalViewModel
                 )
             }
 
@@ -194,14 +186,5 @@ fun BottomNavigationBar(navController: NavHostController, items: List<BottomNavI
                 },
             )
         }
-    }
-}
-
-
-/*          This will be MY simple Centered Text composable that i can use anywhere in the app         */
-@Composable
-fun CenteredText(text: String, fontSize: TextUnit) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text(text, fontSize = fontSize, modifier = Modifier)
     }
 }

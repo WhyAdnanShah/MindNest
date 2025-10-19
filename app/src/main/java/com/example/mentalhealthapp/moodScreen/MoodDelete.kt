@@ -6,9 +6,14 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -26,41 +31,28 @@ import com.example.mentalhealthapp.moodROOMdatabase.MoodEntity
 import com.example.mentalhealthapp.viewModel.MoodViewModel
 
 @Composable
-fun MoodDelete(moodViewModel: MoodViewModel, moodEntity: MoodEntity){
+fun MoodDelete(moodViewModel: MoodViewModel, moodEntity: MoodEntity) {
     var showDeleteDialog by remember { mutableStateOf(false) }
 
-    Button (modifier = Modifier
-        .wrapContentSize(),
-        onClick = {
-            showDeleteDialog = true
-            moodViewModel
-        },
-        border = (
-                BorderStroke(
-                    width = 0.dp,
-                    color = colorResource(R.color.light_red)
-                )
-                ),
-        colors = ButtonDefaults.buttonColors(Color.Transparent)
-    ){
-        Image(modifier = Modifier
-            .size(13.dp),
-            painter = painterResource(R.drawable.delete), contentDescription = null
-        )
-        Spacer(Modifier.width(5.dp))
-        Text(text = "Delete",
-            fontSize = 13.sp,
-            color = colorResource(R.color.light_red)
-
+    IconButton(
+        onClick = { showDeleteDialog = true },
+        modifier = Modifier.size(36.dp)
+    ) {
+        Icon(
+            imageVector = Icons.Default.Delete,
+            contentDescription = "Delete mood",
+            tint = MaterialTheme.colorScheme.error,
+            modifier = Modifier.size(18.dp)
         )
     }
 
-    if (showDeleteDialog) DeleteMoodDialog(
-        onDismiss = { showDeleteDialog = false },
-        moodViewModel = moodViewModel,
-        moodEntity = moodEntity
-    )
-
+    if (showDeleteDialog) {
+        DeleteMoodDialog(
+            onDismiss = { showDeleteDialog = false },
+            moodViewModel = moodViewModel,
+            moodEntity = moodEntity
+        )
+    }
 }
 
 @Composable

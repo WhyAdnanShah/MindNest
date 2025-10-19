@@ -20,6 +20,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -61,9 +62,10 @@ fun EditMoodDialog(
 
     Dialog(onDismissRequest = onDismiss)
     {
-        Card(modifier = Modifier
+        Surface(modifier = Modifier
             .wrapContentSize()
-            .fillMaxWidth()
+            .fillMaxWidth(),
+            shape = RoundedCornerShape(12.dp)
         ){
             Column (modifier = Modifier
                 .wrapContentSize()
@@ -184,6 +186,3 @@ fun EditNoteField(
         maxLines = 10
     )
 }
-
-
-

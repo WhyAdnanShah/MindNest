@@ -40,6 +40,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -62,8 +63,8 @@ fun EditJournalDialog(
     journalViewModel: JournalViewModel,
     journalEntity: JournalEntity
 ) {
-    var titleOfTheJournal by remember { mutableStateOf(journalEntity.title) }
-    var contentOfTheJournal by remember { mutableStateOf(journalEntity.content) }
+    var titleOfTheJournal by rememberSaveable { mutableStateOf(journalEntity.title) }
+    var contentOfTheJournal by rememberSaveable { mutableStateOf(journalEntity.content) }
     var imageUri = remember { Uri.parse(journalEntity.images) }
 
     Dialog(

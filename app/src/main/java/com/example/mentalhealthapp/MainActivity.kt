@@ -1,6 +1,7 @@
 package com.example.mentalhealthapp
 
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -14,21 +15,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.areSystemBarsVisible
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeContent
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.safeGestures
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -53,10 +50,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.core.content.ContextCompat
 import com.example.mentalhealthapp.navigation.Home
 import com.example.mentalhealthapp.ui.theme.MentalHealthAppTheme
+import androidx.core.content.edit
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,9 +65,7 @@ class MainActivity : ComponentActivity() {
                     .padding(WindowInsets.safeDrawing.asPaddingValues())
                 )
                 { innerPadding ->
-                    LoginPage(
-                        modifier = Modifier
-                    )
+                    LoginPage()
                 }
             }
         }
@@ -77,18 +73,18 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun LoginPage(modifier: Modifier = Modifier) {
+fun LoginPage() {
     val context = LocalContext.current
 
-    val loginStatus = remember {  context.getSharedPreferences("LoginStatus", Context.MODE_PRIVATE) }
-    val isLoggedIn = loginStatus.getBoolean("LoginStatus", false)
+//    val loginStatus = remember {  context.getSharedPreferences("LoginStatus", Context.MODE_PRIVATE) }
+//    val isLoggedIn = loginStatus.getBoolean("LoginStatus", false)
 
     val guestStatus = remember { context.getSharedPreferences("GuestStatus", Context.MODE_PRIVATE) }
-    val isGuest = guestStatus.getBoolean("GuestStatus", false)
+    val isGuest = guestStatus.getBoolean("GuestStatus", true)
 
     if (isGuest){
-        val isguest = Intent(context, Home::class.java)
-        context.startActivity(isguest)
+        val isGuest = Intent(context, Home::class.java)
+        context.startActivity(isGuest)
         (context as? MainActivity)?.finish()
     }
 
@@ -110,8 +106,7 @@ fun LoginPage(modifier: Modifier = Modifier) {
             verticalAlignment = Alignment.CenterVertically
         ){
             SkipLogin(
-                context = context,
-                onSkipClick = { isCardVisible = true },
+                onSkipClick = { isCardVisible = true }
             )
         }
 
@@ -128,14 +123,14 @@ fun LoginPage(modifier: Modifier = Modifier) {
         LoginField(
             value = username,
             onValueChange = { username = it },
-            Lable  = "Username",
-            PlaceHolder = "Enter Username"
+            label  = "Username",
+            placeHolder = "Enter Username"
         )
         LoginField(
             value = password,
             onValueChange = { password = it },
-            Lable  = "Password",
-            PlaceHolder = "Enter Password"
+            label  = "Password",
+            placeHolder = "Enter Password"
         )
         Spacer(Modifier.height(30.dp))
 
@@ -220,7 +215,7 @@ fun GuestDialogAction(onDismiss: () -> Unit, context: Context) {
             text = "Continue",
             onClick = {
                 val guestStatus = context.getSharedPreferences("GuestStatus", Context.MODE_PRIVATE)
-                guestStatus.edit().putBoolean("GuestStatus", true).apply()
+                guestStatus.edit { putBoolean("GuestStatus", true) }
 
                 context.startActivity(Intent(context, Home::class.java))
                 onDismiss()
@@ -250,7 +245,7 @@ fun DialogButton(text: String, onClick: () -> Unit, color: Color) {
 
 //Skip Login as a Guest
 @Composable
-fun SkipLogin(context: Context, onSkipClick: () -> Unit) {
+fun SkipLogin(onSkipClick: () -> Unit) {
     Text(modifier = Modifier
         .clickable {
             onSkipClick()
@@ -272,13 +267,13 @@ fun SkipLogin(context: Context, onSkipClick: () -> Unit) {
 
 //Login Fields
 @Composable
-fun LoginField(Lable: String, PlaceHolder: String, value: String, onValueChange: (String) -> Unit) {
+fun LoginField(label: String, placeHolder: String, value: String, onValueChange: (String) -> Unit) {
 
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
-        label = { Text(Lable) },
-        placeholder = {Text(PlaceHolder) } ,
+        label = { Text(label) },
+        placeholder = {Text(placeHolder) } ,
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp, 0.dp, 16.dp, 0.dp),
@@ -304,7 +299,7 @@ fun LoginButton(context: Context, username: String, password: String) {
                 Toast.makeText(context, "User $username Pass : $password", Toast.LENGTH_SHORT).show()
 
                 val loginStatus = context.getSharedPreferences("LoginStatus", Context.MODE_PRIVATE)
-                loginStatus.edit().putBoolean("LoginStatus", true).apply()
+                loginStatus.edit { putBoolean("LoginStatus", true) }
 
             }
         },
@@ -327,9 +322,10 @@ fun LoginWithGoogle(context: Context) {
         horizontalArrangement = Arrangement.Absolute.Center,
         verticalAlignment = Alignment.CenterVertically
     ){
-        Image(painter = painterResource(R.drawable.google)
+        Image(painter = painterResource(R.drawable.cropped_icon_image)
             ,contentDescription = null,
-            modifier = Modifier.size(30.dp))
+            modifier = Modifier.size(30.dp)
+        )
         Spacer(Modifier.width(20.dp))
         Text(
             text = "Login with Google",
@@ -337,12 +333,10 @@ fun LoginWithGoogle(context: Context) {
         )
 
     }
-
 }
 
 //Register Prompt
 @Composable
 fun RegisterPrompt() {
-
 }
 

@@ -354,7 +354,9 @@ fun MoodFilterSection(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
                 text = "Filter by Mood",
@@ -365,7 +367,7 @@ fun MoodFilterSection(
 
             LazyRow(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                horizontalArrangement = Arrangement.Center,
                 contentPadding = PaddingValues(vertical = 8.dp)
             ) {
                 items(moodEmojis) { mood ->
@@ -388,6 +390,7 @@ fun MoodFilterSection(
                             containerColor = MaterialTheme.colorScheme.surfaceVariant
                         ),
                     )
+                    Spacer(modifier = Modifier.width(8.dp))
                 }
             }
         }

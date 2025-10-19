@@ -21,15 +21,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavHostController
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
@@ -40,8 +37,9 @@ import com.example.mentalhealthapp.journalScreen.JournalEntry
 import com.example.mentalhealthapp.journalScreen.JournalItemCard
 import com.example.mentalhealthapp.viewModel.JournalViewModel
 import kotlinx.coroutines.flow.Flow
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun JournalScreen(journalViewModel: JournalViewModel, navController: NavHostController) {
+fun JournalScreen(journalViewModel: JournalViewModel) {
     Log.d("JournalScreen", "JournalScreen called")
     var isJournalEntry by journalViewModel.isJournalEntry
     val journalData by journalViewModel.allJournals.collectAsState(initial = emptyList())
@@ -69,7 +67,7 @@ fun JournalScreen(journalViewModel: JournalViewModel, navController: NavHostCont
                 .fillMaxSize()
                 .padding(top = 16.dp)
                 .border(
-                    width = 0.dp,
+                    width = 1.dp,
                     color = colorResource(R.color.slate_gray),
                     shape = RoundedCornerShape(5.dp, 5.dp, 20.dp, 20.dp)
                 ),

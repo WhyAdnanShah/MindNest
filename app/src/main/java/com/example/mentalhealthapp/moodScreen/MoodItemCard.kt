@@ -38,8 +38,7 @@ fun MoodItemCard(moodEntity: MoodEntity, moodViewModel: MoodViewModel){
 
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 5.dp),
+            .fillMaxWidth(),
         colors = CardDefaults.cardColors(Color.Transparent),
         shape = RoundedCornerShape(20.dp),
         border = (
@@ -65,24 +64,12 @@ fun MoodItemCard(moodEntity: MoodEntity, moodViewModel: MoodViewModel){
             ){ Image(modifier = Modifier.size(40.dp),
                 painter = painterResource(
                     when (moodEntity.mood) {
-                        "laughing" -> {
-                            R.drawable.laughing
-                        }
-                        "smiling" -> {
-                            R.drawable.smiling
-                        }
-                        "neutral" -> {
-                            R.drawable.neutral
-                        }
-                        "sad" -> {
-                            R.drawable.sad
-                        }
-                        "dead" -> {
-                            R.drawable.dead
-                        }
-                        else -> {
-                            R.drawable.dead
-                        }
+                        "laughing" -> R.drawable.laughing
+                        "smiling" -> R.drawable.smiling
+                        "neutral" -> R.drawable.neutral
+                        "sad" -> R.drawable.sad
+                        "dead" -> R.drawable.dead
+                        else -> R.drawable.dead
                     }
                 ) ,
                 contentDescription = null

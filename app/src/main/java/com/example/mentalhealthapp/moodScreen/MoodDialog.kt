@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -28,9 +27,6 @@ import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -39,9 +35,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.SegmentedButtonDefaults.Icon
-import androidx.compose.material3.Snackbar
-import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -71,7 +64,6 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import com.example.mentalhealthapp.R
 import com.example.mentalhealthapp.moodROOMdatabase.MoodEntity
-import com.example.mentalhealthapp.navigation.CenteredText
 import com.example.mentalhealthapp.viewModel.MoodViewModel
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -180,6 +172,7 @@ fun MoodDialog(onDismiss: () -> Unit, moodViewModel: MoodViewModel) {
                 OutlinedCard(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .clip(RoundedCornerShape(12.dp))
                         .clickable { datePickerCard = true },
                     shape = RoundedCornerShape(12.dp),
                     border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline)
@@ -294,7 +287,8 @@ fun DatePickerDialogModal(
         onDismissRequest = onDismiss,
         confirmButton = {
             TextButton(
-                modifier = Modifier.clip(RoundedCornerShape(8.dp)),
+                modifier = Modifier
+                    .clip(RoundedCornerShape(8.dp)),
                 onClick = {
                     onDateSelected(datePickerState.selectedDateMillis)
                 },
@@ -334,7 +328,6 @@ fun ImageRadioGroup(imageResIds: List<Int>, selectedIndex: Int, onSelected: (Int
                 modifier = Modifier
                     .padding(8.dp)
                     .size(40.dp)
-                    .clip(RoundedCornerShape(12.dp))
                     .border(
                         width = if (isSelected) 1.dp else 1.dp,
                         color = if (isSelected) colorResource(R.color.cornflower_blue) else Color.LightGray,
